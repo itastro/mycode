@@ -1,0 +1,109 @@
+package com.bailian.car.domain.carmaintain;
+
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@Entity
+@Table(name = "t_carmaintainapply")
+public class MaintainApply implements Serializable {
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+	@Column(columnDefinition = "varchar(20) default ''", nullable = false)
+	private String sendPeople; // 送修人
+	@Column(columnDefinition = "varchar(20) default ''", nullable = false)
+	private String vSn; // 车辆编号
+
+	private String vCarSn; // 车牌号
+	@Column(columnDefinition = "varchar(50) default ''")
+	private String reason; // 维修原因
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String send_park; // 停放地点
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date send_time; // 送修时间
+	@Column(columnDefinition = "varchar(255) default ''")
+	private String send_remark; // 备注
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date appointedtime; // 双方约定时间
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getSendPeople() {
+		return sendPeople;
+	}
+
+	public void setSendPeople(String sendPeople) {
+		this.sendPeople = sendPeople;
+	}
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public String getSend_park() {
+		return send_park;
+	}
+
+	public void setSend_park(String send_park) {
+		this.send_park = send_park;
+	}
+
+	public Date getSend_time() {
+		return send_time;
+	}
+
+	public void setSend_time(Date send_time) {
+		this.send_time = send_time;
+	}
+
+	public String getSend_remark() {
+		return send_remark;
+	}
+
+	public void setSend_remark(String send_remark) {
+		this.send_remark = send_remark;
+	}
+
+	public Date getAppointedtime() {
+		return appointedtime;
+	}
+
+	public void setAppointedtime(Date appointedtime) {
+		this.appointedtime = appointedtime;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public String getvCarSn() {
+		return vCarSn;
+	}
+
+	public void setvCarSn(String vCarSn) {
+		this.vCarSn = vCarSn;
+	}
+}

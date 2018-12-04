@@ -1,0 +1,183 @@
+package com.bailian.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.bailian.common.JsonData;
+import com.bailian.common.RequestHolder;
+import com.bailian.data.domain.CTV;
+import com.bailian.data.domain.Customer;
+import com.bailian.data.domain.Terminal;
+import com.bailian.exception.ParamException;
+import com.bailian.parm.UpdatePassword;
+import com.bailian.service.CustomerService;
+import com.bailian.utils.BeanValidator;
+import com.bailian.utils.CookieUtils;
+import com.bailian.utils.MD5Util;
+import com.bailian.utils.VerifyCodeUtil;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/customer")
+public class CustomerController {
+	@Autowired
+	private CustomerService customerService;
+
+	@RequestMapping("/code")
+	public void getCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String code = VerifyCodeUtil.generateVerifyCode(4).toLowerCase();
+		request.getSession().setAttribute("code", code);
+		log.info(code);
+		VerifyCodeUtil.outputImage((int) Math.ceil(4 * 20), 30, response.getOutputStream(), code);
+	}
+
+	@RequestMapping("/login.json")
+	@ResponseBody
+	public JsonData login(HttpServletRequest request, HttpServletResponse response) {
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String code = request.getParameter("code");
+		if (code == null) {
+			return JsonData.fail("验证码不能为空");
+		}
+		String remberme = request.getParameter("remberme");
+		Customer customer = customerService.findByUsername(username);
+
+		try {
+			String scode = (String) request.getSession().getAttribute("code");
+			if (StringUtils.isBlank(username)) {
+				return JsonData.fail("用户名不能为空");
+			} else if (StringUtils.isBlank(password)) {
+				return JsonData.fail("密码不能为空");
+			} else if (customer == null) {
+				return JsonData.fail("此用户不存在");
+			} else if (!customer.getPassword().equals(MD5Util.encrypt(password))) {
+				return JsonData.fail("用户名或者密码错误");
+			} else if (code.toLowerCase().equals(scode) != true) {
+				return JsonData.fail("验证码错误");
+			} else {
+				request.getSession().setAttribute("user", customer);
+				RequestHolder.add(request);
+				RequestHolder.add(customer);
+				if (remberme.equals("true")) {
+					// 将用户名密码以Cookie 的形势写到浏览器
+					Cookie cookie = new Cookie("rem", customer.getUsername() + "#" + customer.getPassword());
+					cookie.setMaxAge(60 * 60 * 24 * 7);
+					response.addCookie(cookie);
+					cookie.setPath("/data-management");
+					return JsonData.success();
+				}
+				return JsonData.success("用户登录成功");
+			}
+		} catch (Exception e) {
+			throw new ParamException("系统错误，请联系管理员");
+		}
+	}
+
+	// 用户退出
+	@RequestMapping("/loginOut.page")
+	public String loginOut() {
+		HttpServletRequest request = RequestHolder.getCurrentRequest();
+		request.getSession().removeAttribute("user");
+		Cookie[] cookies = request.getCookies();
+		Cookie cookie = CookieUtils.findCookieByName(cookies, "rem");
+		cookie.setMaxAge(0);
+		return "redirect:http:/data-management/login.jsp";
+	}
+
+	// 添加用户
+	@RequestMapping("/add.json")
+	@ResponseBody
+	public JsonData addCustomer(Customer customer) {
+		JsonData result = null;
+		try {
+			result = customerService.add(customer);
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new ParamException("系统异常，请联系管理员");
+		}
+		return result;
+	}
+
+	@RequestMapping("/delete.json")
+	@ResponseBody
+	// 删除用户
+	public JsonData delteCustomer(Integer id) {
+		return customerService.deleteCustomer(id);
+	}
+
+	// 用户关联终端
+	@RequestMapping("/relatedTerminal.json")
+	@ResponseBody
+	public JsonData relatedTerminal(Integer cid, String vin) {
+
+		return customerService.relatedTerminal(cid, vin);
+
+	}
+
+	// 用户与解除终端的关联的关联
+	@RequestMapping("/removeTerminal.json")
+	@ResponseBody
+	public JsonData customerRemoveTerminal(Integer cid, String vin) {
+
+		JsonData result = customerService.removeTerminal(cid, vin);
+		return result;
+
+	}
+
+	// 通过用户去查询终端
+	@RequestMapping("/findTerminalByCustomer.json")
+	@ResponseBody
+	public List<Terminal> findTerminalByCustomerId() {
+		// 获取当前用户
+		Customer user = RequestHolder.getCurrentUser();
+		// 通过用户来查询终端
+		List<Terminal> terminals = customerService.terminals(1);
+		return terminals;
+	}
+
+	// 查询用户绑定的终端车辆
+	// 通过用户去查询终端
+	@RequestMapping("/findTerminalAndVehicleByCustomer.json")
+	@ResponseBody
+	public List<CTV> customerAndTerminalAndVehicle() {
+		// 获取当前用户
+		// Customer user = RequestHolder.getCurrentUser();
+
+		// 通过用户来查询终端
+		List<CTV> customerAndTerminalAndVehicle = customerService.customerAndTerminalAndVehicle(1);
+		return customerAndTerminalAndVehicle;
+	}
+
+	// 查询所有的用户，不分页
+	@RequestMapping("/allCustomer.json")
+	@ResponseBody
+	public List<Customer> allCustomer() {
+		return customerService.allCustomer();
+	}
+
+	// 用户个人信息展示
+	@RequestMapping("/userInfo.json")
+	@ResponseBody
+	public Customer userInfo() {
+		Customer user = RequestHolder.getCurrentUser();
+		return user;
+	}
+
+	// 用户密码的修改
+	@RequestMapping("/updatePassWord.json")
+	@ResponseBody
+	public JsonData updatePassword(UpdatePassword updatePassword) {
+		BeanValidator.check(updatePassword);
+		return customerService.updatePassword(updatePassword);
+	}
+}

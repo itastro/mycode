@@ -1,0 +1,5 @@
+package com.bailian.car.domain.cardriver;
+
+public class InAndOut {
+
+}

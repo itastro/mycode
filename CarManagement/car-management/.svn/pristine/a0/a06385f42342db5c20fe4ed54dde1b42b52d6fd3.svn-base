@@ -1,0 +1,186 @@
+package com.bailian.car.service.system.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.system.PermissionRepository;
+import com.bailian.car.domain.system.Permission;
+import com.bailian.car.domain.system.Role;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.exception.CustomException;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.PerSearchParam;
+import com.bailian.car.service.system.PermissionService;
+import com.bailian.car.utils.ComputerInfoUtils;
+import com.bailian.car.utils.ExcelUtils;
+import com.bailian.car.utils.TokenManagerUtils;
+
+@Service
+@Transactional
+public class PermissionServiceImpl implements PermissionService {
+	@Autowired
+	private PermissionRepository permissionRepository;
+
+	@Cacheable("per")
+	@Override
+	public List<Permission> findByUser(User user) {
+		if (user.getNetid().equals("admin")) {
+			// 返回所有的权限
+			return permissionRepository.findAll();
+		} else {
+			// 根据用户查询
+			return permissionRepository.findByUser(user.getUid());
+		}
+
+	}
+
+	@Cacheable("per")
+	@Override
+	public PageBean<Permission> query(PageQuery pQuery, PerSearchParam perSearchParam) {
+		PageBean<Permission> bean = new PageBean<Permission>();
+		Sort sort = new Sort(Direction.DESC, "pid");
+
+		Pageable pageable = new PageRequest(pQuery.getPage(), pQuery.getSize(), sort);
+		List<Predicate> p = new ArrayList<>();
+		Specification<Permission> querySpecifi = new Specification<Permission>() {
+			@Override
+			public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(p.toArray(new Predicate[p.size()]));
+			}
+		};
+		Page<Permission> pageData = permissionRepository.findAll(querySpecifi, pageable);
+		bean.setTotal(pageData.getTotalElements());
+		bean.setRows(pageData.getContent());
+		return bean;
+	}
+
+	// 添加权限
+	@Override
+	// @RequiresRoles("system")
+	public JsonData add(Permission permission) {
+		try {
+
+			if (permission.getName() != null || permission.getKeyWord() != null || permission.getKeyWord() != "") {
+
+				permission.setCreateTime(new Date());
+				permission.setOperate_ip(ComputerInfoUtils.getIpAddr());
+				permission.setOperator(TokenManagerUtils.getToken().getNickname());
+				permissionRepository.save(permission);
+				return JsonData.success("添加成功");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			return JsonData.fail("添加失败");
+		}
+		return JsonData.fail("添加失败");
+
+	}
+
+	@Override
+	// @RequiresRoles("system")
+	public JsonData deletePermission(String[] pids) {
+		try {
+			for (String pid : pids) {
+				int id = Integer.parseInt(pid);
+				Permission permission = permissionRepository.findOne(id);
+				if (permission != null) {
+					Set<Role> roles = permission.getRoles();
+					for (Role role : roles) {
+						role.getPermissions().remove(permission);
+					}
+					permission.setRoles(null);
+					permissionRepository.delete(permission);
+				}
+			}
+			return JsonData.success("删除成功");
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new CustomException("用户不存在");
+		}
+
+	}
+
+	@Override
+	public JsonData checkPermissionByName(String name) {
+		Permission permission = permissionRepository.findByName(name);
+		if (permission != null) {
+			return JsonData.fail("此名称已存在");
+		}
+		return JsonData.success();
+	}
+
+	@Override
+	public JsonData checkPermissionBykeyWord(String keyWord) {
+		Permission permission = permissionRepository.findByKeyWord(keyWord);
+		if (permission != null) {
+			return JsonData.fail("此关键字已存在");
+		}
+		return JsonData.success();
+	}
+
+	@Override
+	public JsonData per_import(MultipartFile file) {
+		try {
+			List<String[]> readExcel = ExcelUtils.readExcel(file);
+			for (int i = 1; i < readExcel.size(); i++) {
+				String[] strings = readExcel.get(i);
+				String keyWord = strings[1];
+				Permission permission = permissionRepository.findByKeyWord(keyWord);
+				if (permission != null) {
+					continue;
+				}
+				Permission excelpermission = new Permission();
+				excelpermission.setKeyWord(keyWord);
+				String roleName = strings[0];
+				excelpermission.setName(roleName);
+				String remark = strings[2];
+				excelpermission.setRemark(remark);
+				excelpermission.setOperator(TokenManagerUtils.getNickname());
+				excelpermission.setCreateTime(new Date());
+				excelpermission.setOperate_ip(ComputerInfoUtils.getComputerID());
+				permissionRepository.save(excelpermission);
+			}
+
+			return JsonData.success("导入权限信息,冲突的权限自动忽略");
+		} catch (Exception e) {
+			throw new PermissionException("excel导入异常");
+		}
+	}
+
+	@Cacheable("per")
+	@Override
+	public List<Permission> findAll() {
+		List<Permission> list = permissionRepository.findAll();
+		return list;
+	}
+
+	@Override
+	public List<Permission> findByRole(Integer rid) {
+		List<Permission> list = permissionRepository.findCurrentRoleIsRelatedPer(rid);
+		return list;
+	}
+
+
+
+
+}

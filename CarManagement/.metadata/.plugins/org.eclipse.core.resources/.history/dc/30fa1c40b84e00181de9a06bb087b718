@@ -1,0 +1,614 @@
+package com.bailian.car.domain.cars.car;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.bailian.car.domain.cardriver.CarDriver;
+import com.bailian.car.domain.carmaintain.CarMaintainInfo;
+import com.bailian.car.domain.cars.carmaintenance.VehicleMaintenanceRecords;
+import com.bailian.car.domain.cars.develop.DevelopToolsRecord;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@Entity
+@Table(name = "t_car")
+public class Car implements Serializable {
+
+	public String getProduct_status() {
+		return product_status;
+	}
+
+	public void setProduct_status(String product_status) {
+		this.product_status = product_status;
+	}
+
+	public CarInsurance getCarInsurance() {
+		return carInsurance;
+	}
+
+	public void setCarInsurance(CarInsurance carInsurance) {
+		this.carInsurance = carInsurance;
+	}
+
+	public CarLicense getCarLicense() {
+		return carLicense;
+	}
+
+	public void setCarLicense(CarLicense carLicense) {
+		this.carLicense = carLicense;
+	}
+
+	public String getvCarTypetwo() {
+		return vCarTypetwo;
+	}
+
+	public void setvCarTypetwo(String vCarTypetwo) {
+		this.vCarTypetwo = vCarTypetwo;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Date getUpcheckTime() {
+		return upcheckTime;
+	}
+
+	public void setUpcheckTime(Date upcheckTime) {
+		this.upcheckTime = upcheckTime;
+	}
+
+	public Date getBackchecktime() {
+		return backchecktime;
+	}
+
+	public void setBackchecktime(Date backchecktime) {
+		this.backchecktime = backchecktime;
+	}
+
+	public String getEngineCapacity() {
+		return engineCapacity;
+	}
+
+	public void setEngineCapacity(String engineCapacity) {
+		this.engineCapacity = engineCapacity;
+	}
+
+	public void setDevelopToolsRecors(List<DevelopToolsRecord> developToolsRecors) {
+		DevelopToolsRecors = developToolsRecors;
+	}
+
+	public List<VehicleMaintenanceRecords> getVehicleMaintenanceRecordss() {
+		return VehicleMaintenanceRecordss;
+	}
+
+	public void setVehicleMaintenanceRecordss(List<VehicleMaintenanceRecords> vehicleMaintenanceRecordss) {
+		VehicleMaintenanceRecordss = vehicleMaintenanceRecordss;
+	}
+
+	public List<DevelopToolsRecord> getDevelopToolsRecors() {
+		return DevelopToolsRecors;
+	}
+
+	public void DevelopToolsRecors(List<DevelopToolsRecord> developToolsRecors) {
+		DevelopToolsRecors = developToolsRecors;
+	}
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+	@Column(columnDefinition = "varchar(20) default ''")
+
+	private String product_sn; // 项目号
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String product_name; // 项目名称
+
+	@Column(columnDefinition = "varchar(5) default ''")
+	private String carName; // 车辆名称
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String vCarSn; // 实验车号
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String vSn; // 车辆编号
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String vCarType; // 厂牌型号
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String vCarTypetwo; // 厂牌型号2
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String customer; // 客戶
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String projectEngineer; // 項目工程師
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String contactNumber; // 联系电话
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String engineType; // 发动机型号
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String engineNumber; // 发动机编号
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String engineCapacity; // 发动机排量
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String FuelType; // 燃油规格
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String oilspecification; // 机油规格
+
+	@Column(name = "TS", columnDefinition = "varchar(20) default ''")
+	private String tyresize; // 轮胎规格
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String GBTS; // 变速箱邮箱规格
+
+	@Column(name = "RTP", columnDefinition = "varchar(20) default ''")
+	private String reaTireP;// 后轮胎压力
+
+	@Column(name = "FTP", columnDefinition = "varchar(20) default ''")
+	private String frontTireP; // 前轮胎压力
+
+	@Column(name = "VQ", columnDefinition = "varchar(20) default ''")
+	private String vehicleQuality; // 车辆整备质量
+
+	@Column(name = "LM", columnDefinition = "varchar(20) default ''")
+	private String loadMethod; // 加载方式
+
+	@Column(name = "LD", columnDefinition = "varchar(20) default ''")
+	private String loadData; // 加载数据
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String vin; // 车辆识别码
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String operator; // 填写人
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date makeTime; // 制作日期
+
+	private Integer runsumtime; // 车辆行驶总时间
+
+	private Double longitude; // 经度
+
+	private Double latitude; // 维度
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String runStatic; // 行驶状态
+
+	private Double batteryvoltage; // 电瓶电压
+
+	@Column(name = "GPSSN", columnDefinition = "varchar(50) default ''")
+	private String gpsSN; // gps编号
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String iccard; // ic卡
+
+	private Date dAllowStartTm; // 允许行驶开始时间
+
+	private Date dAllowEndTm; // 允许行驶结束时间
+
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String isAllow; // 是否允许
+
+	private Date fromtime; // 开始时间
+
+	private Date lastTime; // 结束时间
+
+	private Double speed; // 行驶速度
+
+	// 项目状态
+	private String product_status;
+
+	@Column(columnDefinition = "varchar(2) default ''")
+	private String check_s; // 检查状态
+	@Column(columnDefinition = "varchar(20) default '1'")
+	private String warn; // 报警
+	@Column(columnDefinition = "varchar(128) default ''")
+	private String remark;
+
+	private Date upcheckTime; // 接车日期
+
+	private Date backchecktime; // 还车日期
+
+	@OneToOne(cascade = { CascadeType.REMOVE })
+	@JoinColumn(name = "CARPOSITION_ID")
+	private CarPosition carPosition;
+	@ManyToOne
+	@JoinColumn(name = "G_ID")
+	private CarGroup cGroup;
+
+	@OneToOne
+	@JoinColumn(name = "carDriver_id")
+	private CarDriver carDriver;
+
+	@OneToOne(mappedBy = "car", cascade = { CascadeType.REMOVE })
+	private CarMaintainInfo carMaintainInfo;
+
+	@OneToMany(cascade = { CascadeType.REMOVE }, fetch = FetchType.EAGER)
+	@JoinColumn(name = "CAR_ID")
+	private List<VehicleMaintenanceRecords> VehicleMaintenanceRecordss = new ArrayList<VehicleMaintenanceRecords>(); // 保养记录
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE })
+	@JoinColumn(name = "CAR_ID")
+	private List<DevelopToolsRecord> DevelopToolsRecors = new ArrayList<DevelopToolsRecord>(0); // 研发工具装备记录
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // 关系的维护端
+	@JoinColumn(name = "carInsurance_id")
+	private CarInsurance carInsurance;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // 关系的维护端
+	@JoinColumn(name = "carLicense_id")
+	private CarLicense carLicense;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getProduct_sn() {
+		return product_sn;
+	}
+
+	public void setProduct_sn(String product_sn) {
+		this.product_sn = product_sn;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+	public String getCarName() {
+		return carName;
+	}
+
+	public void setCarName(String carName) {
+		this.carName = carName;
+	}
+
+	public String getvCarSn() {
+		return vCarSn;
+	}
+
+	public void setvCarSn(String vCarSn) {
+		this.vCarSn = vCarSn;
+	}
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public String getvCarType() {
+		return vCarType;
+	}
+
+	public void setvCarType(String vCarType) {
+		this.vCarType = vCarType;
+	}
+
+	public String getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
+
+	public String getProjectEngineer() {
+		return projectEngineer;
+	}
+
+	public void setProjectEngineer(String projectEngineer) {
+		this.projectEngineer = projectEngineer;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
+	public String getEngineType() {
+		return engineType;
+	}
+
+	public void setEngineType(String engineType) {
+		this.engineType = engineType;
+	}
+
+	public String getEngineNumber() {
+		return engineNumber;
+	}
+
+	public void setEngineNumber(String engineNumber) {
+		this.engineNumber = engineNumber;
+	}
+
+	public String getFuelType() {
+		return FuelType;
+	}
+
+	public void setFuelType(String fuelType) {
+		FuelType = fuelType;
+	}
+
+	public String getVin() {
+		return vin;
+	}
+
+	public void setVin(String vin) {
+		this.vin = vin;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Date getMakeTime() {
+		return makeTime;
+	}
+
+	public void setMakeTime(Date makeTime) {
+		this.makeTime = makeTime;
+	}
+
+	public Integer getRunsumtime() {
+		return runsumtime;
+	}
+
+	public void setRunsumtime(Integer runsumtime) {
+		this.runsumtime = runsumtime;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getRunStatic() {
+		return runStatic;
+	}
+
+	public void setRunStatic(String runStatic) {
+		this.runStatic = runStatic;
+	}
+
+	public Double getBatteryvoltage() {
+		return batteryvoltage;
+	}
+
+	public void setBatteryvoltage(Double batteryvoltage) {
+		this.batteryvoltage = batteryvoltage;
+	}
+
+	public String getGpsSN() {
+		return gpsSN;
+	}
+
+	public void setGpsSN(String gpsSN) {
+		this.gpsSN = gpsSN;
+	}
+
+	public String getIccard() {
+		return iccard;
+	}
+
+	public void setIccard(String iccard) {
+		this.iccard = iccard;
+	}
+
+	public Date getdAllowStartTm() {
+		return dAllowStartTm;
+	}
+
+	public void setdAllowStartTm(Date dAllowStartTm) {
+		this.dAllowStartTm = dAllowStartTm;
+	}
+
+	public Date getdAllowEndTm() {
+		return dAllowEndTm;
+	}
+
+	public void setdAllowEndTm(Date dAllowEndTm) {
+		this.dAllowEndTm = dAllowEndTm;
+	}
+
+	public String getIsAllow() {
+		return isAllow;
+	}
+
+	public void setIsAllow(String isAllow) {
+		this.isAllow = isAllow;
+	}
+
+	public Date getFromtime() {
+		return fromtime;
+	}
+
+	public void setFromtime(Date fromtime) {
+		this.fromtime = fromtime;
+	}
+
+	public Date getLastTime() {
+		return lastTime;
+	}
+
+	public void setLastTime(Date lastTime) {
+		this.lastTime = lastTime;
+	}
+
+	public Double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(Double speed) {
+		this.speed = speed;
+	}
+
+	public CarGroup getcGroup() {
+		return cGroup;
+	}
+
+	public void setcGroup(CarGroup cGroup) {
+		this.cGroup = cGroup;
+	}
+
+	public CarPosition getCarPosition() {
+		return carPosition;
+	}
+
+	public void setCarPosition(CarPosition carPosition) {
+		this.carPosition = carPosition;
+	}
+
+	public CarDriver getCarDriver() {
+		return carDriver;
+	}
+
+	public void setCarDriver(CarDriver carDriver) {
+		this.carDriver = carDriver;
+	}
+
+	public String getOilspecification() {
+		return oilspecification;
+	}
+
+	public void setOilspecification(String oilspecification) {
+		this.oilspecification = oilspecification;
+	}
+
+	public String getTyresize() {
+		return tyresize;
+	}
+
+	public void setTyresize(String tyresize) {
+		this.tyresize = tyresize;
+	}
+
+	public String getGBTS() {
+		return GBTS;
+	}
+
+	public void setGBTS(String gBTS) {
+		GBTS = gBTS;
+	}
+
+	public String getReaTireP() {
+		return reaTireP;
+	}
+
+	public void setReaTireP(String reaTireP) {
+		this.reaTireP = reaTireP;
+	}
+
+	public String getFrontTireP() {
+		return frontTireP;
+	}
+
+	public void setFrontTireP(String frontTireP) {
+		this.frontTireP = frontTireP;
+	}
+
+	public String getVehicleQuality() {
+		return vehicleQuality;
+	}
+
+	public void setVehicleQuality(String vehicleQuality) {
+		this.vehicleQuality = vehicleQuality;
+	}
+
+	public String getLoadMethod() {
+		return loadMethod;
+	}
+
+	public void setLoadMethod(String loadMethod) {
+		this.loadMethod = loadMethod;
+	}
+
+	public String getLoadData() {
+		return loadData;
+	}
+
+	public void setLoadData(String loadData) {
+		this.loadData = loadData;
+	}
+
+	public String getCheck_s() {
+		return check_s;
+	}
+
+	public void setCheck_s(String check_s) {
+		this.check_s = check_s;
+	}
+
+	public String getWarn() {
+		return warn;
+	}
+
+	public void setWarn(String warn) {
+		this.warn = warn;
+	}
+
+	@JsonBackReference
+	public CarMaintainInfo getCarMaintainInfo() {
+		return carMaintainInfo;
+	}
+
+	public void setCarMaintainInfo(CarMaintainInfo carMaintainInfo) {
+		this.carMaintainInfo = carMaintainInfo;
+	}
+
+}

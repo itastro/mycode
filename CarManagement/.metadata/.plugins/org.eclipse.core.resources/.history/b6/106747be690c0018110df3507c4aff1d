@@ -1,0 +1,44 @@
+package com.bailian.car.controller.system;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import com.bailian.car.common.utils.TokenManagerUtils;
+import com.bailian.car.domain.system.Menu;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.service.system.*;
+
+@Controller
+@RequestMapping("/menu")
+public class MenuController {
+
+	@Autowired
+	private MenuService menuService;
+
+	/**
+	 * 
+	* @Title: munuList
+	* @Description: 查询所有的功能菜单
+	* @param @return    参数
+	* @return ModelAndView    返回类型
+	* @throws
+	 */
+	@RequestMapping("/munuList.action")
+	public ModelAndView munuList() {
+		ModelAndView modelAndView = new ModelAndView();
+		List<Menu> menuList = menuService.findByParentMenuIsNull();
+		modelAndView.addObject("menuList", menuList);
+		modelAndView.setViewName("menuList");
+		return modelAndView;
+	}
+	@RequestMapping("/showMenu.action")
+	public Object showMenu() {
+		// 获取当前用户的信息
+		User user = TokenManagerUtils.getToken();
+		List<Menu> munes = menuService.findByUser(user);
+		return munes;
+
+	}
+}

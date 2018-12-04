@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<syncparticipants>
+<participant displayName="SVN (/car-management)" id="org.tigris.subversion.subclipse.participant" secondary_id="1539314047450">
+<data root="false">
+<org.eclipse.team.ui.TEAMSUBSRCIBERSETTINGS org.eclipse.team.ui.SCOPE_TYPE="ResourceScope">
+<org.eclipse.team.ui.TEAMSUBSRCIBER_REFRESHSCHEDULE org.eclipse.team.ui.CTX_REFRESHSCHEDULE_ENABLED="false" org.eclipse.team.ui.CTX_REFRESHSCHEDULE_INTERVAL="3600" org.eclipse.team.ui.CTX_REFRESHSCHEDULE_RUNONCE="false"/>
+<resource_scope_roots resource_scope_root_resource="/car-management"/>
+</org.eclipse.team.ui.TEAMSUBSRCIBERSETTINGS>
+</data>
+</participant>
+<participant displayName="SVN (Workspace)" id="org.tigris.subversion.subclipse.participant" secondary_id="1517885303638">
+<data root="true">
+<org.eclipse.team.ui.TEAMSUBSRCIBERSETTINGS org.eclipse.team.ui.SCOPE_TYPE="WorkspaceScope">
+<org.eclipse.team.ui.TEAMSUBSRCIBER_REFRESHSCHEDULE org.eclipse.team.ui.CTX_REFRESHSCHEDULE_ENABLED="false" org.eclipse.team.ui.CTX_REFRESHSCHEDULE_INTERVAL="3600" org.eclipse.team.ui.CTX_REFRESHSCHEDULE_RUNONCE="false"/>
+</org.eclipse.team.ui.TEAMSUBSRCIBERSETTINGS>
+</data>
+</participant>
+</syncparticipants>

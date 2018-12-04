@@ -1,0 +1,14 @@
+package com.bailian.car.domain.carmaintain;
+
+/**
+ * 
+    * @ClassName: CarMaintain
+    * @Description: TODO(这里用一句话描述这个类的作用)
+    * @author itastro
+    * @date 2018年5月15日
+    *
+ */
+
+public class CarMaintain {
+
+}

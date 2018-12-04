@@ -1,0 +1,53 @@
+package com.bailian.car.cars;
+
+import java.text.ParseException;
+import java.util.Date;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bailian.car.dao.cars.car.CarInsuranceRepository;
+import com.bailian.car.dao.cars.car.CarLicenseRepository;
+import com.bailian.car.domain.cars.car.CarLicense;
+import com.bailian.car.service.cars.car.CarService;
+import com.bailian.car.utils.DateUtils;
+
+@Transactional
+@RunWith(value = SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:spring/applicationContext.xml")
+public class CarTest {
+
+	@Autowired
+
+	private CarService carService;
+
+	@Autowired
+	private CarLicenseRepository carLicenseRepository;
+
+	@Autowired
+	private CarInsuranceRepository carInsuranceRepository;
+
+	@Test
+	@Rollback(false)
+	public void test() throws ParseException {
+		CarLicense license = new CarLicense();
+		String end = "2018-12-12 24:00:33";
+		String start = "2018-12-23 24:00:11";
+		Date END = DateUtils.String2date(end);
+		Date START = DateUtils.String2date(start);
+		license.setLicenseEndTime(END);
+		license.setLicenseStartTime(START);
+		license.setLicenseNo("10086111111111");
+
+		int i = 1;
+
+		carService.addCarLicense(i, license);
+
+	}
+
+}

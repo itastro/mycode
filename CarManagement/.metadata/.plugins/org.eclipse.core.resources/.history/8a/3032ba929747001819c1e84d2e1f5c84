@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>维修车间大屏</title>
+    <link rel="stylesheet" type="text/css" href="../css/styleA.css" media="screen and (max-width: 2100px)">
+    <link rel="stylesheet" type="text/css" href="../assets/css/workscreen.css" media="screen and (min-width: 2100px) and (max-width: 5148px)">
+    <script type="text/javascript" language="javascript" src="../assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../assets/js/myslideup.js"></script>
+</head>
+
+<body class="shopbody" style="height: 100%;" id="full_mainlist">
+    <div class="shopwhole">
+        <button id='btn'>全屏显示</button>
+        <h3>维修列表</h3>
+        <div class="workshopList">
+            <ul class="title">
+                <li>
+                    <span class="list1">车辆编号</span>
+                    <span class="list2">维修人</span>
+                    <span class="list3">维修项目</span>
+                    <span class="list4">停放地点</span>
+                    <span class="list5">维修状态</span>
+                </li>
+            </ul>
+            <ul class="line">
+            </ul>
+        </div>
+        <div class="shopfooter">
+            <div class="footer_left">
+                <p class="data"></p>
+                <p class="datatime font-big"></p>
+            </div>
+            <div class="footer_content">
+                <p>维修车辆：</p>
+                <p><span class="font-big maintain_countCar">200</span>&nbsp;&nbsp;<span>辆</span></p>
+            </div>
+            <div class="footer_right">
+                <div class="rightBox">
+                    <p class="circleChart" id="0"></p>
+                    <p>排队中：<span class="maintain_queueCar">200</span>辆</p>
+                </div>
+                <div class="rightBox">
+                    <p class="circleChart" id="1"></p>
+                    <p>维修中：<span class="maintain_currentCar">200</span>辆</p>
+                </div>
+                <div class="rightBox">
+                    <p class="circleChart" id="2"></p>
+                    <p>已完成：<span class="maintain_completeCar">200</span>辆</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    function isFF() {
+        return navigator.userAgent.indexOf("Firefox") != -1;
+    }
+
+    function isChrome() {
+        return navigator.userAgent.indexOf("Chrome") > -1;
+    }
+
+    function getList() {
+        $.ajax({
+            "url": "/car-management/carMaintain/screen.action",
+            // "url": "../json/datatable.json",
+            "type": "get",
+            // "dataType": "jsonp", //数据类型为jsonp  
+            // "jsonp": "jsonpCallback", //服务端用于接收callback调用的function名的参数  
+            "success": function(res) {
+                if (res.total == 0) {
+                    alert("未检索到维修车辆");
+                    return;
+                }
+
+                console.log(res);
+                $(".maintain_countCar").html(res.count);
+                $(".maintain_completeCar").html(res.complete);
+                $(".maintain_currentCar").html(res.current);
+                $(".maintain_queueCar").html(res.queue);
+                // ----------------------------------------------------------------------------------------------------------------------------------
+                if (isFF() || isChrome()) {
+                    $("head").append("<script type='text/javascript' src='../assets/js/circleChart.js'>" + '<' + "/script>");
+                    console.log($(document.body).width());
+                    if ($(document.body).width() >= 3800) {
+                        console.log($(document.body).width());
+                        $("ul.line li span").css("fontSize", "40px");
+                        $("ul.title li span").css("fontSize", "48px");
+                        $("ul.title").css("margin-bottom", "7px");
+                        $("ul.line li").css({
+                            "border-bottom-width": "5px",
+                            "border-bottom-width": "5px"
+                        });
+                        $(".circleChart#0").circleChart({
+                            size: 190,
+                            color: "#E41937",
+                            backgroundColor: "#505f76",
+                            // value: 55,
+                            value: res.queuepercentage,
+                            text: 0,
+                            onDraw: function(el, circle) {
+                                circle.text(Math.round(circle.value) + "%");
+                            }
+                        });
+                        $(".circleChart#1").circleChart({
+                            size: 190,
+                            color: "#2ff1cf",
+                            backgroundColor: "#505f76",
+                            value: res.currentpercentage,
+                            text: 0,
+                            top: 50,
+                            onDraw: function(el, circle) {
+                                circle.text(Math.round(circle.value) + "%");
+                            }
+                        });
+                        $(".circleChart#2").circleChart({
+                            size: 190,
+                            color: "#eace50",
+                            backgroundColor: "#505f76",
+                            // value: 22,
+                            value: res.completepercentage,
+                            text: 0,
+                            onDraw: function(el, circle) {
+                                circle.text(Math.round(circle.value) + "%");
+                            }
+                        });
+                    } else {
+                        $(".circleChart#1").circleChart({
+                            size: 70,
+                            color: "#2ff1cf",
+                            backgroundColor: "#505f76",
+                            value: 30,
+                            text: 0,
+                            top: 50,
+                            onDraw: function(el, circle) {
+                                circle.text(Math.round(circle.value) + "%");
+                            }
+                        });
+                        $(".circleChart#0").circleChart({
+                            size: 70,
+                            color: "#eace50",
+                            backgroundColor: "#505f76",
+                            value: 50,
+                            text: 0,
+                            onDraw: function(el, circle) {
+                                circle.text(Math.round(circle.value) + "%");
+                            }
+                        });
+                    }
+                }
+                //-----------------------------------------------------------------------------------------------------------------------------------
+                // var obj = res;
+                var screenHtml = "";
+                var classname = "";
+                var obj = res.screen;
+                for (var i = 0; i < obj.length; i++) {
+                    var a = "";
+                    if (obj[i].status == null) {
+                        a = '';
+                    } else if (obj[i].status == "1") {
+                        a = '<span style="color:red;width:100%;weight:bold;">排队中</span>';
+                    } else if (obj[i].status == "2") {
+                        a = '<span style="color:#2ff1cf;width:100%;weight:bold;">维修中</span>';
+                    } else if (obj[i].status == "3") {
+                        a = '<span style="color:blue;width:100%;weight:bold;">已维修</span>';
+                    } else {
+                        a = '<span>已完成</span>';
+                    }
+                    if (obj[i].operator == null) {
+                        obj[i].operator = "--";
+                    }
+                    if (obj[i].park == null) {
+                        obj[i].park = "--";
+                    }
+                    screenHtml += '<li style="margin-top:0px;"><span class="list1">' + obj[i].vSn +
+                        '</span><span class="list2 ' + classname + '">' + obj[i].operator + '</span><span class="list3">' + obj[i].item +
+                        '</span><span class="list4">' + obj[i].park +
+                        '</span><span class="list5">' + a + '</span></li>';
+                }
+                $(".line").html(screenHtml);
+            },
+            "error": function(res) {
+                console.log(res);
+            }
+        })
+    }
+    getList();
+
+    function formatterDate() {
+        var date = new Date()
+        var month = date.getMonth() + 1
+        var datetime = date.getFullYear() +
+            "年" // "年"
+            +
+            (month >= 10 ? month : "0" + month) +
+            "月" // "月"
+            +
+            (date.getDate() < 10 ? "0" + date.getDate() : date
+                .getDate()) +
+            "日";
+        return datetime;
+    }
+
+    function formatterDateTime() {
+        var date = new Date()
+        var month = date.getMonth() + 1;
+        var datetimehour = (date.getHours() < 10 ? "0" + date.getHours() : date
+                .getHours()) +
+            ":" +
+            (date.getMinutes() < 10 ? "0" + date.getMinutes() : date
+                .getMinutes()) +
+            ":" +
+            (date.getSeconds() < 10 ? "0" + date.getSeconds() : date
+                .getSeconds());
+        return datetimehour;
+    }
+    console.log(formatterDate());
+    console.log(formatterDateTime());
+    setInterval(function() {
+        $(".data").html(formatterDate());
+        $(".datatime").html(formatterDateTime());
+    }, 1000);
+
+    setInterval(function() {
+        getList();
+        // $("#0").circleChart({
+        //     value: Math.random() * 100
+        // });
+    }, 60000); //1小时刷新一次 维修大屏列表和 百分比
+    // 早上刷新一次，下午刷新一次？
+    // 字体大小变化
+    if ($(document.body).width() >= 3800) {
+        console.log($(document.body).width());
+        $("ul.line li span").css("fontSize", "40px");
+        $("ul.title li span").css("fontSize", "48px");
+        $("ul.title").css("margin-bottom", "7px");
+        $("ul.line li").css({
+            "border-bottom-width": "5px",
+            "border-bottom-width": "5px"
+        });
+    }
+    var viewFullScreen = document.getElementById("btn");
+    if (viewFullScreen) {
+        viewFullScreen.addEventListener("click", function() {
+            var docElm = document.documentElement;
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.msRequestFullscreen) {
+                docElm = document.body; //overwrite the element (for IE) 
+                docElm.msRequestFullscreen();
+            } else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            }
+        }, false);
+    }
+    var myheight = $("ul.line li").height();
+    $(".line").slideUp("", myheight);
+    $("#btn").click(function() {
+        $("#full_mainlist").fullScreen();
+        myheight = $("ul.line li").height();
+        $(".line").slideUp("", myheight);
+    })
+</script>
+
+</html>

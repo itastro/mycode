@@ -1,0 +1,38 @@
+package com.bailian.car.dao.driver;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
+import com.bailian.car.domain.cardriver.InAndOut;
+
+public interface InAndOutRepository extends JpaRepository<InAndOut, Integer>, JpaSpecificationExecutor<InAndOut> {
+	
+	@Query(value = "SELECT\r\n" + 
+			"	ID,\r\n" + 
+			"	vSn,\r\n" + 
+			"	driverName,\r\n" + 
+			"	licenseEndTime,\r\n" + 
+			"	updateTime,\r\n" + 
+			"	errorString,\r\n" + 
+			"	LicenseNo,\r\n" + 
+			"	isallow,\r\n" + 
+			"	insNo,\r\n" + 
+			"	endTime,\r\n" + 
+			"   driverCardId,\r\n" + 
+			"   io\r\n" + 
+			"FROM\r\n" + 
+			"	v_cardatainfo\r\n" + 
+			"WHERE\r\n" + 
+			"	id = (\r\n" + 
+			"		SELECT\r\n" + 
+			"			MAX(id)\r\n" + 
+			"		FROM\r\n" + 
+			"			v_cardatainfo\r\n" + 
+			"	)", nativeQuery = true)
+	InAndOut getnewinfo();
+
+	//@Query(value = "select ID,vSn,driverName,licenseEndTime,updateTime,errorString,LicenseNo,isallow,insNo,endTime from v_cardatainfo ORDER BY updateTime DESC", nativeQuery = true)
+	//Page<InAndOut> getinfo(Pageable pageable);
+
+}

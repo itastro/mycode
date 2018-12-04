@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>登录</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="./img/tit_ico.png" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap-3.3.7.min.css">
+    <link href="./css/login.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./assets/css/toastr.min.css" />
+
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="header">
+            <img src="./img/login/header_logo.png" alt="">
+            <span>测试车辆管理系统</span>
+        </div>
+        <!-- <div class="content" "src/main/webapp/login.html">
+            <div class="bogin_bg"></div> -->
+        <div class="login_box">
+            <div class="box_title">用户NET ID登录</div>
+            <!--用户名-->
+            <div class="user_group">
+                <div>
+                    <div class="input-group">
+                        <span class="input-group-addon search-menu"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" class="user_input" placeholder="请输入用户名">
+                    </div>
+                </div>
+            </div>
+            <!--密码-->
+            <div class="pass_group">
+                <div>
+                    <div class="input-group">
+                        <span class="input-group-addon search-menu"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input type="password" class="pass_input" placeholder="请输入密码">
+                    </div>
+                </div>
+            </div>
+            <!--语言选择-->
+            <div class="language_group">
+                <input id="rember" class="eng_radio" type="checkbox" name="autologin">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 下次自动登录
+                <a href="#;" class="pull-right change_logintype" style="margin-left:20px;">员工卡号登录</a>
+            </div>
+            <!--登录按钮-->
+            <div class="loginbtn_group">
+                <input class="login_btn" type="button" name="" value="立即登录">
+            </div>
+            <!--登录提示-->
+            <div class="logininfo_group">
+                点击 “立即登录” 即表示您同意并愿意遵守
+                <a target="_blank" href="../html/carfile.html">测试车辆注意事项</a>
+            </div>
+        </div>
+        <!-- </div> -->
+        <div class="footer">
+            <p class="footer_link"><span>车辆 </span>
+                <span>服务 </span>
+                <span>管理 </span></p>
+            <p>
+                版权所有©2018 西安百联长通科技有限公司 京ICP备16069421号
+            </p>
+        </div>
+    </div>
+
+</body>
+<script src="./assets/js/jquery.min.js"></script>
+<script src="./assets/js/toastr.min.js"></script>
+
+<script src="./js/login.js"></script>
+<script>
+    // 点击判断浏览器类型
+    function isFF() {
+        return navigator.userAgent.indexOf("Firefox") != -1;
+    }
+
+    function isChrome() {
+        return navigator.userAgent.indexOf("Chrome") > -1;
+    }
+    isFF();
+    isChrome();
+    if (!isFF() && !isChrome()) {
+        $("head").append("<link rel='stylesheet' type='text/css' href='../css/ie8login.css' / > ");
+    }
+</script>
+
+</html>

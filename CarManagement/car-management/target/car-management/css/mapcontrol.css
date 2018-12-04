@@ -1,0 +1,331 @@
+/*start 地图*/
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: "微软雅黑";
+}
+
+.button-group {
+    top: 20px !important;
+    /*bott*/
+}
+
+.wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#cmapcontainer,
+#amapcontainer {
+    height: 100%;
+    width: 100%;
+    min-width: 1300px;
+    /* height: 750px; */
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.state-wrap {
+    padding-bottom: 16px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 12px;
+    line-height: 16px;
+    background: url("../img/map/map_label.png") no-repeat left bottom;
+}
+
+.logistics-wrap {
+    background: #fff;
+    padding: 10px;
+}
+
+.logistics-state,
+.logistics-time {
+    padding-left: 25px;
+    height: 25px;
+    line-height: 25px;
+    width: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logistics-state {
+    background: url("../img/map/state_icon.png") no-repeat left center;
+}
+
+.logistics-time {
+    background: url("../img/map/clock_icon.png") no-repeat left center;
+}
+
+/*end 地图*/
+/*s 控件框开始*/
+
+.mapcontrol {
+    width: 281px;
+    position: absolute;
+    top: 5px;
+    left: 50px;
+    z-index: 10;
+}
+
+.button-group .button {
+    background: #4b6ba1;
+    border-radius: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.controlnav {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    text-indent: 10px;
+    /*background: #4b6ba1;*/
+    background: #425F8E;
+    /*background: #0A8CFF;*/
+}
+
+.uparrow {
+    cursor: pointer;
+    float: right;
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+.trans {
+    transform: rotate(180deg);
+}
+
+.controlbody {
+    background: #4b6ba1;
+    /*background: #2398FF;*/
+    width: 100%;
+    color: white;
+    position: relative;
+}
+
+.pointerTabLeft {
+    position: absolute;
+    width: 16px;
+    height: 9px;
+    bottom: 0;
+    background: url("../img/map/pointer_arrow.png");
+    left: 25%;
+    margin-left: -8px;
+    transition: all .2s ease-in-out;
+}
+
+.pointerTabRight {
+    position: absolute;
+    width: 16px;
+    height: 9px;
+    bottom: 0;
+    background: url("../img/map/pointer_arrow.png");
+    left: 75%;
+    margin-left: -8px;
+    transition: all .2s ease-in-out;
+}
+
+.current {
+    width: 48%;
+    display: inline-block;
+    cursor: pointer;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+.current img {
+    vertical-align: middle;
+}
+
+.controlfoot {
+    width: 99.10%;
+    min-height: 200px;
+    position: relative;
+    background: #FFFFFF;
+    /*border: 1px solid #57ACF9;*/
+    border: 1px solid #4b6ba1;
+}
+
+.footbox {
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.input_box {
+    width: 89%;
+    border: 1.4px solid #D2D2D2;
+    border-radius: 6px;
+    height: 35px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.date_input {
+    width: 94%;
+    height: 27px;
+    outline: none;
+    border: none;
+    margin-top: 3px;
+    margin-left: 10px;
+}
+
+.search_input_box {
+    position: relative;
+}
+
+.search_input {
+    width: 92%;
+    height: 28px;
+    outline: none;
+    border: none;
+    position: absolute;
+    left: 9px;
+    top: 2px;
+}
+
+.search_icon {
+    position: absolute;
+    right: 16px;
+    top: 5px;
+}
+
+.search_icon img {
+    width: 20px;
+    height: 21px;
+    margin-left: 2px;
+    margin-top: 1px;
+    cursor: pointer;
+}
+
+.controlRight button {
+    background: #4b6ba1;
+    /*background: #0A8CFF;*/
+    border: none;
+    width: 65px;
+    height: 30px;
+    line-height: 30px;
+    color: white;
+    border-radius: 5px;
+    margin-left: 196px;
+    margin-top: 14px;
+    outline: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.mydata_input {
+    width: 85%;
+    margin-left: 10px;
+    border: none !important;
+    height: 84%;
+    outline: none;
+    margin-top: 3px;
+}
+
+/*end 控件框结束*/
+/**/
+/*自定义信息窗口样式*/
+
+.info {
+    border: solid 1px silver;
+}
+
+div.info-top {
+    position: relative;
+    background: none repeat scroll 0 0 #F9F9F9;
+    border-bottom: 1px solid #CCC;
+    border-radius: 5px 5px 0 0;
+}
+
+div.info-top div {
+    display: inline-block;
+    color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 31px;
+    padding: 0 10px;
+}
+
+div.info-top img {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition-duration: 0.25s;
+}
+
+div.info-top img:hover {
+    box-shadow: 0px 0px 5px #000;
+}
+
+div.info-middle {
+    font-size: 12px;
+    padding: 6px;
+    line-height: 20px;
+}
+
+div.info-bottom {
+    height: 0px;
+    width: 100%;
+    clear: both;
+    text-align: center;
+}
+
+div.info-bottom img {
+    position: relative;
+    z-index: 104;
+}
+
+span {
+    margin-left: 5px;
+    font-size: 11px;
+}
+
+.main p {
+    margin: 6px 0px;
+}
+
+.info-middle img {
+    float: left;
+    margin-right: 6px;
+}
+
+.amap-info-contentContainer {
+    background: #F9F9F9;
+    padding: 5px 15px;
+    border-radius: 10px;
+}
+
+ul.main {
+    list-style: none;
+    text-align: left;
+    width: 134px;
+    margin: 0 auto;
+}
+
+button.close_info {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    border-radius: 5px;
+    position: absolute;
+    top: 6px;
+    line-height: 16px;
+    right: 6px;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+}

@@ -1,0 +1,14 @@
+package com.bailian.car.domain.carmaintain;
+
+/**
+ * 
+    * @ClassName: CarMaintain
+    * @Description:车辆维修实体类
+    * @author itastro
+    * @date 2018年5月15日
+    *
+ */
+
+public class CarMaintain {
+
+}

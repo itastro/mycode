@@ -1,0 +1,316 @@
+package com.bailian.car.domain.cars.car;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "t_carbase")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class CarBase {
+
+	public Integer getSeats() {
+		return seats;
+	}
+
+	public void setSeats(Integer seats) {
+		this.seats = seats;
+	}
+
+	public String getPicurl() {
+		return picurl;
+	}
+
+	public void setPicurl(String picurl) {
+		this.picurl = picurl;
+	}
+
+	public String getProjectEngineer() {
+		return projectEngineer;
+	}
+
+	public void setProjectEngineer(String projectEngineer) {
+		this.projectEngineer = projectEngineer;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getOilspecification() {
+		return oilspecification;
+	}
+
+	public void setOilspecification(String oilspecification) {
+		this.oilspecification = oilspecification;
+	}
+
+	public String getBrandModelone() {
+		return brandModelone;
+	}
+
+	public void setBrandModelone(String brandModelone) {
+		this.brandModelone = brandModelone;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public String getProject_sn() {
+		return project_sn;
+	}
+
+	public void setProject_sn(String project_sn) {
+		this.project_sn = project_sn;
+	}
+
+	public String getProject_name() {
+		return project_name;
+	}
+
+	public void setProject_name(String project_name) {
+		this.project_name = project_name;
+	}
+
+	public String getVin() {
+		return vin;
+	}
+
+	public void setVin(String vin) {
+		this.vin = vin;
+	}
+
+	public String getEngineNumber() {
+		return engineNumber;
+	}
+
+	public void setEngineNumber(String engineNumber) {
+		this.engineNumber = engineNumber;
+	}
+
+	public String getEngineType() {
+		return engineType;
+	}
+
+	public void setEngineType(String engineType) {
+		this.engineType = engineType;
+	}
+
+	public String getCarName() {
+		return carName;
+	}
+
+	public void setCarName(String carName) {
+		this.carName = carName;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public String getvCarType() {
+		return vCarType;
+	}
+
+	public void setvCarType(String vCarType) {
+		this.vCarType = vCarType;
+	}
+
+	public String getEngineCapacity() {
+		return engineCapacity;
+	}
+
+	public void setEngineCapacity(String engineCapacity) {
+		this.engineCapacity = engineCapacity;
+	}
+
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
+	}
+
+	public String getGBTS() {
+		return GBTS;
+	}
+
+	public void setGBTS(String gBTS) {
+		GBTS = gBTS;
+	}
+
+	public String getFuelType() {
+		return FuelType;
+	}
+
+	public void setFuelType(String fuelType) {
+		FuelType = fuelType;
+	}
+
+	public String getTyresize() {
+		return tyresize;
+	}
+
+	public void setTyresize(String tyresize) {
+		this.tyresize = tyresize;
+	}
+
+	public String getReaTireP() {
+		return reaTireP;
+	}
+
+	public void setReaTireP(String reaTireP) {
+		this.reaTireP = reaTireP;
+	}
+
+	public String getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Date getMakeTime() {
+		return makeTime;
+	}
+
+	public void setMakeTime(Date makeTime) {
+		this.makeTime = makeTime;
+	}
+
+	public String getVehicleQuality() {
+		return vehicleQuality;
+	}
+
+	public void setVehicleQuality(String vehicleQuality) {
+		this.vehicleQuality = vehicleQuality;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+
+	private String vSn; // 车辆编号
+
+	private String project_sn; // 项目号
+
+	private String project_name; // 项目名称
+
+	private String projectEngineer; // 項目工程師
+
+	private String vin; // 车架号
+
+	private String engineNumber;// 发动机编号
+
+	private String engineType; // 发动机型号
+
+	private String carName; // 车辆名称
+
+	private String groupName; // 项目分组
+
+	private String vCarType; // 车辆类型
+
+	private String engineCapacity; // 发动机排量
+
+	private String pictureUrl; // 照片 TDDO
+
+	private String GBTS; // 变速箱邮箱规格
+
+	private String FuelType; // 燃油规格
+
+	private String oilspecification; // 机油规格
+
+	private String tyresize; // 轮胎规格
+
+	private String reaTireP;// 后轮胎压力
+
+	private String customer; // 客戶
+
+	private String operator; // 填写人
+
+	private Date makeTime; // 制作日期
+
+	private String vehicleQuality; // 车辆整备质量
+
+	private String color; // 车辆颜色
+
+	private Integer seats; // 座位数
+
+	private String adminName; // 车管
+
+	private String price; // 价值
+
+	private String brandModelone; // 厂牌型号
+
+	private String picurl; // 车辆照片路径
+
+	private String remark; // 备注
+
+}

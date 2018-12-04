@@ -1,0 +1,97 @@
+package com.bailian.car.service.temcar.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.dao.cardata.GroupReposity;
+import com.bailian.car.dao.cardata.TemCarRepository;
+import com.bailian.car.domain.car.CarGroup;
+import com.bailian.car.domain.car.TempCar;
+import com.bailian.car.service.temcar.TemCarService;
+
+@Service
+@Transactional
+public class TemCarServiceImpl implements TemCarService {
+	@Autowired
+	private TemCarRepository temCarRepository;
+	@Autowired
+	private GroupReposity groupReposity;
+
+	@Override
+	public JsonData add(TempCar car, Integer gid) {
+		CarGroup group = null;
+		if (gid != null) {
+			group = groupReposity.findOne(gid);
+		}
+		if (car != null) {
+			Date date = new Date();
+			car.setMakeTime(date);
+			car.setcGroup(group);
+			car.setStatus("0");
+			temCarRepository.save(car);
+			return JsonData.success(car, "添加成功");
+		}
+		return JsonData.fail("添加失败");
+
+	}
+
+	@Override
+	public List<TempCar> Query(String vsn, String status, String groupName) {
+		List<Predicate> predicates = new ArrayList<>();
+	            TempCar tempCar = new TempCar();
+		Specification<TempCar> querySpecifi = new Specification<TempCar>() {
+			
+			
+
+			@Override
+			public Predicate toPredicate(Root<TempCar> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				// 根据车辆编号
+				if (StringUtils.isNotBlank(vsn)) {
+					Predicate p1 = cb.equal(root.get("vSn").as(String.class), vsn);
+					predicates.add(p1);
+				}
+				// 根据状态
+				if (StringUtils.isNoneBlank(status)) {
+					Predicate p2 = cb.equal(root.get("status").as(String.class), status);
+					predicates.add(p2);
+				}
+				//多表关联查询
+				Join<TempCar,CarGroup > standarjoin = root.join("cGroup",
+						JoinType.INNER);
+
+				/*if (courier.getStandard() != null
+						&& StringUtils.isNotBlank(courier.getStandard()
+								.getName())) {
+					Predicate P4 = cb.like(
+							standarjoin.get("name").as(String.class), "%"
+									+ courier.getStandard().getName() + "%");
+					list.add(P4);
+				}*/
+
+				// 根据分组进行查询
+				
+				if () {
+					
+				}
+
+				return null;
+			}
+		};
+		return null;
+	}
+
+}

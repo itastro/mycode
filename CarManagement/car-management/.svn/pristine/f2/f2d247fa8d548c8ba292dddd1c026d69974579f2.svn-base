@@ -1,0 +1,160 @@
+package com.bailian.car.service.iccard.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.IccardResult;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.cars.car.CarRepository;
+import com.bailian.car.dao.driver.DriverRepository;
+import com.bailian.car.dao.iccard.IccardRepository;
+import com.bailian.car.dao.iccard.IccardUseHistoryRepository;
+import com.bailian.car.domain.cardriver.Driver;
+import com.bailian.car.domain.cars.car.Car;
+import com.bailian.car.domain.iccard.Iccard;
+import com.bailian.car.domain.iccard.IccardUseHistory;
+import com.bailian.car.param.IccardSearch;
+import com.bailian.car.param.WriteCarCard;
+import com.bailian.car.service.iccard.IccardService;
+import com.bailian.car.utils.JsonMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@Transactional
+public class IccardServiceImpl implements IccardService {
+
+	@Autowired
+	private IccardUseHistoryRepository iccardUseHistoryRepository;
+
+	@Autowired
+	private IccardRepository iccardRepository;
+
+	@Autowired
+	private CarRepository carRepository;
+
+	@Autowired
+
+	private DriverRepository driverRepository;
+
+	@Override
+	public JsonData insert(IccardUseHistory iccardUseHistory) {
+		try {
+			iccardUseHistoryRepository.save(iccardUseHistory);
+			return JsonData.success("插入成功");
+		} catch (Exception e) {
+			return JsonData.fail("插入失败");
+		}
+
+	}
+
+	@Override
+	public JsonData save(Iccard iccard) {
+		iccardRepository.save(iccard);
+		return JsonData.success("添加成功");
+	}
+
+	@Override
+	public List<Iccard> findSuppercarid() {
+		return iccardRepository.findSuppercarid();
+	}
+
+	@Override
+	public List<Iccard> findBackcarid() {
+		// TODO Auto-generated method stub
+		return iccardRepository.findbackcarid();
+	}
+
+	@Override
+	public List<Iccard> findDrivercarid() {
+		// TODO Auto-generated method stub
+		return iccardRepository.findDrivercarid();
+	}
+
+	@Override
+	public List<Iccard> findcarid() {
+		// TODO Auto-generated method stub
+		return iccardRepository.findcarid();
+	}
+
+	@Override
+	public PageBean<Iccard> findAll(PageQuery pQuery, IccardSearch iSearch) {
+		log.info("pQuery:{}", JsonMapper.obj2String(pQuery));
+		log.info("iSearch:{}", JsonMapper.obj2String(iSearch));
+		Pageable pageable = new PageRequest(pQuery.getPage(), pQuery.getSize());
+
+		List<Predicate> ps = new ArrayList<Predicate>();
+		PageBean<Iccard> pageBean = new PageBean<>();
+		Specification<Iccard> spec = new Specification<Iccard>() {
+			@Override
+			public Predicate toPredicate(Root<Iccard> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return null;
+
+			}
+		};
+		Page<Iccard> pagedata = iccardRepository.findAll(spec, pageable);
+		pageBean.setTotal(pagedata.getTotalElements());
+		pageBean.setRows(pagedata.getContent());
+		return pageBean;
+
+	}
+
+	@Override
+	public JsonData delete(Integer id) {
+		iccardRepository.delete(id);
+		return JsonData.success("删除成功");
+	}
+
+	@Override
+	public JsonData update(Iccard iccard) {
+		iccardRepository.save(iccard);
+		return JsonData.success("更新成功");
+	}
+
+	@Override
+	public IccardResult vehicleBindingcard(WriteCarCard writeCarCard) {
+		if (writeCarCard.getCardType() == 0) {
+
+			Car car = carRepository.findByIccard(writeCarCard.getCardNumber());
+			if (car != null) {
+				return IccardResult.fail("此车辆已经绑定过卡", "1");
+			}
+			saveIccard(writeCarCard);
+			carRepository.updateCard(writeCarCard.getOtherNumber(), writeCarCard.getCardNumber());
+			return IccardResult.success("绑定车辆成功", "0");
+		} else if (writeCarCard.getCardType() == 1) {
+
+			Driver driver = driverRepository.findByIccard(writeCarCard.getCardNumber());
+
+			if (driver != null) {
+				return IccardResult.fail("此驾驶员已经绑定过卡", "1");
+			}
+			saveIccard(writeCarCard);
+			driverRepository.updateCard(writeCarCard.getOtherNumber(), writeCarCard.getCardNumber());
+			return IccardResult.success("绑定驾驶员成功", "0");
+		}
+		return IccardResult.fail("绑定失败", "1");
+	}
+
+	private void saveIccard(WriteCarCard writeCarCard) {
+		Iccard iccard = null;
+		iccard = new Iccard();
+		iccard.setCardType(writeCarCard.getCardType());
+		iccard.setIccard(writeCarCard.getCardNumber());
+		iccardRepository.save(iccard);
+	}
+}

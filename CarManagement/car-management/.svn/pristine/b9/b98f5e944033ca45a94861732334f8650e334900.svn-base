@@ -1,0 +1,389 @@
+package com.bailian.car.controller.cars.car;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import com.bailian.car.annotation.JSON;
+import com.bailian.car.annotation.SystemLog;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.domain.cars.car.Car;
+import com.bailian.car.domain.cars.car.CarBase;
+import com.bailian.car.emnu.OperationType;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.ApplyBom;
+import com.bailian.car.param.ApplyTools;
+import com.bailian.car.param.CarParam;
+import com.bailian.car.param.CarQueryOrder;
+import com.bailian.car.param.CarQueryParam;
+import com.bailian.car.service.cars.car.CarService;
+import com.bailian.car.utils.BeanValidator;
+import com.bailian.car.utils.JsonMapper;
+import com.bailian.car.vo.MapVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+
+@Api(value = "api接口", description = "车辆相关操作")
+@Controller
+@RequestMapping("/car")
+@Scope("prototype")
+@Slf4j
+public class CarController {
+	@Autowired
+	private CarService carService;
+
+	@RequestMapping("/save.action")
+	@ResponseBody
+	@ApiOperation(value = "车辆录入", notes = "车辆录入的同时录入bom零部件、研发工具、需要携带车辆编号")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "project_sn", value = "项目编号", dataType = "string"),
+			@ApiImplicitParam(name = "project_name", value = "项目名称", dataType = "string"),
+			@ApiImplicitParam(name = "projectEngineer", value = "项目工程师", dataType = "string"),
+			@ApiImplicitParam(name = "vin", value = "车架号", dataType = "string"),
+			@ApiImplicitParam(name = "engineNumber", value = "发动机编号", dataType = "string"),
+			@ApiImplicitParam(name = "engineType", value = "发动机型号", dataType = "string"),
+			@ApiImplicitParam(name = "carName", value = "车辆名称", dataType = "string"),
+			@ApiImplicitParam(name = "groupName", value = "分组名称", dataType = "string"),
+			@ApiImplicitParam(name = "vCarType", value = "车辆类型", dataType = "string"),
+			@ApiImplicitParam(name = "engineCapacity", value = "发动机排量", dataType = "string"),
+			@ApiImplicitParam(name = "pictureUrl", value = "照片路径", dataType = "string"),
+			@ApiImplicitParam(name = "GBTS", value = "变速箱规格", dataType = "string"),
+			@ApiImplicitParam(name = "FuelType", value = "燃油规格", dataType = "string"),
+			@ApiImplicitParam(name = "oilspecification", value = "机油规格", dataType = "string"),
+			@ApiImplicitParam(name = "tyresize", value = "轮胎规格", dataType = "string"),
+			@ApiImplicitParam(name = "reaTireP", value = "后轮胎压力", dataType = "string"),
+			@ApiImplicitParam(name = "customer", value = "客户", dataType = "string"),
+			@ApiImplicitParam(name = "vehicleQuality", value = "重量", dataType = "string"),
+			@ApiImplicitParam(name = "seats", value = "座位数", dataType = "string"),
+			@ApiImplicitParam(name = "adminName", value = "车管", dataType = "string"),
+			@ApiImplicitParam(name = "price", value = "价值", dataType = "string"),
+			@ApiImplicitParam(name = "contactNumber", value = "电话", dataType = "string"),
+			@ApiImplicitParam(name = "remark", value = "备注", dataType = "string") })
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "录入车辆信息")
+	public JsonData savecar(CarParam param) {
+		log.info("param:{}", JsonMapper.obj2String(param));
+		BeanValidator.check(param);
+		try {
+			return carService.save(param);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具工程师角色/车辆录入权限");
+		}
+
+		// contactNumber
+	}
+
+	@Value("${IMAGE_SERVER_URL}")
+	private String IMAGE_SERVER_URL;
+
+	@RequestMapping(value = "/carPicUpload.action", produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public JsonData carPicUpload(MultipartFile uploadFile, String vSn) throws Exception {
+
+		return carService.upload(uploadFile, vSn, IMAGE_SERVER_URL);
+	}
+
+	
+	@RequestMapping(value = "/bomUpload.action", produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public JsonData bomUpload(MultipartFile uploadFile, String vSn) throws Exception {
+		return carService.uploadbom(uploadFile, vSn, IMAGE_SERVER_URL);
+	
+	}
+	@RequestMapping(value = "/circuitPicUpload.action", produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public JsonData circuitPicUpload(MultipartFile uploadFile, String vSn) throws Exception {
+		return carService.circuitPicUpload(uploadFile, vSn, IMAGE_SERVER_URL);
+	}
+
+	@RequestMapping("/applybom.action")
+	@ResponseBody
+	@ApiImplicitParams({ @ApiImplicitParam(name = "bomName", value = "bom名称", dataType = "string"),
+			@ApiImplicitParam(name = "partName", value = "零部件号", dataType = "string"),
+			@ApiImplicitParam(name = "ApplyPerson", value = "申请人", dataType = "string"),
+			@ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string")
+
+	})
+	@ApiOperation(value = "申请bom")
+	@SystemLog(type = OperationType.APPLY, medoule = "车辆管理", methods = "申请BOM零部件")
+	public JsonData savebom(@RequestBody List<ApplyBom> applyBoms) {
+		log.info("applyBoms:{}", applyBoms);
+
+		try {
+			return carService.savebom(applyBoms);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具工程师角色/BOM申请权限");
+		}
+
+	}
+
+	@RequestMapping("/applytools.action")
+	@ResponseBody
+	@ApiOperation(value = "申请工具")
+
+	@ApiImplicitParams({ @ApiImplicitParam(name = "toolName", value = "研发工具名称", dataType = "string"),
+			@ApiImplicitParam(name = "ApplyPerson", value = "申请人", dataType = "string"),
+			@ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string")
+
+	})
+	@SystemLog(type = OperationType.APPLY, medoule = "车辆管理", methods = "申请研发工具信息")
+	public JsonData savetools(@RequestBody List<ApplyTools> applyTools) {
+		log.info("applyTools:{}", applyTools);
+
+		try {
+			return carService.savatools(applyTools);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具工程师角色/研发工具申请权限");
+		}
+
+	}
+
+	// 查询车辆录入信息
+	@RequestMapping("findAddCar.action")
+	@ApiOperation(value = "车辆录入信息查询")
+
+	@ResponseBody
+	public CarBase findAddCar(@ApiParam(value = "车辆编号") String vSn) {
+		CarBase car = carService.getAddCar(vSn);
+		return car;
+
+	}
+
+	// 修改车辆录入信息
+	@RequestMapping(value = "/update.action")
+	// @SystemLog(type = OperationType.QUERY, medoule = "车辆管理", methods =
+	// "模糊查询车辆编号")
+	@ApiOperation(value = "修改车辆录入信息")
+	@ResponseBody
+	@ApiImplicitParams({ @ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "project_sn", value = "项目编号", dataType = "string"),
+			@ApiImplicitParam(name = "project_name", value = "项目名称", dataType = "string"),
+			@ApiImplicitParam(name = "projectEngineer", value = "发动机型号", dataType = "string"),
+			@ApiImplicitParam(name = "vin", value = "车架号", dataType = "string"),
+			@ApiImplicitParam(name = "engineNumber", value = "发动机编号", dataType = "string"),
+			@ApiImplicitParam(name = "engineType", value = "发动机型号", dataType = "string"),
+			@ApiImplicitParam(name = "carName", value = "车辆名称", dataType = "string"),
+			@ApiImplicitParam(name = "groupName", value = "分组名称", dataType = "string"),
+			@ApiImplicitParam(name = "vCarType", value = "车辆类型", dataType = "string"),
+			@ApiImplicitParam(name = "engineCapacity", value = "发动机排量", dataType = "string"),
+			@ApiImplicitParam(name = "pictureUrl", value = "照片路径", dataType = "string"),
+			@ApiImplicitParam(name = "GBTS", value = "变速箱规格", dataType = "string"),
+			@ApiImplicitParam(name = "FuelType", value = "燃油规格", dataType = "string"),
+			@ApiImplicitParam(name = "oilspecification", value = "机油规格", dataType = "string"),
+			@ApiImplicitParam(name = "brandModelone", value = "车辆型号", dataType = "string"),
+			@ApiImplicitParam(name = "tyresize", value = "轮胎规格", dataType = "string"),
+			@ApiImplicitParam(name = "reaTireP", value = "后轮胎压力", dataType = "string"),
+			@ApiImplicitParam(name = "customer", value = "客户", dataType = "string"),
+			@ApiImplicitParam(name = "vehicleQuality", value = "重量", dataType = "string"),
+			@ApiImplicitParam(name = "seats", value = "座位数", dataType = "string"),
+			@ApiImplicitParam(name = "adminName", value = "车管", dataType = "string"),
+			@ApiImplicitParam(name = "price", value = "价值", dataType = "string"),
+			@ApiImplicitParam(name = "remark", value = "备注", dataType = "string"),
+			@ApiImplicitParam(name = "contactNumber", value = "联系方式", dataType = "string") })
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "更新车辆信息")
+	public JsonData update(CarBase param) {
+		log.info("param:{}", JsonMapper.obj2String(param));
+
+		try {
+			return carService.update(param);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具工程师角色/修改车辆录入信息权限");
+		}
+
+	}
+
+	// 车辆多条件查询
+	@RequestMapping(value = "/pageQuery.action")
+	@ApiOperation(value = "车辆查询", notes = "多条件查询")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "page", value = "当前页", dataType = "int", defaultValue = "1"),
+			@ApiImplicitParam(name = "size", value = "每页显示数量", dataType = "int", defaultValue = "10"),
+			@ApiImplicitParam(name = "sort", value = "排序参数", dataType = "string"),
+			@ApiImplicitParam(name = "sortOder", value = "排序命令", dataType = "string"),
+
+			@ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "project_sn", value = "项目编号", dataType = "string"),
+			@ApiImplicitParam(name = "vin", value = "车架号", dataType = "string"),
+			@ApiImplicitParam(name = "engineNumber", value = "发动机编号", dataType = "string"),
+			@ApiImplicitParam(name = "projectEngineer", value = "项目工程师", dataType = "string"),
+			@ApiImplicitParam(name = "brandModeltwo", value = "厂牌型号（来自保险）", dataType = "string"),
+			@ApiImplicitParam(name = "NO", value = "保险编号", dataType = "string"),
+			@ApiImplicitParam(name = "bstart", value = "保险起始日", dataType = "Date"),
+			@ApiImplicitParam(name = "bend", value = "保险结束日", dataType = "Date"),
+			@ApiImplicitParam(name = "pend", value = "牌照结束日", dataType = "Date"),
+			@ApiImplicitParam(name = "pstart", value = "牌照起始日", dataType = "Date"),
+			@ApiImplicitParam(name = "ustart", value = "接车起始日", dataType = "Date"),
+			@ApiImplicitParam(name = "uend", value = "接车结束日", dataType = "Date"),
+			@ApiImplicitParam(name = "backstart", value = "还车车起始日", dataType = "Date"),
+			@ApiImplicitParam(name = "backend", value = "还车结束日", dataType = "Date")
+
+	})
+	// @SystemLog(type = OperationType.QUERY, medoule = "车辆管理", methods = "车辆查询")
+	@ResponseBody
+	public PageBean<Car> carPageQuery(PageQuery pageQuery, CarQueryParam carQueryParam) {
+
+		PageBean<Car> result = carService.pageQuery(pageQuery, carQueryParam);
+
+		return result;
+
+	}
+
+	@RequestMapping("/pageQuery2.action")
+	@ResponseBody
+	public PageBean<Car> pageQuery2(PageQuery pageQuery, CarQueryParam carQueryParam) {
+
+		PageBean<Car> result = carService.pageQuery2(pageQuery, carQueryParam);
+
+		return result;
+
+	}
+
+	// 车辆命令查询
+	@RequestMapping("orderQuery.action")
+	@ResponseBody
+	@ApiOperation(value = "车辆命令查询,带分页", notes = "查询全部、之前归还、当月新车、当月归还、有保险无牌照、有牌照无保险")
+
+	@ApiImplicitParams({ @ApiImplicitParam(name = "allCount", value = "查询所有", dataType = "string"),
+			@ApiImplicitParam(name = "beforBack", value = "之前归还", dataType = "string"),
+			@ApiImplicitParam(name = "thismonnew", value = "当月新车", dataType = "string"),
+			@ApiImplicitParam(name = "thismonthback", value = "当月归还", dataType = "string"),
+			@ApiImplicitParam(name = "HaveIn", value = "有保险无牌照", dataType = "string"),
+			@ApiImplicitParam(name = "haveLi", value = "有牌照无保险", dataType = "string")
+
+	})
+	public PageBean<Car> orderQuery(PageQuery pQuery, CarQueryOrder cOrder) {
+
+		log.info("cOrder:{}", JsonMapper.obj2String(cOrder));
+		return carService.orderQuery(pQuery, cOrder);
+
+	}
+
+	@RequestMapping(value = "/likevSn.action")
+	@ResponseBody
+	@ApiOperation(value = "车牌号模糊查询")
+	public List<String> find(@ApiParam(value = "车辆编号") String vSn) {
+		List<String> vSns = carService.findAllvSn(vSn);
+		return vSns;
+
+	}
+
+	// 加载车辆在地图上的分布 以及车辆信息
+	// 拿到这个区域的车辆信息
+	// 拿到经纬度
+	@RequestMapping(value = "/allcar.action")
+	@ApiOperation(value = "所有车辆信息地图分布")
+	@JSON(type = Car.class, include = "id,vSn,vCarSn,gpsSN,iccard,isAllow,runStatic,speed,longitude,latitude,carName,towards,vCarType,licenseNo,driverName")
+	public List<Car> findAll() {
+
+		List<Car> cars = carService.findAll();
+
+		return cars;
+
+	}
+
+	@RequestMapping(value = "/carTrack.action")
+	@ResponseBody
+	@ApiOperation(value = "车辆轨迹")
+	public List<MapVo> carTrack1(Date startDate, Date endDate, String vSn) {
+		long millis = System.currentTimeMillis();
+		 List<MapVo> list = carService.showTrack1(startDate, endDate, vSn);
+		long end = System.currentTimeMillis();
+		long time = (end - millis) / 1000;
+		System.out.println(time);
+		return list;
+	}
+
+	// 车辆的删除
+	@RequestMapping(value = "/delete.action")
+	@ResponseBody
+	@SystemLog(type = OperationType.DELETE, medoule = "车辆管理", methods = "车辆的删除")
+	public JsonData delete(String[] ids) {
+
+		return carService.deleteCar(ids);
+
+	}
+
+	// 查询单个车辆的信息
+	@RequestMapping(value = "/carDataByvSn.action")
+	@ApiOperation(value = "单个车辆数据查询")
+	@JSON(type = Car.class, include = "id,vSn,vCarSn,gpsSN,iccard,isAllow,runStatic,speed,longitude,latitude,carName,towards,vCarType,licenseNo")
+	public Car carDataByvSn(String vSn) {
+		return carService.findCarByvSn(vSn);
+	}
+
+	// 以excel的形式导入车辆信息
+	@RequestMapping("/car_batchImport.action")
+	@ResponseBody
+	public JsonData batchImport(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request)
+			throws IOException, IllegalStateException, InvalidFormatException {
+		String filename = file.getOriginalFilename();
+
+		if (file != null) {
+			int i = -1;
+
+			i = carService.insertDBByExcel(file, filename);
+			
+			if (i == 0) {
+				return JsonData.fail("内容为空");
+			}
+
+			if (i > 0) {
+				return JsonData.success("你导入了" + i + "辆", "导入成功");
+			} else {
+				return JsonData.fail("上传失败");
+			}
+
+		} else {
+			return JsonData.fail("上传失败");
+		}
+
+	}
+
+	// 更新检测站车型
+	@RequestMapping("updateVehicleTestingStationType.action")
+	@ResponseBody
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "更新检测站车型")
+	public JsonData updateVehicleTestingStationType(String vSn, String type) {
+		log.info("vSn:{},type:{}", vSn, type);
+		return carService.updateVehicleTestingStationType(vSn, type);
+	}
+
+	
+	
+	// 车辆绑定GPS
+	@RequestMapping("vehicleRelateGps.action")
+	@ResponseBody
+	public JsonData vehicleRelateGps(String vSn, String gps) {
+		return carService.vehicleRelateGps(vSn, gps);
+	}
+
+	// 车辆绑定GPS
+	@RequestMapping("vehicleCancleGps.action")
+	@ResponseBody
+	public JsonData vehicleCancleGps(String vSn) {
+		return carService.vehicleCancleGps(vSn);
+	}
+	
+	//
+	@RequestMapping("/updateVVV")
+	@ResponseBody
+	public JsonData updateVVV() {
+		return carService.updateVVV();
+	}
+	
+}

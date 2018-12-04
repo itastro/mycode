@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>维修车间大屏</title>
+    <link rel="shortcut icon" href="../img/tit_ico.png" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap-3.3.7.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/screensmall.css" media="screen and (max-width: 1300px)">
+    <link rel="stylesheet" type="text/css" href="../css/screenbig.css" media="screen and (min-width: 1300px) and (max-width: 5148px)">
+
+</head>
+
+<body class="shopbody" style="height: 100%;" id="full_mainlist">
+    <div class="shopwhole">
+        <img class="logo" src="../img/logo.png" alt="">
+        <h3>
+            <img src="../img/screen/left.png" alt=""> 维修车辆列表
+            <img src="../img/screen/right.png" alt="">
+        </h3>
+        <button id='btn'>全屏显示</button>
+        <div class="workshopList">
+            <ul class="title">
+                <li>
+                    <span class="list0">序号</span>
+                    <span class="list1">车辆编号</span>
+                    <span class="list2">申请人</span>
+                    <span class="list3">维修项目</span>
+                    <span class="list4">预计完成日期</span>
+                    <span class="list5">操作员</span>
+                    <span class="list6">维修状态</span>
+                    <span class="list7">停放地点</span>
+                </li>
+            </ul>
+            <div id="scrollbg">
+                <div id="scrollbgul">
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div id="scrollDiv">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="shopfooter">
+            <div class="data_group">
+                <p class="datatime font-big"></p>
+                <p class="font_smalll"><span class="data"></span><span class="day"></span></p>
+            </div>
+            <div class="weather_group">
+                天气
+            </div>
+            <div class="footer_right">
+                <div class="rightBox">
+                    <p>总维修车辆：</p>
+                    <p><span class="font-big maintain_countCar">200</span>&nbsp;&nbsp;<span>辆</span></p>
+                </div>
+                <div class="rightBox">
+                    <p class="circleChart" id="0"></p>
+                    <p>排队中：<span class="maintain_queueCar">200</span>辆</p>
+                </div>
+                <div class="rightBox">
+                    <p class="circleChart" id="1"></p>
+                    <p>维修中：<span class="maintain_currentCar">200</span>辆</p>
+                </div>
+                <div class="rightBox">
+                    <p class="circleChart" id="2"></p>
+                    <p>已完成：<span class="maintain_completeCar">200</span>辆</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+
+<script src="../js/screen.js"></script>
+<script type="text/javascript">
+    // alert($("body").width());
+    // alert($("body").height());
+
+    function isFF() {
+        return navigator.userAgent.indexOf("Firefox") != -1;
+    }
+
+    function isChrome() {
+        return navigator.userAgent.indexOf("Chrome") > -1;
+    }
+
+    function formatterDate() {
+        var date = new Date();
+        var month = date.getMonth() + 1;
+        var datetime = date.getFullYear() +
+            "/" // "年"
+            +
+            (month >= 10 ? month : "0" + month) +
+            "/" // "月"
+            +
+            (date.getDate() < 10 ? "0" + date.getDate() : date
+                .getDate()) +
+            "";
+        return datetime;
+    }
+
+    function formatterDateTime() {
+        var date = new Date()
+        var month = date.getMonth() + 1;
+        var datetimehour = (date.getHours() < 10 ? "0" + date.getHours() : date
+                .getHours()) +
+            ":" +
+            (date.getMinutes() < 10 ? "0" + date.getMinutes() : date
+                .getMinutes()) +
+            ":" +
+            (date.getSeconds() < 10 ? "0" + date.getSeconds() : date
+                .getSeconds());
+        return datetimehour;
+    }
+
+    function formatterDay() {
+        var mydate = new Date();
+        var myday = mydate.getDay() //注:0-6对应为星期日到星期六 
+        if (myday == 0) {
+            return "星期日";
+        } else if (myday == 1) {
+            return "星期一";
+        } else if (myday == 2) {
+            return "星期二";
+        } else if (myday == 3) {
+            return "星期三";
+        } else if (myday == 4) {
+            return "星期四";
+        } else if (myday == 5) {
+            return "星期五";
+        } else if (myday == 6) {
+            return "星期六";
+        }
+    }
+    setInterval(function() {
+        $(".data").html(formatterDate());
+        $(".datatime").html(formatterDateTime());
+        $(".day").html(formatterDay());
+    }, 1000);
+
+
+    // 字体大小变化
+    var viewFullScreen = document.getElementById("btn");
+    if (viewFullScreen) {
+        viewFullScreen.addEventListener("click", function() {
+            $("#btn").hide();
+            var docElm = document.documentElement;
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.msRequestFullscreen) {
+                docElm = document.body; //overwrite the element (for IE) 
+                docElm.msRequestFullscreen();
+            } else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            } else {}
+        }, false);
+    }
+    (function($) {
+        $(document).ready(function() {}).keydown(function(e) {
+            if (e.which === 27) {
+                $("#btn").show();
+                /** 这里编写当ESC按下时的处理逻辑！ */
+            }
+        });
+    })(jQuery);
+    $("#btn").unbind('click').bind('click', function() {});
+    $.ajax({
+        url: 'https://restapi.amap.com/v3/weather/weatherInfo',
+        type: "post",
+        data: {
+            key: "dfb9a576fbcb2c9a13a65ab736e47004",
+            city: "上海市",
+            extensions: "all"
+        },
+        success: function(res) {
+            console.log(res.forecasts[0]);
+            var obj = res.forecasts[0].casts;
+            console.log(obj);
+            var weathericon = "";
+            if (obj[0].dayweather == "多云") {
+                weathericon = '<i class="iconfont icon-duoyun"></i>';
+            } else if (obj[0].dayweather == "晴") {
+                weathericon = '<i class="iconfont icon-qing"></i>';
+            } else if (obj[0].dayweather == "阴") {
+                weathericon = '<i class="iconfont icon-yintian"></i>';
+            } else {
+                weathericon = '<i class="iconfont icon-yu"></i>';
+            }
+            var cast = '<div><span>' + weathericon + '</span><span>' + obj[0].daytemp + '℃</span>' +
+                '</div><div class="font_smalll"><span class="dayweather">' + obj[0].dayweather + '</span><span>风级' + obj[0].daypower + '</span></div > '
+            $(".weather_group").html(cast);
+        }
+    });
+
+    function isEllipsis(dom) { //判断div内容是否溢出函数
+        var checkDom = dom.cloneNode(),
+            parent, flag;
+        checkDom.style.width = dom.offsetWidth + 'px';
+        checkDom.style.height = dom.offsetHeight + 'px';
+        checkDom.style.overflow = 'auto';
+        checkDom.style.position = 'absolute';
+        checkDom.style.zIndex = -1;
+        checkDom.style.opacity = 0;
+        checkDom.style.whiteSpace = "nowrap";
+        checkDom.innerHTML = dom.innerHTML;
+
+        parent = dom.parentNode;
+        parent.appendChild(checkDom);
+        flag = checkDom.scrollWidth > checkDom.offsetWidth;
+        parent.removeChild(checkDom);
+        return flag;
+    }
+</script>
+<script>
+    getList();
+    Scroll({
+        line: 9,
+        speed: 1000,
+        timer: 14000
+    }, "");
+    // 各种浏览器兼容
+    var hidden, state, visibilityChange;
+    if (typeof document.hidden !== "undefined") {
+        hidden = "hidden";
+        visibilityChange = "visibilitychange";
+        state = "visibilityState";
+    } else if (typeof document.mozHidden !== "undefined") {
+        hidden = "mozHidden";
+        visibilityChange = "mozvisibilitychange";
+        state = "mozVisibilityState";
+    } else if (typeof document.msHidden !== "undefined") {
+        hidden = "msHidden";
+        visibilityChange = "msvisibilitychange";
+        state = "msVisibilityState";
+    } else if (typeof document.webkitHidden !== "undefined") {
+        hidden = "webkitHidden";
+        visibilityChange = "webkitvisibilitychange";
+        state = "webkitVisibilityState";
+    }
+
+    // 添加监听器，在title里显示状态变化
+    document.addEventListener(visibilityChange, function() {
+        // document.title = document[state];
+        if (document[state] == hidden) {
+            clearInterval(mylistInter);
+        } else {
+            mylistInter = setInterval(function() {
+                getList();
+            }, 60000);
+        }
+    }, false);
+
+
+    // 初始化
+    // document.title = document[state];
+    if (document[state] == hidden) {
+        clearInterval(mylistInter);
+    } else {
+        var mylistInter = setInterval(function() {
+            getList();
+        }, 60000);
+    }
+</script>
+
+</html>

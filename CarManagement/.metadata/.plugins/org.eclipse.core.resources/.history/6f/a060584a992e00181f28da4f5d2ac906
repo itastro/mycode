@@ -1,0 +1,96 @@
+package com.bailian.car.domain.carcheck;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+/**
+ * 
+    * @ClassName: CarCheckParentItem
+    * @Description: 车辆检查父项目
+    * @author itastro
+    * @date 2018年3月23日
+    *
+ */
+@Entity
+@Table(name = "T_CAR_CHECK_P_ITEM")
+public class CarCheckParentItem implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+	@Column(name = "P_ITEM_NAME")
+	private String name; // 父项目名称
+	@OneToMany(mappedBy = "carCheckParentItem", fetch = FetchType.LAZY)
+	private List<CarCheckItem> CarCheckItems = new ArrayList<CarCheckItem>();
+
+	@OneToOne
+	@JoinColumn(name = "RQ_ID") // 检查要求
+	private CarCheckRequest carCheckRequest;
+	@OneToOne
+	@JoinColumn(name = "RE_ID") // 检查结果
+	private CarCheckResult carCheckResult;
+	@ManyToOne
+	@JoinColumn(name = "CHECK_ID")
+	private CarCheckName carCheckName;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<CarCheckItem> getCarCheckItems() {
+		return CarCheckItems;
+	}
+
+	public void setCarCheckItems(List<CarCheckItem> carCheckItems) {
+		CarCheckItems = carCheckItems;
+	}
+
+	
+	public CarCheckRequest getCarCheckRequest() { return carCheckRequest; }
+	
+	public void setCarCheckRequest(CarCheckRequest carCheckRequest) {
+	this.carCheckRequest = carCheckRequest; }
+	
+	public CarCheckResult getCarCheckResult() {
+		return carCheckResult;
+	}
+
+	public void setCarCheckResult(CarCheckResult carCheckResult) {
+		this.carCheckResult = carCheckResult;
+	}
+
+	public CarCheckName getCarCheckName() {
+		return carCheckName;
+	}
+
+	public void setCarCheckName(CarCheckName carCheckName) {
+		this.carCheckName = carCheckName;
+	}
+
+}

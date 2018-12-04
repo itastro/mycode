@@ -1,0 +1,101 @@
+package com.bailian.car.dao.cars.car;
+
+import java.util.Date;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.bailian.car.domain.cars.car.Car;
+
+public interface CarRepository extends JpaRepository<Car, Integer>, JpaSpecificationExecutor<Car> {
+	@Query(value = "select vSn from t_car c where c.vSn like CONCAT('%',:vSn,'%') limit 9", nativeQuery = true)
+	List<String> findByvSnLike(@Param("vSn") String vSn);
+
+	@Query("select c from Car c where c.vSn=?1")
+	Car findByVSn(String vSn);
+
+	Car findByvSn(String vsn);
+
+	Car findByEngineNumber(String engineNumber);
+
+	Car findByVin(String vin);
+
+	@Query(value = "select check_s from t_car c where C_ID=?1", nativeQuery = true)
+	String findById(Integer id);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET vCarTypetwo=?1 WHERE C_ID=?2", nativeQuery = true)
+	void updateTypeTwo(String instype, Integer id);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET product_status=?1 WHERE vSn=?2", nativeQuery = true)
+	void updatep_s(String string, String vSn);
+
+	@Query(value = "SELECT vSn FROM t_car WHERE ID = (SELECT MAX(ID) FROM t_car)", nativeQuery = true)
+	String getvSn();
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET checks_status='完成' WHERE vSn=?1", nativeQuery = true)
+	void updateCheck_s(String vSn);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET adminName = null WHERE adminName=?1", nativeQuery = true)
+	void updateCarAdmin(String name);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET adminName = ?2 WHERE adminName=?1", nativeQuery = true)
+	void updateCarAdmin(String adminName, String adminName1);
+
+	@Query(value = "SELECT * from t_car  c where  c.latitude IS NOT NULL AND c.longitude IS NOT NULL", nativeQuery = true)
+	List<Car> findAllGpsIsNotNull();
+
+	@Query(value = "SELECT * from t_car c WHERE  c.licenseEndTime BETWEEN c.licenseEndTime AND DATE_SUB(c.licenseEndTime,INTERVAL ?1 DAY)", nativeQuery = true)
+	List<Car> findCarDistance(int distance);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET checkStaionType = ?2 WHERE vSn =?1", nativeQuery = true)
+	void updateVehicleTestingStationType(String vSn, String type);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET licenseEndTime = ?2,licenseNo=?3 ,licenseStartTime=NOW(),licremark=?4 WHERE vSn =?1", nativeQuery = true)
+	void updateLicense(String vSn, Date date, String licenseNo, String remark);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET insNo=?2 ,startTime=?3,endTime=?4,brandModeltwo=?5,insremark=?6 WHERE vSn=?1", nativeQuery = true)
+	void update(String vSn, String insNo, Date startTime, Date endTime, String brandModeltwo, String remark);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET backchecktime=NOW(),car_status='已还',backcheckSubmitTime=NOW() WHERE vSn=?1", nativeQuery = true)
+	void updateBackcheck(String vSn);
+
+	@Query(value = "SELECT * FROM t_car  WHERE project_id=?1", nativeQuery = true)
+
+	List<Car> findByProject(Integer id);
+
+	@Modifying
+	@Query(value = "UPDATE t_car  SET GPSSN=?2 WHERE vSn=?1", nativeQuery = true)
+	void updateGps(String vSn, String gps);
+
+	@Modifying
+	@Query(value = "UPDATE t_car  SET GPSSN=null WHERE vSn=?1", nativeQuery = true)
+	void updateCancleGps(String vSn);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET rstatus='审核通过' WHERE vSn=?1", nativeQuery = true)
+	void uodatePassRstatus(String vSn);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET rstatus='未通过' WHERE vSn=?1", nativeQuery = true)
+	void uodateNoPassRstatus(String vSn);
+
+	@Modifying
+	@Query(value = "UPDATE t_car SET backchecktime=NOW() WHERE vSn=?1", nativeQuery = true)
+	void updateBackchecktime(String vSn);
+	@Modifying
+	@Query(value = "UPDATE t_project SET project_status=?2 WHERE project_sn=?1", nativeQuery = true)
+	void updateProject(String projectSn, String status);
+
+}

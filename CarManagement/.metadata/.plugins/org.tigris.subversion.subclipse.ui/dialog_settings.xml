@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="" key="DirectorySelectionPage.lastParent_https://jx-pc:8445/svn/bailian_xian/java_project/Delphi"/>
+	<item value="214" key="HistoryTableProvider.SVNHistoryPage.作者"/>
+	<item value="202" key="HistoryTableProvider.MergeWizardUnblockRevisionsPage.作者"/>
+	<item value="536" key="HistoryTableProvider.SVNHistoryPage.注释"/>
+	<item value="138" key="UpdateDialogWithConflictHandling.location.y"/>
+	<item value="102" key="HistoryTableProvider.MergeWizardUnblockRevisionsPage.修订"/>
+	<item value="101" key="HistoryTableProvider.revisionsBlock.修订"/>
+	<item value="" key="DirectorySelectionPage.lastParent_https://jx-pc:8445/svn/bailian_xian/java_project/delphi_v1"/>
+	<item value="" key="DirectorySelectionPage.lastParent_https://jx-pc:8445/svn/bailian_xian/java_project/%E5%AE%9E%E9%AA%8C%E8%BD%A6%E8%BE%86%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"/>
+	<item value="268" key="HistoryTableProvider.SVNHistoryPage.日期"/>
+	<item value="503" key="HistoryTableProvider.revisions.注释"/>
+	<item value="" key="DirectorySelectionPage.lastParent_https://jx-pc:8445/svn/bailian_xian/java_project"/>
+	<item value="" key="DirectorySelectionPage.lastParent_https://jx-pc:8445/svn/bailian_xian"/>
+	<item value="" key="DirectorySelectionPage.lastParent_https://jx-pc:8445/svn/bailian_xian/java_project/%E5%BE%B7%E5%B0%94%E7%A6%8F%E8%BD%A6%E8%BE%86%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"/>
+	<item value="" key="DirectorySelectionPage.lastParent_https://jx-pc:8445/svn/bailian_xian/java_project/delphi"/>
+	<item value="252" key="HistoryTableProvider.revisions.日期"/>
+	<item value="0" key="CommitDialog.location.y"/>
+	<item value="0" key="CommitDialog.location.x"/>
+	<item value="201" key="HistoryTableProvider.revisions.作者"/>
+	<item value="2" key="ResourceSelectionTree.mode"/>
+	<item value="500" key="CommitDialog.weights.0"/>
+	<item value="500" key="CommitDialog.weights.1"/>
+	<item value="650" key="UpdateDialogWithConflictHandling.size.y"/>
+	<item value="101" key="HistoryTableProvider.revisions.修订"/>
+	<item value="1040" key="CommitDialog.size.y"/>
+	<item value="525" key="UpdateDialogWithConflictHandling.size.x"/>
+	<item value="1920" key="CommitDialog.size.x"/>
+	<item value="503" key="HistoryTableProvider.revisionsBlock.注释"/>
+	<item value="252" key="HistoryTableProvider.MergeWizardUnblockRevisionsPage.日期"/>
+	<item value="" key="DirectorySelectionPage.lastParent_https://192.168.2.227:8445/svn/bailian_xian_doc/%E9%A1%B9%E7%9B%AE/delphi%E8%BD%A6%E8%BE%86%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/code"/>
+	<item value="641" key="UpdateDialogWithConflictHandling.location.x"/>
+	<item value="252" key="HistoryTableProvider.revisionsBlock.日期"/>
+	<item value="505" key="HistoryTableProvider.MergeWizardUnblockRevisionsPage.注释"/>
+	<item value="201" key="HistoryTableProvider.revisionsBlock.作者"/>
+	<item value="https://jx-pc:8445/svn/bailian_xian" key="RepositorySelectionPage.lastRepository"/>
+	<item value="108" key="HistoryTableProvider.SVNHistoryPage.修订"/>
+	<section name="CommitWizard">
+		<item value="500" key="VWeight2"/>
+		<item value="500" key="VWeight1"/>
+		<item value="false" key="ShowCompare"/>
+	</section>
+	<section name="IgnoreResourcesDialog">
+		<item value="2" key="Action"/>
+	</section>
+	<section name="NewLocationWizard">
+		<list key="ConfigurationWizardMainPage.STORE_URL_ID">
+			<item value="https://jx-pc:8445/svn/bailian_xian/java_project/delphi_v1&#x0A;"/>
+			<item value="https://jx-pc:8445/svn/bailian_xian/java_project/delphi&#x0A;"/>
+			<item value=""/>
+			<item value="https://jx-pc:8445/svn/bailian_xian/java_project&#x0A;"/>
+			<item value="https://jx-pc:8445/svn/bailian_xian/java_project/Delphi&#x0A;"/>
+		</list>
+	</section>
+</section>

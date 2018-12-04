@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="blstation-web:war">
+    <output-path>$PROJECT_DIR$/blstation-web/target</output-path>
+    <root id="archive" name="blstation-web.war">
+      <element id="artifact" artifact-name="blstation-web:war exploded" />
+    </root>
+  </artifact>
+</component>

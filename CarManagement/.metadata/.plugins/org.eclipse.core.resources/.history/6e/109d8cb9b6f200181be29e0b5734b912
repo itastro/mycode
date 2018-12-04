@@ -1,0 +1,88 @@
+package com.bailian.car.param;
+
+import java.io.Serializable;
+import java.util.Date;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Data
+@Getter
+@Setter
+/**
+ * 
+    * @ClassName: CarQueryParam
+    * @Description: 车辆查询参数
+    * @author itastro
+    * @date 2018年6月21日
+    *
+ */
+public class CarQueryParam implements Serializable {
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	private static final long serialVersionUID = 1L;
+
+	private String vSn; // 车辆编号
+
+	private String project_sn; // 项目编号
+
+	private String projectEngineer; // 项目工程师
+
+	private String engineNumber; // 发动机编号
+
+	private String vin; // 车架号
+	
+	private String insNo; // 保险编号
+
+	private String brandModeltwo; // 厂牌型号
+
+	
+
+	private Date bstart; // 保险起始日
+
+	private Date bend; // 保险结束日
+
+	private Date pstart; // 牌照起始日
+
+	private Date pend; // 牌照结束日
+
+	private Date ustart; // 接车点检起始日
+
+	private Date uend; // 接车点检结束日
+
+	private Date backstart; // 还车起始日
+
+	private Date backend; // 还车结束日
+	
+	private String adminName; //车管
+	
+	private String customer;  //客户
+	
+	private String istatus;  //保险状态
+	
+	private String groupName;  //分组名称
+	
+	private String checks_status;
+	
+	
+	private String carStatus;
+	
+	
+	private  String  vehicleInspection;  //验车状态
+	
+	
+	
+
+
+}

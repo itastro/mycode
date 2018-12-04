@@ -1,0 +1,211 @@
+package com.bailian.car.domain.system;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+/**
+ * 
+ * @ClassName: User
+ * @Description: TODO(用户实体)
+ * @author itastro
+ * @date 2018年1月15日
+ *
+ */
+
+@Entity
+@Table(name = "t_user")
+public class User implements Serializable {
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getEmployeeCard() {
+		return employeeCard;
+	}
+
+	public void setEmployeeCard(String employeeCard) {
+		this.employeeCard = employeeCard;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Boolean getChangedPassword() {
+		return changedPassword;
+	}
+
+	public void setChangedPassword(Boolean changedPassword) {
+		this.changedPassword = changedPassword;
+	}
+
+	@Transient
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	private static final long serialVersionUID = -863466514638657592L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer uid; // 主键
+
+	@Column(name = "C_PASSWORD", columnDefinition = "varchar(50) default ''", nullable = false)
+	private String password; // 密码
+	@Column(name = "C_TELEPHONE", columnDefinition = "varchar(50) default ''", nullable = false)
+	private String telephone; // 电话
+	@Column(name = "C_EMAIL", columnDefinition = "varchar(50) default ''", nullable = false)
+	private String email; // 邮箱
+	@Column(name = "C_SEX", columnDefinition = "varchar(50) default ''")
+	private String sex;
+	@Column(name = "C_STATUS", length = 2, columnDefinition = "INT default 0")
+	private int status; // 状态
+	@Column(name = "C_REMARK", columnDefinition = "varchar(255) default ''")
+	private String remark; // 备注
+	@Column(name = "C_NICKNAME", columnDefinition = "varchar(50) default ''", nullable = false)
+	private String username; // 用户名
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@Column(name = "C_CREATETIME")
+	private Date createTime; // 创建时间
+	@Column(name = "C_OPERATOR", columnDefinition = "varchar(50) default ''")
+	private String operator; // 操作者
+
+	@Column(name = "C_OPERATE_ID", columnDefinition = "varchar(50) default ''")
+
+	private String operate_id; // 操作者ID
+	@ManyToMany
+	@JoinTable(name = "t_user_role", joinColumns = {
+			@JoinColumn(name = "C_USER_ID", referencedColumnName = "C_ID") }, inverseJoinColumns = {
+					@JoinColumn(name = "C_ROLE_ID", referencedColumnName = "C_ID") })
+	private Set<Role> roles = new HashSet<Role>(0); // 角色
+
+	// 第一次登录是否修改密码
+	@Column(name = "IsChange")
+	private Boolean changedPassword;
+
+	private String employeeCard; // 员工卡号
+
+	// 登录ip
+	private String ip;
+
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(Boolean changedPassword, String ip) {
+		super();
+		this.changedPassword = changedPassword;
+		this.ip = ip;
+	}
+
+	public Integer getUid() {
+		return uid;
+	}
+
+	public void setUid(Integer uid) {
+		this.uid = uid;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public String getOperate_id() {
+		return operate_id;
+	}
+
+	public void setOperate_id(String operate_id) {
+		this.operate_id = operate_id;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+}

@@ -1,0 +1,119 @@
+package com.bailian.car.controller.check;
+
+import java.io.IOException;
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.domain.carcheck.*;
+import com.bailian.car.domain.checktable.CheckParentItem;
+import com.bailian.car.domain.checktable.CheckType;
+import com.bailian.car.service.check.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Controller
+@RequestMapping("/car")
+public class CarCheckController {
+	@Autowired
+	private CarCheckService carCheckService;
+
+	// 接车点检
+	@RequestMapping("/upcheck.action")
+	@ResponseBody
+	public JsonData upcheck(PickUpCheck pickUpCheck, Integer tcarid) {
+		return carCheckService.create(pickUpCheck, tcarid);
+	}
+
+	// 查询接车点检
+	@RequestMapping("/findUpcheck.action")
+	@ResponseBody
+	public PickUpCheck findUpcheck(Integer tcarid) {
+		return carCheckService.findUpCheck(tcarid);
+	}
+
+	// 还车点检
+	@RequestMapping("/backCheck.action")
+	@ResponseBody
+	public JsonData backCheck(BackCheck backCheck, Integer tcarid) {
+		return carCheckService.create(backCheck, tcarid);
+
+	}
+
+	// 查询还车点检
+	@RequestMapping("/findBackcheck.action")
+	@ResponseBody
+	public BackCheck findBackcheck(Integer tcarid) {
+		return carCheckService.findBackcheck(tcarid);
+	}
+
+	// 查询所有的检查类型
+	@RequestMapping("/findAllCheckName.action")
+	@ResponseBody
+	public List<CheckType> findAllCheckName() {
+		return carCheckService.findAllCheckName();
+	}
+
+	// 通过检查类型查询所有的检查项
+	@RequestMapping("/findAllParentItem.action")
+	@ResponseBody
+	public List<CheckParentItem> findAllParentItem(Integer CNID) {
+		return carCheckService.findAlllParentItemByCNID(CNID);
+	}
+
+	// 车辆缸压 的添加
+	@RequestMapping("/saveClacyLindersss.action")
+	@ResponseBody
+	public JsonData addClacyLindersss(ClacyLindersss clacyLindersss, Integer tcarid) {
+		return carCheckService.save(clacyLindersss, tcarid);
+	}
+
+	// 车辆安全检查
+	@RequestMapping("/addSafeCheck/{carid}.action")
+	@ResponseBody
+	public JsonData addSafeCheck(@PathVariable Integer carid, @RequestBody List<SafeCheckResult> safeCheckResult)
+			throws JsonProcessingException, JsonMappingException, IOException {
+		/*
+		 * ObjectMapper objectMapper = new ObjectMapper(); JavaType javaType =
+		 * objectMapper.getTypeFactory().constructParametricType(List.class,
+		 * SafeCheckResult.class); List<SafeCheckResult> list =
+		 * objectMapper.readValue(safeCheckResult, javaType);
+		 */
+		return carCheckService.SafeCheck(carid, safeCheckResult);
+
+	}
+
+	// 线束检查
+	@RequestMapping("/addHiCheck/{carid}.action")
+	@ResponseBody
+	public JsonData addHiCheck(@PathVariable Integer carid, @RequestBody List<HIResult> HIResults) {
+
+		return carCheckService.HICheck(carid, HIResults);
+
+	}
+
+	// bom零部件检查
+	@RequestMapping("/addEmsAndBomCheck/{carid}.action")
+	@ResponseBody
+	public JsonData addEmsAndBomCheck(@PathVariable Integer carid,
+			@RequestBody List<EmsAndBomCheckResult> EmsAndBomCheckResults) {
+
+		return carCheckService.EmsAndBomCheck(carid, EmsAndBomCheckResults);
+
+	}
+
+	// 查询未通过审核车辆
+	@RequestMapping("/findNotPassReview.action")
+	@ResponseBody
+	public String  findNotPassReview() {
+
+		List<CarCheckResultInfo> list = carCheckService.findNotPassReview();
+		return list;
+
+	}
+	// 查询待审核车辆
+	// 查询审核通过车辆
+}

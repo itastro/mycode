@@ -1,0 +1,97 @@
+{
+    "reviewer": null,
+    "safeCheck": {
+        "id": 4,
+        "vSn": "2018ICECTC001",
+        "checkingPerson": "admin",
+        "checkingTime": "2018-06-14",
+        "checkPerson": "admin",
+        "checkTime": "2018-06-14"
+    },
+    "hiCheck": {
+        "id": 5,
+        "vSn": "2018ICECTC001",
+        "status": null,
+        "checkingPerson": null,
+        "checkingTime": null,
+        "checkPerson": "admin",
+        "checkTime": "2018-06-14"
+    },
+    "bCheck": {
+        "id": 29,
+        "vSn": "2018ICECTC001",
+        "checkingPerson": null,
+        "checkingTime": null,
+        "checkPerson": null,
+        "checkTime": null,
+        "applyPerson": "admin",
+        "applyTime": "2018-06-13"
+    },
+    "developToolsRecords": [{
+            "id": 6,
+            "vSn": "2018ICECTC001",
+            "toolName": "12V电源",
+            "applicant": "admin",
+            "applyTime": "2018-06-13 11:11:05",
+            "equippedDate": "2018-06-14 10:23:04",
+            "operator": "111",
+            "demolitionDate": null,
+            "demolitionOperator": null
+        },
+        {
+            "id": 7,
+            "vSn": "2018ICECTC001",
+            "toolName": "CAN1开发接头",
+            "applicant": "admin",
+            "applyTime": "2018-06-13 11:11:07",
+            "equippedDate": null,
+            "operator": null,
+            "demolitionDate": null,
+            "demolitionOperator": null
+        },
+        {
+            "id": 8,
+            "vSn": "2018ICECTC001",
+            "toolName": "前催化器载体温度",
+            "applicant": "admin",
+            "applyTime": "2018-06-13 11:11:10",
+            "equippedDate": null,
+            "operator": null,
+            "demolitionDate": null,
+            "demolitionOperator": null
+        },
+        {
+            "id": 9,
+            "vSn": "2018ICECTC001",
+            "toolName": "空气比传感器座",
+            "applicant": "admin",
+            "applyTime": "2018-06-13 11:11:12",
+            "equippedDate": null,
+            "operator": null,
+            "demolitionDate": null,
+            "demolitionOperator": null
+        },
+        {
+            "id": 10,
+            "vSn": "2018ICECTC001",
+            "toolName": "排方前采样管",
+            "applicant": "admin",
+            "applyTime": "2018-06-13 11:11:15",
+            "equippedDate": null,
+            "operator": null,
+            "demolitionDate": null,
+            "demolitionOperator": null
+        },
+        {
+            "id": 27,
+            "vSn": "2018ICECTC001",
+            "toolName": "CAN0开发接头",
+            "applicant": "admin",
+            "applyTime": "2018-06-13 11:12:03",
+            "equippedDate": null,
+            "operator": null,
+            "demolitionDate": null,
+            "demolitionOperator": null
+        }
+    ]
+}

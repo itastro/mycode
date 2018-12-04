@@ -1,0 +1,90 @@
+package com.bailian.car.controller.cardriver;
+
+import java.util.Date;
+import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.bailian.car.annotation.SystemLog;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.domain.cardriver.CarDriver;
+import com.bailian.car.emnu.OperationType;
+import com.bailian.car.service.cardriver.CarDriverService;
+
+@Controller
+@RequestMapping("/carDriver")
+public class CarDriverController {
+	@Autowired
+	private CarDriverService carDriverService;
+
+	// 驾驶员的添加
+	@RequestMapping("/add.action")
+	@SystemLog(medoule = "驾驶员管理", type = OperationType.ADD, methods = "添加驾驶员")
+	@ResponseBody
+	public JsonData addCarDriver(CarDriver carDriver) {
+
+		return carDriverService.add(carDriver);
+	}
+
+	// 驾驶员列表
+	@RequestMapping("/CarDriverList.action")
+	@SystemLog(medoule = "驾驶员管理", type = OperationType.QUERY, methods = "驾驶员查询")
+	@ResponseBody
+	public HashMap<String, Object> carDriverList(@RequestParam(defaultValue = "1") Integer page,
+			@RequestParam(defaultValue = "20") Integer size, CarDriver carDriver) {
+		Sort sort = new Sort(Direction.DESC, "id");
+		return carDriverService.pageQuery(page, size, sort, carDriver);
+
+	}
+
+	// 驾驶员的删除
+	@RequestMapping("/delete.action")
+	@SystemLog(medoule = "驾驶员管理", type = OperationType.DELETE, methods = "驾驶员删除")
+	@ResponseBody
+	public JsonData delete(@RequestParam(value = "ids") String[] ids, HttpServletRequest request) {
+
+		return carDriverService.delete(String ids[]);
+
+	}
+
+	// 驾驶员编辑的时候数据进行回显
+	@RequestMapping("/edit.action")
+	@ResponseBody
+	public CarDriver edit(Integer id) {
+		return carDriverService.findById(id);
+	}
+
+	// 驾驶员的更新
+	@RequestMapping("/update.action")
+	@SystemLog(medoule = "驾驶员管理", type = OperationType.UPDATE, methods = "驾驶员更新")
+	@ResponseBody
+	public JsonData updateCarDriver(CarDriver carDriver) {
+
+		return carDriverService.updateCarDriver(carDriver);
+
+	}
+	// 对驾驶员进行授权，设置权限的时间
+
+	@RequestMapping("/authorized.action")
+	@SystemLog(medoule = "驾驶员管理", type = OperationType.UPDATE, methods = "驾驶员设置权限")
+	@ResponseBody
+	public JsonData authorized(Integer id, Date startTime, Date endTime) {
+
+		return carDriverService.authorized(id, startTime, endTime);
+
+	}
+
+	// 对驾驶员进行取消权限
+	@RequestMapping("/cancelAuthorized.action")
+	@SystemLog(medoule = "驾驶员管理", type = OperationType.UPDATE, methods = "取消驾驶员权限")
+	@ResponseBody
+	public JsonData cancelAuthorized(String[] ids) {
+		return carDriverService.cancelAuthorized(ids);
+	}
+}

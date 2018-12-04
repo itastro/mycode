@@ -1,0 +1,224 @@
+package com.bailian.car.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.management.RuntimeErrorException;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bailian.car.common.exception.CustomException;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.common.utils.ComputerInfoUtils;
+import com.bailian.car.common.utils.MD5Utils;
+import com.bailian.car.common.utils.TokenManagerUtils;
+import com.bailian.car.dao.RoleRepository;
+import com.bailian.car.dao.UserRepository;
+import com.bailian.car.domain.system.Role;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.service.UserService;
+
+@Service
+@Transactional
+public class UserServiceImpl implements UserService {
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+
+	@Override
+	public JsonData login(String username, String password, String verifyCode, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		// 从session中获取验证码
+		String code = (String) request.getSession().getAttribute("vCode");
+		System.out.println(code);
+		
+		if
+		String vcode = verifyCode.toLowerCase();
+
+		System.out.println(vcode);
+		if (StringUtils.isBlank(username)) {
+			return JsonData.fail("用户名不能为空");
+		}
+	
+		if (!StringUtils.equals(vcode, code)) {
+			return JsonData.fail("验证码错误");
+		}
+		try {
+			// 获取当前用户
+			Subject subject = SecurityUtils.getSubject();
+			// 如果用户已经登录，踢出用户
+
+			// 对密码进行MD5加密
+			String pass = MD5Utils.toMD5(password, MD5Utils.salt);
+			// 传入密码和用户构建令牌
+			UsernamePasswordToken token = new UsernamePasswordToken(username, pass);
+			int i = 1 / 0;
+			// 登录成功，保存session
+			subject.login(token);
+			return JsonData.success("登录成功");
+		} catch (AuthenticationException e) {
+			if (e instanceof UnknownAccountException) {
+
+				return JsonData.fail("无此用户，请联系管理员");
+
+			} else if (e instanceof IncorrectCredentialsException) {
+				return JsonData.fail("密码错误");
+			}
+
+		}
+		return null;
+
+	}
+
+	@Override
+	public User findByUsername(String username) {
+		// TODO Auto-generated method stub
+		return userRepository.findByUsername(username);
+	}
+
+	@Override
+	public JsonData changeUserPassWord(String username, String oldpassword, String newpassword) {
+
+		String pass = MD5Utils.toMD5(oldpassword, MD5Utils.salt);
+		User user = userRepository.findUserByUsernameAndPassword(username, pass);
+		if (user == null) {
+			return JsonData.fail("用户名和密码错误");
+		}
+		if (newpassword == null || newpassword.equals("")) {
+			return JsonData.fail("请重新输入新密码");
+		}
+		String newpass = MD5Utils.toMD5(newpassword, MD5Utils.salt);
+
+		int result = userRepository.updatePassWord(username, newpass);
+		if (result == 1) {
+			return JsonData.fail("修改密码成功");
+		} else {
+			return JsonData.success("修改密码成功");
+		}
+
+	}
+
+	@Override
+	public List<User> findALL() {
+		// TODO Auto-generated method stub
+		List<User> users = userRepository.findAll();
+		return users;
+	}
+
+	// 1、2、3、4分别代表username、phone、email、nickname
+	@Override
+	public JsonData checkData(String param, Integer type) {
+		String username = null;
+		String telephone = null;
+		String email = null;
+		String nickname = null;
+		if (param != null & type != null) {
+			// TODO Auto-generated method stub
+			if (type == 1) {
+				username = param;
+				User user = userRepository.findByUsername(username);
+				if (user != null) {
+					return JsonData.fail("账户已经被占用");
+				}
+				return JsonData.success();
+			}
+
+			if (type == 2) {
+				telephone = param;
+				User user = userRepository.findByTelephone(telephone);
+				if (user != null) {
+					return JsonData.fail("此号码已经被占用");
+				}
+				return JsonData.success();
+			}
+
+			if (type == 3) {
+				email = param;
+				User user = userRepository.findByEmail(email);
+				if (user != null) {
+					return JsonData.fail("邮箱已经被占用");
+				}
+				return JsonData.success();
+
+			}
+
+			if (type == 4) {
+				nickname = param;
+				User user = userRepository.findByNickname(nickname);
+				if (user != null) {
+					return JsonData.fail("用户名已经被占用");
+				}
+				return JsonData.success();
+			}
+		} else {
+			return JsonData.fail("非法的参数");
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional
+	public JsonData save(User user, String[] ids) {
+
+		// TODO Auto-generated method stub
+		if (StringUtils.isBlank(user.getUsername())) {
+			return JsonData.fail("账号不能为空");
+		}
+		if (StringUtils.isBlank(user.getPassword())) {
+			return JsonData.fail("密码不能为空");
+
+		}
+		if (StringUtils.isBlank(user.getEmail())) {
+			return JsonData.fail("邮箱不能为空");
+		}
+		if (StringUtils.isBlank(user.getUsername())) {
+			return JsonData.fail("用户名不能为空");
+		}
+
+		if (StringUtils.isBlank(user.getTelephone())) {
+			return JsonData.fail("手机号不能为空");
+		}
+
+		// 获取当前的用户
+		User currentUser = TokenManagerUtils.getToken();
+		// 获取当前用户电脑的ip
+		String ipAddr = ComputerInfoUtils.getIpAddr();
+		// 补全User的其他属性
+		user.setCreateTime(new Date());
+		user.setOperate_id(ipAddr);
+		// user.setOperator(currentUser.getNickname());
+		// user.setOperate_id("127.0.0.1");
+		user.setOperator("wang");
+		String md5pass = MD5Utils.toMD5(user.getPassword(), MD5Utils.salt);
+		user.setPassword(md5pass);
+		try {
+			if (StringUtils.isAnyBlank(ids)) {
+				userRepository.save(user);
+				return JsonData.success();
+			} else {
+				for (String id : ids) {
+					Role role = roleRepository.findOne(Integer.parseInt(id));
+					user.getRoles().add(role);
+				}
+				userRepository.save(user);
+				return JsonData.success();
+			}
+		} catch (CustomException e) {
+			return JsonData.fail();
+		}
+
+	}
+
+}

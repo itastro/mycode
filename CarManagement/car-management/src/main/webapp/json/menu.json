@@ -1,0 +1,379 @@
+[{
+        "mid": 1,
+        "name": "GPS",
+        "url": "GPS",
+        "priority": "1",
+        "remark": "gps",
+        "createTime": "2018-03-08",
+        "operator": "王春森",
+        "operate_ip": "192.168.1.1",
+        "childrenMenus": [{
+                "mid": 101,
+                "name": "车辆地图",
+                "url": "carmap",
+                "priority": "2",
+                "remark": "地图",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 102,
+                "name": "车辆轨迹",
+                "url": "carTrack",
+                "priority": "3",
+                "remark": "轨迹",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            }
+        ]
+    },
+    {
+        "mid": 2,
+        "name": "门岗",
+        "url": "CarDoor",
+        "priority": "1",
+        "remark": "门岗",
+        "createTime": "2018-03-08",
+        "operator": "王春森",
+        "operate_ip": "192.168.1.1",
+        "childrenMenus": [{
+                "mid": 202,
+                "name": "车辆出入管理",
+                "url": "sentry",
+                "priority": "3",
+                "remark": "车辆出入管理",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 201,
+                "name": "驾驶员管理",
+                "url": "driverList",
+                "priority": "2",
+                "remark": "车辆出入管理",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            }
+        ]
+    },
+    {
+        "mid": 3,
+        "name": "车辆管理",
+        "url": "cheliangguanli",
+        "priority": "1",
+        "remark": "车辆管理",
+        "createTime": "2018-03-08",
+        "operator": "王春森",
+        "operate_ip": "192.168.1.1",
+        "childrenMenus": [{
+            "mid": 301,
+            "name": "车辆录入",
+            "url": "carCheck",
+            "priority": "6",
+            "remark": "添加",
+            "createTime": "2018-03-26",
+            "operator": "admin",
+            "operate_ip": "192.168.1.1",
+            "childrenMenus": []
+        }, {
+            "mid": 302,
+            "name": "新车查验",
+            "url": "carList",
+            "priority": "1",
+            "remark": "",
+            "createTime": "2018-04-10",
+            "operator": "admin",
+            "operate_ip": "127.0.0.1",
+            "childrenMenus": []
+        }, {
+            "mid": 303,
+            "name": "保险管理",
+            "url": "insuranceTypeIn",
+            "priority": "1",
+            "remark": "",
+            "createTime": "2018-04-10",
+            "operator": "admin",
+            "operate_ip": "127.0.0.1",
+            "childrenMenus": []
+        }, {
+            "mid": 304,
+            "name": "车牌管理",
+            "url": "plate",
+            "priority": "1",
+            "remark": "",
+            "createTime": "2018-04-10",
+            "operator": "admin",
+            "operate_ip": "127.0.0.1",
+            "childrenMenus": []
+        }, {
+            "mid": 306,
+            "name": "车辆总表",
+            "url": "sumCarList",
+            "priority": "1",
+            "remark": "",
+            "createTime": "2018-04-10",
+            "operator": "admin",
+            "operate_ip": "127.0.0.1",
+            "childrenMenus": []
+        }, {
+            "mid": 307,
+            "name": "油卡录入",
+            "url": "oilCard",
+            "priority": "1",
+            "remark": "",
+            "createTime": "2018-04-10",
+            "operator": "admin",
+            "operate_ip": "127.0.0.1",
+            "childrenMenus": []
+        }]
+    },
+    {
+        "mid": 4,
+        "name": "维修管理",
+        "url": "maintain",
+        "priority": "1",
+        "remark": "维修",
+        "createTime": "2018-03-08",
+        "operator": "王春森",
+        "operate_ip": "192.168.1.1",
+        "childrenMenus": [{
+                "mid": 401,
+                "name": "维修申请",
+                "url": "add_maintain_apply",
+                "priority": "1",
+                "remark": "维修",
+                "createTime": "2018-03-20",
+                "operator": "11",
+                "operate_ip": "11111",
+                "childrenMenus": []
+            },
+            {
+                "mid": 402,
+                "name": "维修列表",
+                "url": "maintainList",
+                "priority": "1",
+                "remark": "维修",
+                "createTime": "2018-03-20",
+                "operator": "11",
+                "operate_ip": "11111",
+                "childrenMenus": []
+            },
+            {
+                "mid": 403,
+                "name": "维修大屏",
+                "url": "maintainScreen",
+                "priority": "5",
+                "remark": "大屏",
+                "createTime": "2018-03-08",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 404,
+                "name": "操作员管理",
+                "url": "employee",
+                "priority": "5",
+                "remark": "操作员管理",
+                "createTime": "2018-03-08",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            }
+        ]
+    },
+    {
+        "mid": 5,
+        "name": "系统管理",
+        "url": "Sysytem",
+        "priority": "1",
+        "remark": "系统",
+        "createTime": "2018-03-08",
+        "operator": "王春森",
+        "operate_ip": "192.168.1.1",
+        "childrenMenus": [{
+                "mid": 503,
+                "name": "用户管理",
+                "url": "user",
+                "priority": "4",
+                "remark": "用户",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 502,
+                "name": "角色管理",
+                "url": "role",
+                "priority": "3",
+                "remark": "角色",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 504,
+                "name": "菜单管理",
+                "url": "menu",
+                "priority": "5",
+                "remark": "菜单管理",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 501,
+                "name": "权限管理",
+                "url": "rights",
+                "priority": "2",
+                "remark": "权限",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            }, {
+                "mid": 505,
+                "name": "分组管理",
+                "url": "group",
+                "priority": "2",
+                "remark": "分组",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 507,
+                "name": "项目管理",
+                "url": "projectManage",
+                "priority": "2",
+                "remark": "项目管理",
+                "createTime": "2018-03-08",
+                "operator": "王春森",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            }
+        ]
+    },
+    {
+        "mid": 6,
+        "name": "数据管理",
+        "url": "data",
+        "priority": "1",
+        "remark": "数据",
+        "createTime": "2018-03-08",
+        "operator": "王春森",
+        "operate_ip": "192.168.1.1",
+        "childrenMenus": [{
+                "mid": 604,
+                "name": "历史数据",
+                "url": "beforeData",
+                "priority": "4",
+                "remark": "befor",
+                "createTime": "2018-03-14",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 602,
+                "name": "远程ECU刷写",
+                "url": "longECU",
+                "priority": "2",
+                "remark": "ecu",
+                "createTime": "2018-03-14",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 601,
+                "name": "远程数据采集",
+                "url": "longData",
+                "priority": "1",
+                "remark": "数据",
+                "createTime": "2018-03-14",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 603,
+                "name": "实时数据",
+                "url": "currentData",
+                "priority": "3",
+                "remark": "实时数据",
+                "createTime": "2018-03-14",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            }
+        ]
+    },
+    {
+        "mid": 7,
+        "name": "日志管理",
+        "url": "log",
+        "priority": "1",
+        "remark": "日志",
+        "createTime": "2018-03-08",
+        "operator": "王春森",
+        "operate_ip": "192.168.1.1",
+        "childrenMenus": [{
+                "mid": 701,
+                "name": "系统日志管理",
+                "url": "dataLog",
+                "priority": "1",
+                "remark": "数据",
+                "createTime": "2018-03-08",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 702,
+                "name": "维修日志管理",
+                "url": "maintainLog",
+                "priority": "1",
+                "remark": "维修",
+                "createTime": "2018-03-08",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 703,
+                "name": "车辆日志管理",
+                "url": "manageLog",
+                "priority": "2",
+                "remark": "车辆",
+                "createTime": "2018-03-08",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            },
+            {
+                "mid": 704,
+                "name": "驾驶员管理日志",
+                "url": "approveLog",
+                "priority": "3",
+                "remark": "驾驶员",
+                "createTime": "2018-03-08",
+                "operator": "admin",
+                "operate_ip": "192.168.1.1",
+                "childrenMenus": []
+            }
+        ]
+    }
+]

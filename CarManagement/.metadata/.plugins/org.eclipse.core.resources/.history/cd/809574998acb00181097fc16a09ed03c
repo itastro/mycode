@@ -1,0 +1,169 @@
+package com.bailian.car.service.driver.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.stereotype.Service;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.driver.InAndOutRepository;
+import com.bailian.car.dao.iccard.IccardRepository;
+import com.bailian.car.domain.cardriver.InAndOut;
+import com.bailian.car.domain.iccard.Iccard;
+import com.bailian.car.service.driver.InAndOutService;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@Transactional
+public class InAndOutServiceImpl implements InAndOutService {
+	@Autowired
+	private InAndOutRepository inAndOutRepository;
+	@Autowired
+	private LocalContainerEntityManagerFactoryBean entityManagerFactory;
+	
+	@Autowired
+	private IccardRepository iccardRepository;
+	
+	@Override
+	public PageBean<InAndOut> pageQuery(PageQuery pageQuery) {
+
+		/*
+		 * Sort sort = new Sort(Direction.DESC, "id"); Pageable pageable = new
+		 * PageRequest(pageQuery.getPage(), pageQuery.getSize(),sort);
+		 * PageBean<InAndOut> result = new PageBean<>(); Page<InAndOut> pageData =
+		 * inAndOutRepository.getinfo(pageable);
+		 * result.setTotal(pageData.getTotalElements());
+		 * result.setRows(pageData.getContent());
+		 * 
+		 * log.info("result:{}", result); return result;
+		 */
+
+		long count = 0;
+		PageBean<InAndOut> result = new PageBean<>();
+		List<InAndOut> resultList = null;
+		EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
+
+		String sql = "select ID,vSn,driverName,licenseEndTime,updateTime,errorString,LicenseNo,isallow,insNo,endTime,driverCardId from v_cardatainfo ORDER BY updateTime DESC";
+		count = em.createNativeQuery(sql, InAndOut.class).getResultList().size();
+		resultList = pageResult(pageQuery, em, sql);
+
+		if (em != null) {
+			em.close();
+		}
+		if (resultList == null) {
+			result.setTotal((long) 0);
+		} else {
+			result.setTotal(count);
+		}
+		result.setRows(resultList);
+		return result;
+	}
+
+	private List<InAndOut> pageResult(PageQuery pQuery, EntityManager em, String sql) {
+		List<InAndOut> resultList = new ArrayList<InAndOut>();
+		Query nativeQuery = em.createNativeQuery(sql, InAndOut.class)
+				.setFirstResult(pQuery.getPage() * pQuery.getSize() - pQuery.getSize()).setMaxResults(pQuery.getSize());
+
+		resultList = nativeQuery.getResultList();
+		return resultList;
+	}
+
+	@Override
+	public JsonData delete(String[] ids) {
+		// TODO Auto-generated method stub
+
+		if (ids == null) {
+			return JsonData.fail("请你选择一条记录");
+		}
+
+		if (ids.length < 0) {
+			return JsonData.fail("请你选择一条记录");
+		}
+		return JsonData.success("删除成功");
+	}
+
+	@Override
+	public HashMap<String, Object> getNewInAndOut() {
+
+		Date date = new Date();
+
+		StringBuilder sb = new StringBuilder();
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		InAndOut andOut = inAndOutRepository.getnewinfo();
+		
+		String  driverCardId = andOut.getDriverCardId();
+		
+		Iccard iccard = iccardRepository.findByIccard(driverCardId);
+		Integer type = iccard.getCardType();
+		
+		if (type==255) {
+			andOut.setIsallow("正常");
+			map.put("isallow", "允许通过");
+		}else {
+			if (StringUtils.isBlank(andOut.getInsNo())) {
+				sb.append("<font color=\"#FF0000\" size=\"10\">" + "车辆没有保险" + "<font/>" + "<br/>");
+			} else {
+				if (andOut.getEndTime() != null) {
+					long time = date.getTime();
+					long i = andOut.getEndTime().getTime() - time;
+					if (i <= 0) {
+						sb.append("<font color=\"#FF0000\" size=\"10\">" + "保险过期" + "<font/>" + "<br/>");
+					}
+
+				}
+			}
+
+			if (StringUtils.isBlank(andOut.getLicenseNo())) {
+				sb.append("<font color=\"#FF0000\" size=\"10\">" + "无牌照" + "<font/>" + "<br/>");
+			} else {
+				if (andOut.getLicenseEndTime() != null) {
+					long time = date.getTime();
+					long i = andOut.getLicenseEndTime().getTime() - time;
+					if (i <= 0) {
+						sb.append("<font color=\"#FF0000\" size=\"10\">" + "牌照过期" + "<font/>" + "<br/>");
+					}
+				}
+			}
+
+			if (StringUtils.equals("禁止", andOut.getIsallow())) {
+				sb.append("<font color=\"#FF0000\" size=\"10\">" + "驾驶员未授权" + "<font/>" + "<br/>");
+			}
+
+			if (StringUtils.isNotBlank(andOut.getErrorString())) {
+				//sb.append("<font color=\"#FF0000\" size=\"10\">" + "读到多张卡" + "<font/>" + "<br/>");
+				sb.append("<font color=\"#FF0000\" size=\"5\">" + andOut.getErrorString() + "<font/>" + "<br/>");
+				
+			}
+
+			if (StringUtils.isBlank(sb.toString())) {
+				sb.append("<font color=\"#00FF00\" size=\"10\">" + "允许通过" + "<font/>" + "<br/>");
+				map.put("isallow", "<font color=\"#00FF00\">" + "允许通过" + "<font/>");
+			} else {
+				map.put("isallow", "<font color=\"#FF0000\">" + "禁止通过" + "<font/>");
+			}
+
+		}
+		map.put("inAndOut", andOut);
+		
+		if (StringUtils.isBlank(sb.toString())) {
+			map.put("message", "<font color=\"#00FF00\" size=\"10\">" + "超级卡" + "<font/>" + "<br/>");
+		}else {
+			map.put("message", sb.toString());
+		}
+	
+		return (HashMap<String, Object>) map;
+	}
+
+}

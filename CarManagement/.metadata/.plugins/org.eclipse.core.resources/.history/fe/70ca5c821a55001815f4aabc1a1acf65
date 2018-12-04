@@ -1,0 +1,75 @@
+package com.bailian.controller;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.bailian.common.JsonData;
+import com.bailian.data.domain.Vehicle;
+import com.bailian.parm.PageQuery;
+import com.bailian.service.VehicleService;
+import com.bailian.utils.BeanValidator;
+import com.bailian.utils.PageBean;
+@RequestMapping("/vehicle")
+@Controller
+public class VehicleController {
+
+	@Autowired
+	private VehicleService vehicleService;
+
+	// 添加车辆
+	@RequestMapping("/add.json")
+	@ResponseBody
+	public JsonData addVehicle(Vehicle vehicle) {
+		BeanValidator.check(vehicle);
+		return vehicleService.addVehicle(vehicle);
+	}
+
+	// 删除车辆
+	@RequestMapping("/delete.json")
+	@ResponseBody
+	public JsonData deleteVehicle(String[] ids) {
+		return vehicleService.delete(ids);
+	}
+
+	// 查询车辆
+	
+	@RequestMapping("/pageQuery.json")
+	@ResponseBody
+	public PageBean<Vehicle> queryVehicle(PageQuery pageQuery, Vehicle vehicle) {
+		return vehicleService.query(pageQuery, vehicle);
+	}
+
+	
+	// 查询未关联终端的车辆
+	@RequestMapping("/findByTerminalIsNull.json")
+	@ResponseBody
+	public List<Vehicle> findByTerminalIsNull() {
+		List<Vehicle> list = vehicleService.findByTerminalIsNull();
+		return list;
+	}//傻逼   你就是一个傻逼
+
+	// 车辆数据的回显
+	@RequestMapping("/edit.json")
+	@ResponseBody
+	public Vehicle edit(Integer id) {
+		
+	Vehicle vehicle=	vehicleService.edit(id);
+		return vehicle;
+	}
+	//车辆数据更新
+	@RequestMapping("/update.json")
+	@ResponseBody
+	public JsonData update(Vehicle vehicle) {
+		return vehicleService.update(vehicle);
+		
+	}
+	@RequestMapping("/findVehicle.json")
+	@ResponseBody
+	public List<Vehicle> findVehicle(){
+		
+		return vehicleService.findByterminalIsNotNull();
+		
+	}
+}

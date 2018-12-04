@@ -1,0 +1,1441 @@
+/*消息弹框样式*/
+
+.toast-top-center {
+    top: 35% !important;
+    right: 32% !important;
+}
+
+.table-responsive {
+    padding-top: 40px;
+}
+
+#maintainList .table-responsive {
+    padding-top: 10px;
+}
+
+table {
+    border: 2px solid #c1d3de;
+}
+
+button#Insurance_apply {
+    font-size: 13px;
+}
+
+.keep-open .dropdown-menu {
+    background: #f5f5f5;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #fff;
+}
+
+.table-striped>tbody>tr:nth-of-type(even) {
+    background-color: #f7fcfe;
+}
+
+.table>thead>tr>th {
+    color: #eee;
+}
+
+.btn {
+    font-size: 12px;
+    padding: 3px 12px;
+}
+
+.form_btngroup .form-group {
+    width: 30% !important;
+    display: inline-block;
+}
+
+#carTypeIn .cartypein_apply .form_btngroup {
+    display: none;
+}
+
+.form_twolist .form-group:nth-child(3n+1) {
+    margin-left: 40px;
+}
+
+.even_style .form-group {
+    width: 50% !important;
+    display: inline-block;
+}
+
+.even_style .form-group:last-child {
+    width: 100% !important;
+    text-align: center;
+}
+
+.filter_choice_btn {
+    background: #010B50;
+    color: #fff;
+}
+
+.btn_filter {
+    text-align: left;
+    margin-left: -4px;
+}
+
+#filter_model .text_group .form-group:last-child {
+    width: 50% !important;
+    text-align: center;
+}
+
+#filter_model .even_style .range_group .form-group {
+    width: 100% !important;
+    text-align: center;
+    margin-left: 1px;
+}
+
+#filter_model .range_group input {
+    width: 25% !important;
+}
+
+.range_group {
+    border-top: 1px solid #c1d3de;
+    border-bottom: 1px solid #c1d3de;
+    padding: 10px 0px 10px 40px;
+    margin-bottom: 10px;
+}
+
+.modal .even_style .form-group:nth-child(4n+3),
+.modal .even_style .form-group:nth-child(4n+4) {
+    background: transparent;
+}
+
+.modal .even_style {
+    border: none;
+    box-shadow: none;
+}
+
+.even_style .form-group:nth-child(2n+1) {
+    padding-left: 40px;
+    margin-left: 5px;
+}
+
+#filter_model .range_group .form-group:nth-child(2n+1) {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+.caroptrator {
+    height: 20px;
+    font-size: 13px;
+}
+
+.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #c1d3de;
+}
+
+.detail_input {
+    height: 25px;
+}
+
+.btn-default:hover {
+    background: #3a4f72;
+    color: white;
+}
+
+#auditList td.bs-checkbox input {
+    text-align: center;
+    margin-left: 10px;
+}
+
+.my_btn {
+    color: #3a4f72;
+    background: transparent;
+    border: 1px solid #3a4f72;
+}
+
+#carDetail .row {
+    margin-top: 15px;
+    text-align: center;
+    margin-left: 195px;
+}
+
+.card-view span:first-child {
+    margin-left: 41px;
+    width: 100px !important;
+    display: inline-block;
+}
+
+.card-views .card-view:first-child span {
+    color: #1B6DDA;
+}
+
+.car_image {
+    line-height: 30px;
+}
+
+.car_image_check {
+    padding-top: 9px;
+}
+
+#carCheck .col-sm-5 input,
+#returncarCheck .col-sm-5 input {
+    width: 100px;
+    vertical-align: middle;
+    margin: 0px 0px 0px 0px;
+}
+
+.form_subject {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0px 12px;
+    background: #3a4f72;
+    color: #fff;
+}
+
+.detail_part .form_btngroup {
+    display: none;
+}
+
+div#add_maintain_apply form {
+    margin-top: 35px;
+}
+
+.detail_part #auditForm .form_btngroup {
+    display: block;
+    margin: 10px auto 20px;
+}
+
+.form_subject p.pull-right {
+    cursor: pointer;
+}
+
+.form_subject p {
+    margin: 0px;
+}
+
+input.toolname {
+    width: 100%;
+    border: none;
+}
+
+.form_subject .iconfont {
+    font-size: 25px !important;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+#carListtable_toolbar .btn {
+    padding: 0px 12px;
+    margin-top: -5px;
+}
+
+.form_subject a {
+    color: #fff;
+}
+
+#sCheck .form_subject {
+    margin-bottom: 30px;
+}
+
+.form_subject i {
+    margin-right: 5px;
+    margin-top: 3px;
+}
+
+.plateDetail .audit_row.clearfix {
+    margin-bottom: 30px;
+}
+
+.vSn_sort {
+    cursor: pointer;
+}
+
+.data_tab_box span:not(:last-child) {
+    margin-top: 10px;
+}
+
+button.btn.btn-default.pull-left.btn-primary.carCheck_btn {
+    text-align: center;
+    margin-left: 50%;
+}
+
+input.form-control.plate_vSn,
+input.form-control.ins_updata,
+input.form-control.ins_applyTime,
+input.form-control.ins_enddata,
+input.form-control.plate_applydata,
+input.form-control.plate_enddata,
+input.form-control.oil_importdata,
+input.form-control.oil_operator,
+input.form-control.search_input,
+input.form-control.ins_vSn {
+    padding: 0px 3px;
+    width: 90px;
+    height: 25px;
+    font-size: 12px;
+}
+
+.insuranceTypeIn_top .search_input,
+.carList_top .search_input,
+.plate_top .search_input {
+    margin-right: 20px;
+}
+
+.sumcar_top.data_tab_box form label {
+    font-size: 12px;
+}
+
+.down_btn {
+    background: #286090 !important;
+}
+
+button#carlist_search,
+button#plate_search,
+button#user_search,
+button#ins_search {
+    padding: 0px 9px !important;
+    position: relative;
+    line-height: 21px;
+    top: -3px;
+}
+
+.audit_title.clearfix {
+    border-top: 1px solid #bbb;
+}
+
+img.car_img {
+    width: 460px;
+    height: auto;
+}
+
+.car_img_box,
+.crd_box,
+.bom_box,
+.circuitry_box {
+    text-align: center;
+}
+
+td.bs-checkbox {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+#m_cancel_btn {
+    margin: 10px 53px;
+}
+
+#driverList span.export_title {
+    bottom: 0px;
+}
+
+span.export_title {
+    left: 572px;
+    position: absolute;
+    bottom: -8px;
+    width: 79px;
+}
+
+.cartypein_apply .form_btngroup {
+    display: none !important;
+}
+
+#newcarTypeIn .cartypein_apply .form_btngroup {
+    display: none;
+}
+
+#newcarTypeIn button.btn.btn-default.btn-primary.sub_cartypein {
+    text-align: center;
+}
+
+.even_style {
+    border: 2px solid #f5f5f5;
+    box-shadow: 4px 0px 3px #f5f5ff;
+}
+
+.even_style .form-group:nth-child(4n+3),
+.even_style .form-group:nth-child(4n+4) {
+    background: #f7fcfe;
+}
+
+.finish_form .from-group-tips {
+    margin-top: -15px;
+}
+
+.maintain_form .form-group {
+    padding-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 0px;
+    min-height: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 0px;
+}
+
+label.drivetypein_tips {
+    padding-left: 200px;
+}
+
+select {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 26px;
+    font-size: 12px;
+}
+
+a.a_select span {
+    font-size: 12px;
+}
+
+.vSn_tips,
+.tip_style {
+    font-size: 12px;
+    color: red;
+    position: absolute;
+    top: 5px;
+    line-height: 30px;
+}
+
+.audit_top div p {
+    border: 1px solid #ddd;
+    width: 100%;
+    padding: 7px 0px;
+    margin: 0px;
+    border-bottom: none;
+    border-right: none;
+}
+
+.audit_top div {
+    border: 1px solid #ddd;
+    padding: 0px;
+    text-align: center;
+    border-right: none;
+}
+
+.audit_top_list1.col-md-4.col-sm-4 p {
+    height: 210px;
+    line-height: 210px;
+}
+
+.audit_top div:last-child {
+    border-right: 1.5px solid #ddd;
+}
+
+.audit_center {
+    border-top: 1px solid #ddd;
+}
+
+.audit_footer.clearfix {
+    margin: 12px auto;
+}
+
+textarea {
+    vertical-align: middle;
+}
+
+.radio_group {
+    vertical-align: middle;
+    margin-top: 6px;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    margin: 0px;
+    margin-top: 1px;
+    vertical-align: middle;
+    cursor: pointer;
+    text-align: center;
+}
+
+span.my_radio {
+    /* color: blue; */
+    font-weight: bold;
+}
+
+.checkbox_group {
+    vertical-align: middle;
+    margin-top: 7px;
+}
+
+#audit_model .modal-dialog.modal-lg {
+    margin-top: 5% !important;
+}
+
+.groupsearch_btn {
+    width: 56px;
+    background: #1A1D3E;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.form-group_text label {
+    font-weight: normal;
+}
+
+button#upkeep_btn {
+    margin-right: 45px;
+}
+
+input.bom_name,
+input.bom_num {
+    width: 99%;
+    border: none;
+    text-align: center;
+    min-height: 40px;
+}
+
+ul.mydrop_menu {
+    min-width: 88px !important;
+    padding: 0px;
+    border-radius: 11px;
+    border: 1px solid lightgray;
+}
+
+ul.mydrop_menu>li>a:link {
+    padding: 0px;
+    background: transparent;
+}
+
+ul.mydrop_menu>li>a:visited {
+    padding: 0px;
+    background: transparent;
+}
+
+ul.mydrop_menu>li>a:active {
+    padding: 0px;
+    background: transparent;
+}
+
+ul.mydrop_menu li button {
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid grey;
+    width: 88px;
+    text-align: center;
+}
+
+ul.mydrop_menu li:first-child button {
+    border-top-right-radius: 11px;
+    border-top-left-radius: 11px;
+}
+
+ul.mydrop_menu li:last-child button {
+    border-bottom-right-radius: 11px;
+    border-bottom-left-radius: 11px;
+}
+
+ul.mydrop_menu li {
+    width: 87px;
+}
+
+ul.mydrop_menu .btn-default:hover {
+    background: #337ab7;
+    color: white;
+}
+
+.pageMaintain li {
+    width: 20px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    background: #E5F1FB;
+    color: #278CDE;
+    text-align: center;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.pageMaintain {
+    float: right;
+    margin-top: -27px;
+}
+
+.pageMaintain li.cur {
+    background: #278CDE;
+    color: white;
+}
+
+.form-group.zhanwei {
+    padding-left: 40px;
+    margin-left: 5px;
+    background: #f5f5f5;
+}
+
+.form-group_text input {
+    width: 337px;
+    height: 25px;
+    line-height: 25px;
+    text-indent: 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.col-sm-9.car_tools_check div {
+    padding: 10px 5px;
+}
+
+.col-sm-9.car_tools_check .col-sm-12 span:first-child {
+    display: inline-block;
+    width: 130px;
+    vertical-align: middle;
+}
+
+.upitem_group label.col-sm-2.control-label {
+    margin-left: 30px;
+}
+
+#maintainList #toolbar_tablescreen .form-control {
+    display: inline-block;
+    width: 25%;
+    border: 1px solid #ccc;
+    height: 25px;
+    font-size: 11px;
+    line-height: 25px;
+}
+
+#maintainList .input-sm,
+#user .input-sm {
+    padding: 2px 10px;
+}
+
+.table-hover>tbody>tr:hover {
+    background-color: #E5F1FB;
+    cursor: pointer;
+}
+
+.fixed-table-container tbody .selected td {
+    background-color: #E5F1FB;
+}
+
+#toolbar_maintainTable .form-control,
+#user .form-control,
+.search .form-control {
+    height: 26px;
+}
+
+#driverList .import-mdoel_select {
+    top: 1px;
+}
+
+#group_carvSn {
+    width: 67px;
+    height: 25px;
+    outline: none;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.operator_group {
+    padding-left: 70px;
+}
+
+p.pull-right.check_modifier,
+p.pull-right.checking_modifier {
+    margin-right: 30px;
+}
+
+form.form-horizontal.even_style.upkeepFormInfo {
+    border: 1px solid #ccc;
+    padding: 10px 0px;
+}
+
+#upkeepForm .form-horizontal {
+    width: 100%;
+}
+
+.upkeepFormInfo:first-child {
+    margin-top: 0px !important;
+}
+
+.fixed-table-pagination .pagination a {
+    padding: 1px 5px;
+}
+
+.fixed-table-container tbody td {
+    border: 1px solid #c1d3de;
+}
+
+#maintainList table tbody td {
+    font-size: 11px;
+}
+
+.fixed-table-container thead tr {
+    background: #3a4f72;
+    border-bottom: 1px solid #c1d3de;
+}
+
+.fixed-table-container thead th {
+    border: 1px solid #c1d3de;
+}
+
+#carListtable_toolbar span {
+    position: relative;
+    top: -2px;
+}
+
+.menulist_height {
+    line-height: 30px;
+}
+
+.checkitem_active {
+    color: #1471EE;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    background: #4b6ba1;
+}
+
+.fixed-table-loading {
+    display: none;
+}
+
+.from-group-tips label {
+    color: #D80000 !important;
+}
+
+#sumcar_search_form input {
+    width: 99px;
+    height: 27px;
+    margin-right: 20px;
+}
+
+span.page-list {
+    display: inline-block !important;
+}
+
+
+/*.myrow {
+    background: pink;
+}*/
+
+form#sumcar_search_form {
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.tablelistbox h3 {
+    margin-top: -12px;
+    margin-bottom: 0px;
+}
+
+.form-group.modal_btn_group .modal_del {
+    margin-right: 35px;
+}
+
+.form-control {
+    width: 90%;
+}
+
+span {
+    display: inline-block;
+}
+
+#upkeep_model .form-control {
+    width: 109%;
+}
+
+input.form-control {
+    background: white;
+}
+
+.role_check_box label,
+.role_menuList,
+.role_menuList label {
+    font-size: 13px;
+    color: #666 !important;
+}
+
+.sex-group {
+    margin-top: 7px;
+}
+
+#role .form-horizontal input {
+    color: #333;
+    vertical-align: middle;
+    margin: 0px 2px 0px 2px;
+}
+
+.role_check_box input {
+    vertical-align: middle;
+    margin: 0px 2px 0px 2px;
+}
+
+
+/*用户列表*/
+
+#toolbar_userList {
+    position: absolute;
+    top: -45px;
+    left: 0px;
+}
+
+#toolbar h3 {
+    display: inline-block;
+    margin-top: -2px;
+}
+
+#userList,
+#roleList,
+#rightsList,
+#menuList {
+    top: 20px;
+}
+
+#rights .add_boxs,
+#role .add_boxs {
+    margin-top: 165px;
+}
+
+.role_check_box,
+.user_check_box {
+    margin-top: 7px;
+    vertical-align: middle;
+}
+
+.mybtn {
+    width: 70px;
+    border-radius: 20px;
+    height: 26px;
+    line-height: 26px;
+    border: none;
+    background: #1A1D3E;
+    color: white;
+    outline: none;
+}
+
+.my_remove {
+    position: absolute;
+    top: 15px;
+    color: #1A1D3E;
+    cursor: pointer;
+    right: 10px;
+}
+
+
+/*
+.add_box_form {
+    width: 700px;
+}*/
+
+div#sumCarList .table-responsive {
+    padding-top: 3px;
+}
+
+.driveradd_btn {
+    display: inline-block;
+}
+
+.table-responsive {
+    width: 95%;
+    margin: 0 auto;
+}
+
+.modal.in .modal-dialog {
+    margin-top: 8%;
+}
+
+#toolRecord_model .modal-dialog,
+#upkeep_model .modal-dialog {
+    margin-top: 5% !important;
+}
+
+.radio_style {
+    margin-top: 6px;
+}
+
+.model_title {
+    background: #E5F1FB;
+    color: #0078D7;
+}
+
+.form-group-last {
+    margin: 10px 0px;
+}
+
+.detail_part {
+    width: 100%;
+}
+
+.datail_title {
+    width: 95%;
+    margin: 0 auto;
+    background: #E5F1FB;
+    height: 40px;
+    padding: 0px 10px;
+}
+
+.detail_menu {
+    display: inline-block;
+}
+
+.detail_menu a:hover {
+    color: #0078D7;
+}
+
+.detail_menu a {
+    margin: 0px 20px;
+    line-height: 40px;
+    padding-bottom: 9px;
+}
+
+.detail_menu a.checkitem_active {
+    color: #0078d7;
+    border-bottom: 2px solid #0078D7;
+}
+
+
+/*门岗是否合法*/
+
+#sentrytable th:last-child {
+    color: red;
+}
+
+#sentrytable td:last-child {
+    color: green;
+    font-weight: bold;
+}
+
+.fixed-table-toolbar {
+    padding-bottom: 20px;
+    margin-top: -25px;
+}
+
+
+/*#employee .fixed-table-toolbar,
+#cargroup .fixed-table-toolbar {
+    margin-top: 0px;
+}*/
+
+#childmenuList {
+    margin-bottom: 0px;
+}
+
+#childmenuList_p {
+    padding-top: 20px;
+}
+
+#menu_rightbox {
+    margin-top: 53px;
+}
+
+#user .form-horizontal {
+    margin-top: 63px;
+}
+
+#menulist_toolbar,
+#childmenulist_toolbar {
+    color: #1B6DDA;
+}
+
+.fixed-table-container {
+    margin-top: 15px;
+}
+
+.checkMenus,
+.menu_style {
+    display: inline-block;
+}
+
+.menu_style button,
+.checkMenus button {
+    text-decoration-line: underline;
+    background: transparent;
+    font-size: 11px;
+    cursor: pointer;
+    margin: 0px 10px 0px 28px;
+    outline: none;
+    border: none;
+}
+
+.menu_style button:hover,
+.checkMenus button:hover {
+    color: #1B6DDA;
+}
+
+.form_style2 {
+    margin-top: 0px;
+}
+
+.itemlist_head {
+    width: 13% !important;
+    line-height: 20px !important;
+    vertical-align: middle !important;
+    height: auto;
+}
+
+.confirm_group {
+    text-align: center;
+}
+
+.pot_style div {
+    text-align: center;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.pot_style div:last-child {
+    margin-right: 0px;
+}
+
+label.audit_tips {
+    color: red;
+    margin-left: 46px;
+    padding-top: 6px;
+}
+
+.pot_style input {
+    width: 60px;
+    text-align: center;
+    margin-left: 2px;
+}
+
+.form_width_style {
+    width: 95% !important;
+    margin: 0 auto;
+}
+
+input[type="file"] {
+    border: none;
+    box-shadow: none;
+}
+
+.checkitem p {
+    height: 38px;
+    border-top: 1px solid #c1d3de;
+    line-height: 37px;
+    font-size: 13px;
+    margin-bottom: 0px;
+    /*让超出的用...实现*/
+    text-overflow: ellipsis;
+    /*禁止换行*/
+    white-space: nowrap;
+    /*超出的隐藏*/
+    overflow: hidden;
+}
+
+.checkitem p:first-child {
+    border: none;
+}
+
+.checktitle span {
+    background: #f5f5f5;
+    color: #01034A;
+}
+
+.checktitle span:nth-child(2),
+.checkitem span:nth-child(2) {
+    width: 14%;
+}
+
+#wiringCheck .form_style2_detail span.itemlist_head.head14,
+#wiringCheck .form_style2_detail span.itemlist_head.head20,
+#wiringCheck .form_style2_detail span.itemlist_head.head24 {
+    line-height: 16px !important;
+}
+
+#insurance_model .checktitle span:nth-child(2),
+#insurance_model .checkitem span:nth-child(2) {
+    width: 17%;
+}
+
+div#insurance_model {
+    overflow: auto;
+}
+
+button#bom_apply_btn {
+    margin: 13px 50% 0px;
+}
+
+.checktitle span:nth-child(4),
+.checkitem span:nth-child(4) {
+    width: 32%;
+}
+
+#toolForm .checktitle span:nth-child(3),
+#toolForm .checkitem span:nth-child(3),
+#toolRecord_model .checktitle span:nth-child(3),
+#toolRecord_model .checkitem span:nth-child(3) {
+    /*width: 35%;*/
+    width: 18%;
+}
+
+.rd_apply div.checkitem {
+    width: 33.3333%;
+    display: inline-block;
+}
+
+.cartypein_btn_group {
+    margin-top: 40px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.cartypein_btn_group button:nth-child(1) {
+    margin-right: 44px;
+    margin-left: 44px;
+}
+
+.upkeepDetail,
+.plateDetail {
+    margin-bottom: 10px;
+}
+
+#toolForm .checktitle span:nth-child(4),
+#toolForm .checkitem span:nth-child(4),
+#toolRecord_model .checktitle span:nth-child(4),
+#toolRecord_model .checkitem span:nth-child(4) {
+    width: 25%;
+}
+
+#toolRecord_model .checkitem span:nth-child(3) input,
+#toolForm .checkitem span:nth-child(3) input {
+    border: none;
+    width: 99%;
+    vertical-align: middle;
+    text-align: center;
+    height: 100%;
+    margin-top: 6px;
+    outline: none;
+    box-shadow: none;
+}
+
+div.checkitem span:nth-child(4) input,
+.item_input,
+.request_input {
+    width: 99%;
+    border: none;
+    outline: none;
+    text-align: center;
+}
+
+#toolForm .checktitle span:nth-child(2),
+#toolForm .checkitem span:nth-child(2),
+#toolRecord_model .checktitle span:nth-child(2),
+#toolRecord_model .checkitem span:nth-child(2) {
+    width: 17%;
+}
+
+.checktitle span:last-child,
+.checkitem span:last-child {
+    border-right: 1px solid #c1d3de;
+}
+
+#toolRecord_model .checktitle:nth-child(2) span {
+    background: #E5F1FB;
+}
+
+.checktitle span,
+.checkitem span {
+    display: inline-block;
+    width: 27%;
+    min-height: 42px;
+    height: auto;
+    text-align: center;
+    line-height: 40px !important;
+    border: 1px solid #c1d3de;
+    border-top: none;
+    border-right: none;
+    vertical-align: middle;
+}
+
+.toolForm .checktitle span,
+.toolForm .checkitem span {
+    width: 20%
+}
+
+.bom_apply .checktitle span,
+.bom_apply .checkitem span {
+    width: 50%;
+}
+
+.rd_apply .checktitle span,
+.rd_apply .checkitem span {
+    width: 100%;
+}
+
+.rd_apply .checkitem span input {
+    text-align: center;
+}
+
+#tool_submit_btn {
+    margin: 5% 40% 2%;
+}
+
+form.pot_pressure.pot_style {
+    padding-left: 10px;
+}
+
+.form_btngroup {
+    width: 200px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 4px;
+}
+
+.data_tab_box {
+    width: 100%;
+    padding: 10px 20px 17px;
+    margin: 10px auto;
+    border: 1px solid #c1d3de;
+    box-shadow: 0 0 7px #999;
+}
+
+.plate_top.data_tab_box,
+.insuranceTypeIn_top.data_tab_box {
+    margin-top: -25px;
+}
+
+form.form-inline input {
+    width: 100px !important;
+    height: 29px;
+}
+
+#sumCarList form.form-inline input {
+    margin-right: 7px;
+}
+
+form.bomcheck_itembox.form_style1_detail {
+    text-align: center;
+}
+
+.modal-body.toolForm {
+    text-align: center;
+    height: 450px;
+    overflow: auto;
+}
+
+button.btn.btn-default.btn-primary.link_bomapply {
+    margin: 20px auto;
+}
+
+form.form-horizontal.even_style.toolForm,
+.bomcheck_itembox.form_style1_detail {
+    text-align: center;
+}
+
+.InsFormDetail,
+.plateDetail {
+    text-align: center;
+    border: 1px solid #bbb;
+    margin-bottom: 25px;
+    padding: 15px 0px 15px;
+}
+
+
+/*************.form_style4表示部件检查表单的相关样式*************************************/
+
+table#wiringChecktable tbody td,
+#wiringCheckDetailtable tbody td {
+    text-align: center;
+    font-size: 12px;
+}
+
+.picDetail,
+.cirDetail {
+    text-align: center;
+}
+
+.form_style4 .checkitem span,
+.form_style4 .checktitle span,
+.form_style2 .checktitle span,
+.form_style2 .checkitem span {
+    width: 45%;
+}
+
+.form_style2 .itemlist1,
+.form_style4 .itemlist1 {
+    width: 50%;
+}
+
+.form_style2 .itemlist2,
+.form_style4 .itemlist2 {
+    width: 15% !important;
+}
+
+.form_style4 .itemlist3,
+.form_style2 .itemlist3 {
+    width: 40% !important;
+}
+
+.form_style1_detail .checkitem span,
+.form_style1_detail .checktitle span {
+    width: 16%;
+}
+#bomCheck .form_style1_detail .checkitem span,
+#bomCheck .form_style1_detail .checktitle span {
+    width: 20%;
+}
+
+.form_style2_detail .checkitem span,
+.form_style2_detail .checktitle span {
+    width: 25%;
+}
+
+.form_style1_detail .checktitle span:nth-child(1),
+.form_style1_detail .checkitem span:nth-child(1) {
+    width: 27%;
+}
+
+.form_style1_detail .checktitle span:nth-child(2),
+.form_style1_detail .checkitem span:nth-child(2) {
+    width: 9%;
+}
+#bomCheck .form_style1_detail .checktitle span:nth-child(2),
+#bomCheck .form_style1_detail .checkitem span:nth-child(2) {
+    width: 13%;
+}
+
+.itemlist_head {
+    float: left;
+    border: none !important;
+}
+
+.form_style4 span.itemlist_head.head7,
+.form_style4 span.itemlist_head.head12 {
+    font-size: 10px;
+    line-height: 17px !important;
+}
+
+.reset_btn {
+    margin: 5px 20px;
+}
+
+span.item_child {
+    width: 87% !important;
+    float: left;
+    border-bottom: none;
+}
+
+.checkitem span {
+    font-size: 12px;
+}
+
+.form_style4 .checkitem p {
+    height: 43px;
+    line-height: 20px;
+    font-size: 10px;
+    margin-bottom: 0px;
+}
+
+.form_style4 .itemlist2 p {
+    font-size: 12px;
+}
+
+.itemlist1 .item_child {
+    font-size: 10px;
+}
+
+.checktitle .item_child {
+    font-size: 13px;
+}
+
+.explain_input,
+.confirm_input,
+.solve_input {
+    border: none;
+    width: 99%;
+    text-align: center;
+    min-height: 37px;
+}
+
+.form_style4 .explain_input {
+    height: 100%;
+}
+
+.statusno {
+    margin: 0px 5px;
+}
+
+.road_menu {
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #DDE4EA;
+    box-shadow: 2px 4px 5px #DDE4EA;
+    margin-bottom: 20px;
+}
+
+form.check_itembox,
+form.form_style2,
+form.bomcheck_itembox,
+form.form_style4 {
+    margin-bottom: 20px;
+}
+
+.checktitle {
+    border-top: 1px solid #c1d3de;
+}
+
+.loadleft {
+    width: 80%;
+    display: inline-block;
+}
+
+.loadright {
+    width: 19%;
+    display: inline-block;
+    text-align: right;
+    font-size: 13px;
+    color: #0078D7;
+}
+
+.loadnormal {
+    font-size: 13px;
+    padding: 8px 50px 8px 50px;
+}
+
+.loadactive {
+    background: url("../img/index/load1.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+.loadactives {
+    background: url("../img/index/load2.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+td.explain,
+td.solve {
+    width: 25%;
+}
+
+thead td {
+    padding: 12px 0px;
+    text-align: center;
+    background: #f5f5f5;
+    color: #01034A;
+    font-size: 14px;
+}
+
+td.status {
+    width: 15%;
+}
+
+input.my_radio {
+    height: 13px;
+    vertical-align: text-top;
+    margin-top: 0px;
+}
+
+table input[type='text'] {
+    width: 100%;
+    min-height: 35px;
+    text-align: center;
+    border: none;
+}
+
+input.readonly {
+    background: #f5f5f5;
+    /*background: #edf2f6;*/
+}

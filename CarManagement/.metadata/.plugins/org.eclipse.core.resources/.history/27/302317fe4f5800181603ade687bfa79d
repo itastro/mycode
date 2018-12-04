@@ -1,0 +1,30 @@
+package com.bailian.car.domain.carmaintain;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+/**
+ * 
+    * @ClassName: Employee
+    * @Description: 维修员工
+    * @author itastro
+    * @date 2018年5月15日
+    *
+ */
+@Entity
+@Table(name = "t_employee")
+public class Employee {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private int id;
+@NotBlank
+	private String name;
+
+}

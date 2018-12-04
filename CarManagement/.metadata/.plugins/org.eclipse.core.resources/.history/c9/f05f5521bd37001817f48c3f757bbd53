@@ -1,0 +1,362 @@
+package com.bailian.car.service.check.impl;
+
+import java.util.Date;
+import java.util.List;
+import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.common.utils.CopyBean;
+import com.bailian.car.common.utils.TokenManagerUtils;
+import com.bailian.car.dao.check.BackCheckRepository;
+import com.bailian.car.dao.check.CheckSafeOperatorRepository;
+import com.bailian.car.dao.check.ClacyLindersssRepository;
+import com.bailian.car.dao.check.EmsAndBomCheckResultRepository;
+import com.bailian.car.dao.check.HIResultReposity;
+import com.bailian.car.dao.check.PartCheckResultRepository;
+import com.bailian.car.dao.check.PickUpCheckRepository;
+import com.bailian.car.dao.check.SafeCheckResultRepository;
+import com.bailian.car.dao.check.SystemCheckRepository;
+import com.bailian.car.dao.checktable.CheckParentItemRepository;
+import com.bailian.car.dao.checktable.CheckTypeRepository;
+import com.bailian.car.dao.data.CarRepository;
+import com.bailian.car.dao.data.TempCarRepository;
+import com.bailian.car.domain.car.Car;
+import com.bailian.car.domain.car.TempCar;
+import com.bailian.car.domain.carcheck.BackCheck;
+import com.bailian.car.domain.carcheck.SafeCheck;
+import com.bailian.car.domain.carcheck.ClacyLindersss;
+import com.bailian.car.domain.carcheck.PickUpCheck;
+import com.bailian.car.domain.carcheck.SystemCheck;
+import com.bailian.car.domain.carcheckresult.CarCheckResultInfo;
+import com.bailian.car.domain.carcheckresult.EmsAndBomCheckResult;
+import com.bailian.car.domain.carcheckresult.HIResult;
+import com.bailian.car.domain.carcheckresult.PartCheckResult;
+import com.bailian.car.domain.carcheckresult.SafeCheckResult;
+import com.bailian.car.domain.checktable.CheckParentItem;
+import com.bailian.car.domain.checktable.CheckType;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.service.check.CarCheckService;
+import com.bailian.car.dao.check.CarCheckResultInfoRepository;
+
+@Service
+@Transactional
+public class CarCheckServiceImpl implements CarCheckService {
+
+	private static Logger log = LoggerFactory.getLogger(CarCheckServiceImpl.class);
+	@Autowired
+	private CarRepository carRepository;
+	@Autowired
+	private TempCarRepository tempCarRepository;
+	@Autowired
+	private PickUpCheckRepository pickUpCheckRepository;
+	@Autowired
+	private BackCheckRepository backCheckRepository;
+	@Autowired
+	private CheckTypeRepository checkTypeRepository;
+	@Autowired
+	private CheckParentItemRepository checkParentItemRepository;
+	@Autowired
+	private ClacyLindersssRepository clacyLindersssRepository;
+	@Autowired
+	private SafeCheckResultRepository safeCheckResultRepository;
+	@Autowired
+	private CheckSafeOperatorRepository checkSafeOperatorRepository;
+	@Autowired
+	private CarCheckResultInfoRepository carCheckResultInfoRepository;
+	@Autowired
+	private SystemCheckRepository systemCheckRepository;
+	@Autowired
+	private HIResultReposity hIResultReposity;
+	@Autowired
+	private EmsAndBomCheckResultRepository emsAndBomCheckResultRepository;
+	@Autowired
+
+	private PartCheckResultRepository partCheckResultRepository;
+
+	@Override
+	public JsonData create(PickUpCheck pickUpCheck, Integer tcarid) {
+
+		if (tcarid != null & pickUpCheck != null) {
+
+			TempCar car = tempCarRepository.findOne(tcarid);
+			if ((StringUtils.isNotBlank(pickUpCheck.getVin()) && StringUtils.isNotBlank(pickUpCheck.getEngineNumber()))
+					&& pickUpCheck.getVin().equals(car.getVin())
+							& pickUpCheck.getEngineNumber().equals(car.getEngineNumber())) {
+				pickUpCheckRepository.save(pickUpCheck);
+				car.setPickUpCheck(pickUpCheck);
+				car.setStatus("1"); // 设置状态为1
+				tempCarRepository.save(car);
+				return JsonData.success(pickUpCheck, "接车点检成功");
+			}
+			return JsonData.fail("请正确填写发动机号或车架号");
+		}
+		return JsonData.fail("接车点检失败");
+	}
+
+	@Override
+	public PickUpCheck findUpCheck(Integer tcarid) {
+		PickUpCheck pickUpCheck = null;
+
+		if (tcarid != null) {
+
+			TempCar car = tempCarRepository.findOne(tcarid);
+			pickUpCheck = car.getPickUpCheck();
+
+		}
+		return pickUpCheck;
+	}
+
+	@Override
+	public JsonData create(BackCheck backCheck, Integer tcarid) {
+		if (backCheck != null & tcarid != null) {
+
+			TempCar car = tempCarRepository.findOne(tcarid);
+
+			User currentUser = TokenManagerUtils.getToken();
+			backCheck.setOperator(currentUser.getNickname());
+
+			backCheck.setOperate_time(new Date());
+			backCheckRepository.save(backCheck);
+			car.setBackCheck(backCheck);
+			car.setStatus("6"); // 设置状态为6
+			tempCarRepository.save(car);
+			return JsonData.success(backCheck, "还车点检成功");
+		}
+		return JsonData.fail("还车点检失败");
+	}
+
+	@Override
+	public BackCheck findBackcheck(Integer tcarid) {
+		// TODO Auto-generated method stub
+		BackCheck backCheck = null;
+
+		TempCar car = tempCarRepository.findOne(tcarid);
+		backCheck = car.getBackCheck();
+
+		return backCheck;
+	}
+
+	@Override
+	public List<CheckType> findAllCheckName() {
+		List<CheckType> list = checkTypeRepository.findAll();
+		return list;
+	}
+
+	@Override
+	public List<CheckParentItem> findAlllParentItem() {
+		// TODO Auto-generated method stub
+		return checkParentItemRepository.findAll();
+	}
+
+	// 保存缸压检查
+	@Override
+	public JsonData save(ClacyLindersss clacyLindersss, Integer carid) {
+		TempCar car = null;
+		if (carid != null & clacyLindersss != null) {
+			clacyLindersssRepository.save(clacyLindersss);
+			car = tempCarRepository.findOne(carid);
+			car.setClacyLindersss(clacyLindersss);
+			tempCarRepository.save(car);
+
+			return JsonData.success("成功");
+		}
+		return JsonData.fail("失败");
+	}
+
+	@Override
+	public List<CheckParentItem> findAlllParentItemByCNID(Integer cNID) {
+		List<CheckParentItem> parentItems = null;
+		if (cNID != null) {
+			CheckType checkName = checkTypeRepository.findOne(cNID);
+			parentItems = checkName.getCarCheckParentItems();
+		}
+		return parentItems;
+	}
+
+	// 安全检查
+	@Override
+	public JsonData SafeCheck(Integer carid, List<SafeCheckResult> safeCheckResults) {
+		TempCar car = tempCarRepository.findOne(carid);
+
+		for (SafeCheckResult safeCheckResult : safeCheckResults) {
+			safeCheckResultRepository.save(safeCheckResult);
+			car.getSafeCheckResults().add(safeCheckResult);
+			car.setStatus("2"); // 安全检查后设置状态为2
+			tempCarRepository.save(car);
+		}
+		CarCheckResultInfo checkResultInfo = new CarCheckResultInfo();
+		SafeCheck safeOperator = new SafeCheck();
+		CheckSave(car, checkResultInfo, safeOperator); // 安全检查成功后 绑定到检查进度表
+		return JsonData.success("成功");
+	}
+
+	// 线束检查
+	@Override
+	public JsonData HICheck(Integer carid, List<HIResult> HIresults) {
+
+		if (carid != null) {
+			TempCar car = tempCarRepository.findOne(carid);
+			for (HIResult hiResult : HIresults) {
+				hIResultReposity.save(hiResult);
+				car.getReIesults().add(hiResult);
+				car.setStatus("3"); // 线束检查完 设置状态为3
+
+				CarCheckResultInfo checkResultInfo = car.getCarCheckResultInfo();
+				SystemCheck systemCheck = new SystemCheck();
+				CheckSave(car, checkResultInfo, systemCheck);
+				tempCarRepository.save(car);
+
+			}
+			return JsonData.success("线束检查成功");
+		}
+		return JsonData.fail("车辆编号不能为空");
+
+	}
+
+	// EMS/BOM检查
+	@Override
+	public JsonData EmsAndBomCheck(Integer carid, List<EmsAndBomCheckResult> emsAndBomCheckResults) {
+
+		if (carid != null) {
+			TempCar car = tempCarRepository.findOne(carid);
+			for (EmsAndBomCheckResult emsAndBomCheckResult : emsAndBomCheckResults) {
+				emsAndBomCheckResultRepository.save(emsAndBomCheckResult);
+				car.getEmsAndBomCheckResult().add(emsAndBomCheckResult);
+				car.setStatus("4"); // 设置状态为4
+				tempCarRepository.save(car);
+			}
+			return JsonData.success("EMS\\BOM检查成功");
+		}
+		return JsonData.fail("车辆编号不能为空");
+	}
+
+	// 重要零部件检查
+	@Override
+	public JsonData partCheck(Integer carid, List<PartCheckResult> partCheckResults) {
+		// TODO Auto-generated method stub
+		if (carid != null) {
+			TempCar car = tempCarRepository.findOne(carid);
+			for (PartCheckResult partCheckResult : partCheckResults) {
+				partCheckResultRepository.save(partCheckResult);
+				car.getPartCheckResults().add(partCheckResult);
+				car.setStatus("5"); // 设置状态为5
+				CarCheckResultInfo checkResultInfo = car.getCarCheckResultInfo();
+				SystemCheck systemCheck = new SystemCheck();
+				CheckSave(car, checkResultInfo, systemCheck);
+				tempCarRepository.save(car);
+			}
+		}
+		return JsonData.success("成功");
+	}
+
+	/**
+	* @Title: CheckSave
+	* @Description: TODO检查保存
+	* @param @param car
+	* @param @param checkResultInfo
+	* @param @param safeOperator    参数
+	* @return void    返回类型
+	* @throws
+	*/
+
+	private void CheckSave(TempCar car, CarCheckResultInfo checkResultInfo, Object object) {
+		// User token = TokenManagerUtils.getToken();
+
+		if (object instanceof SafeCheck) {
+			Date date = new Date();
+			((SafeCheck) object).setOperator("admin");
+			((SafeCheck) object).setTime(date);
+			checkSafeOperatorRepository.save(((SafeCheck) object));
+			checkResultInfo.setTempcar(car);
+			checkResultInfo.setSafeCheck(((SafeCheck) object));
+			checkResultInfo.setStatus("1");
+			checkResultInfo.setvSn(car.getvSn());
+			carCheckResultInfoRepository.save(checkResultInfo);
+		}
+
+		if (object instanceof SystemCheck) {
+			Date date = new Date();
+			((SystemCheck) object).setOperator("admin");
+			((SystemCheck) object).setTime(date);
+			systemCheckRepository.save(((SystemCheck) object));
+			checkResultInfo.setTempcar(car);
+			checkResultInfo.setSystemCheck(((SystemCheck) object));
+			checkResultInfo.setStatus("2");
+			checkResultInfo.setvSn(car.getvSn());
+			carCheckResultInfoRepository.save(checkResultInfo);
+		}
+
+	}
+
+	// 查询未通过审核的
+	@Override
+	public List<CarCheckResultInfo> findNotPassReview() {
+		String status = "4";
+		List<CarCheckResultInfo> list = carCheckResultInfoRepository.findByStatus(status);
+		return list;
+	}
+
+	// 审核通过
+	@Override
+	public JsonData passReview(Integer id) {
+
+		log.info("" + id);
+		CarCheckResultInfo resultInfo = carCheckResultInfoRepository.findOne(id);
+		resultInfo.setStatus("3");
+		carCheckResultInfoRepository.save(resultInfo);
+		TempCar tempcar = resultInfo.getTempcar();
+
+		Car car = CopyBean.CopyCar(tempcar);
+
+		carRepository.save(car);
+		return JsonData.success("成功");
+	}
+
+	// 待审核
+	@Override
+	public List<CarCheckResultInfo> findWaitReviewCar() {
+		String status = "3";
+		List<CarCheckResultInfo> list = carCheckResultInfoRepository.findByStatusNot(status);
+		// TODO Auto-generated method stub
+		return list;
+	}
+
+	// 查询通过检查的
+	@Override
+	public List<CarCheckResultInfo> findPassReview() {
+		String status = "3";
+		List<CarCheckResultInfo> list = carCheckResultInfoRepository.findByStatus(status);
+		return list;
+	}
+
+	@Override
+	public JsonData deleteReview(Integer id) {
+
+		return null;
+	}
+
+	@Override
+	public JsonData passReview(CarCheckResultInfo carCheckResultInfo) {
+		if (carCheckResultInfo != null) {
+			carCheckResultInfo.setStatus("3");
+			carCheckResultInfoRepository.save(carCheckResultInfo);
+			return JsonData.success("审核成功");
+		}
+
+		return JsonData.fail("审核失败");
+	}
+
+	@Override
+	public JsonData notPassReview(CarCheckResultInfo carCheckResultInfo) {
+		if (carCheckResultInfo != null) {
+			carCheckResultInfoRepository.save(carCheckResultInfo);
+			return JsonData.success("成功");
+		}
+		return JsonData.fail("失败");
+	}
+
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;com.bailian.car.system&apos; to &apos;com.bailian.car.domain.system&apos;&#x0D;&#x0A;- Original project: &apos;car-domain&apos;&#x0D;&#x0A;- Original element: &apos;car-domain/src/main/java/com.bailian.car.system&apos;&#x0D;&#x0A;- Renamed element: &apos;car-domain/src/main/java/com.bailian.car.domain.system&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;com.bailian.car.system&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src\/main\/java&lt;com.bailian.car.system" name="com.bailian.car.domain.system" qualified="false" references="true" stamp="1516007306823" textual="false" version="1.0"/>
+</session>

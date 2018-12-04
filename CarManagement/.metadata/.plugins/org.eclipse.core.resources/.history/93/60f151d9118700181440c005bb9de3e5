@@ -1,0 +1,810 @@
+package com.bailian.car.service.cars.car.impl;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.cars.car.CarBaseRepository;
+import com.bailian.car.dao.cars.car.CarPositionRepository;
+import com.bailian.car.dao.cars.car.CarRepository;
+import com.bailian.car.dao.cars.check.BomCheckRepository;
+import com.bailian.car.dao.cars.check.EmsAndBomCheckResultRepository;
+import com.bailian.car.dao.cars.develop.DevelopToolsRecordRepository;
+import com.bailian.car.dao.cars.project.ProjectRepository;
+import com.bailian.car.domain.carcheck.BomCheck;
+import com.bailian.car.domain.carcheckresult.EmsAndBomCheckResult;
+import com.bailian.car.domain.cars.car.Car;
+import com.bailian.car.domain.cars.car.CarBase;
+import com.bailian.car.domain.cars.car.Project;
+import com.bailian.car.domain.cars.develop.DevelopToolsRecord;
+import com.bailian.car.exception.ParamException;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.ApplyBom;
+import com.bailian.car.param.ApplyTools;
+import com.bailian.car.param.CarParam;
+import com.bailian.car.param.CarQueryOrder;
+import com.bailian.car.param.CarQueryParam;
+import com.bailian.car.service.cars.car.CarService;
+import com.bailian.car.utils.DateUtils;
+import com.bailian.car.utils.ExcelUtils;
+import com.bailian.car.utils.FastDFSClient;
+import com.bailian.car.utils.JsonMapper;
+import com.bailian.car.utils.TokenManagerUtils;
+import com.bailian.car.vo.MapVo;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@Transactional
+public class CarServiceImpl implements CarService {
+	@Autowired
+	private CarRepository carRepository;
+	@Autowired
+	private EmsAndBomCheckResultRepository EmsAndBomCheckResultRepository;
+	@Autowired
+	private CarBaseRepository carBaseRepository;
+	@Autowired
+	private DevelopToolsRecordRepository developToolsRecordRepository;
+	@Autowired
+	private LocalContainerEntityManagerFactoryBean entityManagerFactory;
+	@Autowired
+	private CarPositionRepository carPositionRepository;
+	@Autowired
+	private ProjectRepository projectRepository;
+	@Autowired
+	private BomCheckRepository bomCheckRepository;
+
+	@RequiresRoles(value = { "admin", "engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData save(CarParam param) {
+		try {
+			Thread.sleep(100);
+			String vSn = param.getvSn();
+			// String nickname = TokenManagerUtils.getNickname();
+			Car car = carRepository.findByvSn(vSn);
+
+			Project project = getProject(param);
+
+			CarBase carbase = carBaseRepository.findByvSn(param.getvSn());
+			if (carbase == null) {
+				CarBase carBase2 = new CarBase();
+				carBaseRepository.save(carBase2);
+				BeanUtils.copyProperties(param, carBase2);
+				carBase2.setOperator(TokenManagerUtils.getNickname()); // TODD:
+				carBase2.setMakeTime(new Date());
+				carBaseRepository.save(carBase2);
+
+			} else {
+				BeanUtils.copyProperties(param, carbase);
+				carbase.setOperator(TokenManagerUtils.getNickname()); // TODD:
+				carbase.setMakeTime(new Date());
+				carBaseRepository.save(carbase);
+			}
+
+			BeanUtils.copyProperties(param, car);
+			car.setProject(project);
+			car.setMakeTime(new Date());
+			car.setCar_status("进行中");
+			car.setChecks_status("检查中");
+			log.info("car:{}", JsonMapper.obj2String(car));
+			carRepository.save(car);
+			return JsonData.success("车辆信息添加成功");
+		} catch (Exception e) {
+			return JsonData.fail("车辆信息保存失败");
+		}
+
+	}
+
+	private Project getProject(CarParam param) {
+		Project project = projectRepository.findByProject_snAndProjectName(param.getProject_name(),
+				param.getProject_sn());
+		if (project == null) {
+			Project project2 = new Project();
+			project2.setProject_sn(param.getProject_sn());
+			project2.setProjectName(param.getProject_name());
+			projectRepository.save(project2);
+			return project2;
+		}
+		return project;
+	}
+
+	@RequiresRoles(value = { "admin", "engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData savebom(List<ApplyBom> applyBoms) {
+		log.info("applyBoms:{}", JsonMapper.obj2String(applyBoms));
+		String vSn = null;
+		for (ApplyBom applyBom : applyBoms) {
+			vSn = applyBom.getvSn();
+			if (applyBom.getvSn() != null) {
+				EmsAndBomCheckResult emsAndBomCheckResult = EmsAndBomCheckResultRepository
+						.findByBomNameAndVSn(applyBom.getBomName(), applyBom.getvSn());
+				if (emsAndBomCheckResult != null) {
+					if (emsAndBomCheckResult.getUuid() != null) {
+						emsAndBomCheckResult.setBomName(applyBom.getBomName());
+						emsAndBomCheckResult.setBomNum(applyBom.getBomNum());
+					}
+				} else {
+					// 保存Bom信息
+					EmsAndBomCheckResult bom = EmsAndBomCheckResult.builder().bomName(applyBom.getBomName())
+							.bomNum(applyBom.getBomNum()).vSn(applyBom.getvSn()).build();
+
+					EmsAndBomCheckResultRepository.save(bom);
+				}
+
+			} else {
+				return JsonData.success("车辆编号不能为空");
+			}
+		}
+
+		BomCheck bomCheck = bomCheckRepository.findByvSn(vSn);
+		if (bomCheck != null) {
+			bomCheck.setApplyPerson(TokenManagerUtils.getNickname());
+			bomCheck.setApplyTime(new Date());
+		} else {
+			BomCheck build = BomCheck.builder().vSn(vSn).applyPerson(TokenManagerUtils.getNickname())
+					.applyTime(new Date()).build();
+			bomCheckRepository.save(build);
+		}
+		return JsonData.success("BOM零部件申请成功");
+	}
+
+	@RequiresRoles(value = { "admin", "engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData savatools(List<ApplyTools> applyTools) {
+		log.info("applyTools:{}", JsonMapper.obj2String(applyTools));
+		// 保存研发工具信息
+		try {
+			for (ApplyTools applyTool : applyTools) {
+				if (applyTool.getvSn() != null) {
+
+					DevelopToolsRecord developToolsRecord = developToolsRecordRepository
+							.findByToolNameAndVSn(applyTool.getToolName(), applyTool.getvSn());
+					if (developToolsRecord != null) {
+						continue;
+					}
+					DevelopToolsRecord tools = DevelopToolsRecord.builder().toolName(applyTool.getToolName())
+							.vSn(applyTool.getvSn()).build();
+					tools.setApplicant(TokenManagerUtils.getNickname());
+					tools.setApplyTime(new Date());
+					developToolsRecordRepository.save(tools);
+				} else {
+					return JsonData.success("车辆编号不能为空");
+				}
+			}
+			return JsonData.success("研发工具安装申请成功");
+		} catch (Exception e) {
+			throw new PermissionException("研发工具安装申请失败");
+		}
+
+	}
+
+	@Override
+	public CarBase getAddCar(String vSn) {
+		if (StringUtils.isBlank(vSn)) {
+			throw new ParamException("车辆编号不能为空");
+		}
+		return carBaseRepository.findByvSn(vSn);
+	}
+
+	@RequiresRoles(value = { "admin", "engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData update(CarBase carParam) {
+		if (carParam.getvSn() == null) {
+			return JsonData.fail("车辆编号不能为空");
+		}
+
+		if (carParam.getId() == null) {
+			return JsonData.fail("id不能为空");
+		}
+		try {
+			carBaseRepository.save(carParam);
+			Car car = carRepository.findByvSn(carParam.getvSn());
+
+			CopyCar(carParam, car);
+
+			return JsonData.success("更新成功");
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new ParamException("更新失败");
+		}
+
+	}
+
+	private Project getProject(CarBase param) {
+		Project project = projectRepository.findByProject_snAndProjectName(param.getProject_name(),
+				param.getProject_sn());
+		if (project == null) {
+			Project project2 = new Project();
+			project2.setProject_sn(param.getProject_sn());
+			project2.setProjectName(param.getProject_name());
+			projectRepository.save(project2);
+			return project2;
+		}
+		return project;
+	}
+
+	private void CopyCar(CarBase carParam, Car car) {
+		Project project = projectRepository.findByProject_snAndProjectName(carParam.getProject_name(),
+				carParam.getProject_sn());
+		if (project == null) {
+			project = getProject(carParam);
+		}
+		car.setProject(project);
+		car.setProjectEngineer(carParam.getProjectEngineer());
+		car.setEngineType(carParam.getEngineType());
+		car.setCarName(carParam.getCarName());
+		car.setGroupName(carParam.getGroupName());
+		car.setvCarType(carParam.getvCarType());
+		car.setEngineCapacity(carParam.getEngineCapacity());
+		car.setGbts(carParam.getGbts());
+		car.setFsuelType(carParam.getFuelType());
+		car.setOilspecification(carParam.getOilspecification());
+		car.setTyresize(carParam.getTyresize());
+		car.setReaTireP(carParam.getReaTireP());
+		car.setCustomer(carParam.getCustomer());
+		car.setVehicleQuality(carParam.getVehicleQuality());
+		car.setColor(carParam.getColor());
+		car.setPrice(carParam.getPrice());
+		car.setBrandModelone(carParam.getBrandModelone());
+		car.setContactNumber(carParam.getContactNumber());
+		car.setFrontTireP(carParam.getFrontTireP());
+		car.setIccard(carParam.getIccard());
+		car.setBackCard(carParam.getBackCard());
+		carRepository.save(car);
+	}
+
+	// 车辆查询一
+	@Cacheable(value = "car")
+	@Override
+	public PageBean<Car> pageQuery(PageQuery pageQuery, CarQueryParam carQueryParam) {
+		log.info("carQueryParam:{}", JsonMapper.obj2String(carQueryParam));
+		PageBean<Car> result = new PageBean<>();
+		Sort sort = new Sort(Direction.DESC, "id");
+
+		Pageable pageable = new PageRequest(pageQuery.getPage(), pageQuery.getSize(), sort);
+
+		final List<Predicate> list = new ArrayList<>();
+
+		Specification<Car> specification = new Specification<Car>() {
+
+			@Override
+			public Predicate toPredicate(Root<Car> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (carQueryParam != null) {
+
+					if (StringUtils.isNotBlank(carQueryParam.getAdminName())) {
+						Predicate p13 = cb.like(root.get("adminName").as(String.class),
+								"%" + carQueryParam.getAdminName() + "%");
+						list.add(p13);
+					}
+
+					if (StringUtils.isNotBlank(carQueryParam.getVin())) {
+						Predicate p1 = cb.like(root.get("vin").as(String.class), "%" + carQueryParam.getVin() + "%");
+						list.add(p1);
+					}
+
+					if (StringUtils.isNotBlank(carQueryParam.getvSn())) {
+						Predicate p1 = cb.like(root.get("vSn").as(String.class), "%" + carQueryParam.getvSn() + "%");
+						list.add(p1);
+					}
+
+					if (StringUtils.isNotBlank(carQueryParam.getEngineNumber())) {
+						Predicate p2 = cb.like(root.get("engineNumber").as(String.class),
+								"%" + carQueryParam.getEngineNumber() + "%");
+						list.add(p2);
+					}
+
+					if (StringUtils.isNotBlank(carQueryParam.getProject_sn())) {
+
+						Join<Car, Project> carjoin = root.join("project", JoinType.INNER);
+						Predicate p3 = cb.like(carjoin.get("project_sn").as(String.class),
+								"%" + carQueryParam.getProject_sn() + "%");
+						list.add(p3);
+					}
+
+					if (StringUtils.isNotBlank(carQueryParam.getProjectEngineer())) {
+						Predicate p4 = cb.like(root.get("projectEngineer").as(String.class),
+								"%" + carQueryParam.getProjectEngineer() + "%");
+						list.add(p4);
+					}
+					if (StringUtils.isNotBlank(carQueryParam.getNO())) {
+						Predicate p5 = cb.like(root.get("insNo").as(String.class), "%" + carQueryParam.getNO() + "%");
+						list.add(p5);
+					}
+
+					if (StringUtils.isNotBlank(carQueryParam.getBrandModeltwo())) {
+						Predicate p6 = cb.like(root.get("brandModeltwo").as(String.class),
+								"%" + carQueryParam.getBrandModeltwo() + "%");
+						list.add(p6);
+					}
+
+					if (carQueryParam.getBstart() != null & carQueryParam.getBend() != null) {
+						Predicate p7 = cb.between(root.get("endTime").as(Date.class), carQueryParam.getBstart(),
+								carQueryParam.getBend());
+						list.add(p7);
+					}
+
+					if (carQueryParam.getPstart() != null & carQueryParam.getPend() != null) {
+						Predicate p8 = cb.between(root.get("licenseEndTime").as(Date.class), carQueryParam.getPstart(),
+								carQueryParam.getPend());
+						list.add(p8);
+					}
+
+					if (carQueryParam.getUstart() != null & carQueryParam.getUend() != null) {
+						Predicate p9 = cb.between(root.get("upcheckTime").as(Date.class), carQueryParam.getUstart(),
+								carQueryParam.getUend());
+						list.add(p9);
+					}
+
+					if (carQueryParam.getUstart() != null & carQueryParam.getUend() != null) {
+						Predicate p10 = cb.between(root.get("backchecktime").as(Date.class),
+								carQueryParam.getBackstart(), carQueryParam.getBackend());
+						list.add(p10);
+					}
+
+				}
+
+				return cb.and(list.toArray(new Predicate[list.size()]));
+
+			}
+		};
+		Page<Car> pageData = carRepository.findAll(specification, pageable);
+		result.setTotal(pageData.getTotalElements());
+		result.setRows(pageData.getContent());
+		return result;
+	}
+
+	@Override
+	public JsonData deleteCar(String[] ids) {
+		log.info("ids:{}", JsonMapper.obj2String(ids));
+		if (ids == null) {
+			return JsonData.fail("请至少选择一辆车");
+		}
+		if (ids.length <= 0) {
+			return JsonData.fail("请至少选择一辆车");
+		}
+		// 删除所有与车辆相关的信息
+		for (String id : ids) {
+			carRepository.delete(Integer.parseInt(id));
+		}
+		return JsonData.success("删除成功");
+	}
+
+	// 模糊查询车牌号
+	@Override
+	public List<String> findAllvSn(String vSn) {
+		// TODO Auto-generated method stub
+		List<String> vSns = carRepository.findByvSnLike(vSn);
+		return vSns;
+	}
+
+	// 查看单个车辆信息
+	@Override
+	@Cacheable(value = "car")
+	public Car findCarByvSn(String vSn) {
+		// TODO Auto-generated method stub
+		return carRepository.findByvSn(vSn);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public PageBean<Car> orderQuery(PageQuery pQuery, CarQueryOrder cOrder) {
+
+		long count = 0;
+		PageBean<Car> result = new PageBean<>();
+		List<Car> resultList = null;
+		EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
+		// 停止
+		String stop = cOrder.getStop();
+
+		if (StringUtils.isNotBlank(stop)) {
+			String sql = "SELECT * FROM t_car WHERE insNo IS NULL AND insNo='' AND licenseNo IS NULL AND licenseNo ='' AND endTime >NOW() AND licenseEndTime >NOW()"
+					+ " ";
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+		// 再用
+		String ing = cOrder.getIng();
+		if (StringUtils.isNotBlank(ing)) {
+
+			String sql = "SELECT * FROM t_car WHERE insNo IS not NULL AND insNo!='' AND licenseNo IS NOT NULL AND licenseNo !='' AND endTime > NOW() AND licenseEndTime >NOW()"
+
+					+ " ";
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+		String all = cOrder.getAll();
+		// 所有
+		if (StringUtils.isNotBlank(all)) {
+			String sql = "SELECT * FROM t_car c,t_project p WHERE 1=1 GROUP BY c.car_status,c.ID" + " ";
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+
+		// 之前归还
+		String beforBack = cOrder.getBeforBack();
+		// Date date = new Date();
+		if (StringUtils.isNotBlank(beforBack)) {
+			String sql = "SELECT * FROM t_car c WHERE 1=1 AND c.backchecktime < NOW()  AND c.car_status='已还' GROUP BY c.car_status,c.ID"
+					+ " ";
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+		// 当月新车
+		String thismonnew = cOrder.getThismonnew();
+
+		if (StringUtils.isNotBlank(thismonnew)) {
+			String sql = "SELECT * FROM t_car c WHERE 1=1 AND DATE_FORMAT(makeTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')  GROUP BY c.car_status,c.ID"
+					+ " ";
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+
+		// 先前接车
+		String beforup = cOrder.getBeforup();
+		if (StringUtils.isNotBlank(beforup)) {
+			String sql = "SELECT * FROM t_car c WHERE 1=1 AND c.upchecktime < NOW() GROUP BY c.car_status,c.ID" + " ";
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+		// 当月已还
+		String thismonthback = cOrder.getThismonthback();
+
+		if (StringUtils.isNotBlank(thismonthback)) {
+			String sql = "SELECT * FROM t_car c WHERE 1=1 AND DATE_FORMAT(backchecktime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m') AND c.car_status='已还' GROUP BY c.car_status,c.ID"
+					+ " ";
+
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+		// 有保险无牌照
+		String haveLi = cOrder.getHaveLi();
+		if (StringUtils.isNotBlank(haveLi)) {
+			String sql = "SELECT * FROM t_car c WHERE 1=1 AND (c.insNo IS NOT NULL AND c.insNo!='') AND (c.licenseNo IS NULL OR c.licenseNo='') "
+					+ " ";
+			count = em.createNativeQuery(sql, Car.class).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		}
+
+		/*
+		 * // 又牌照无保险 String haveIn = cOrder.getHaveIn(); String sql =
+		 * "SELECT * FROM t_car c WHERE 1=1 AND (c.licenseNo IS NOT NULL AND c.licenseNo!='') AND (c.insNo IS NULL OR c.insNo='')"
+		 * + " "; resultList = pageResult(pQuery, em, sql);
+		 */
+		if (em != null) {
+			em.close();
+		}
+		if (resultList == null) {
+			result.setTotal((long) 0);
+		} else {
+			result.setTotal(count);
+		}
+		result.setRows(resultList);
+		return result;
+	}
+
+	private List<Car> pageResult(PageQuery pQuery, EntityManager em, String sql) {
+		List<Car> resultList = new ArrayList<Car>();
+		Query nativeQuery = em.createNativeQuery(sql, Car.class)
+				.setFirstResult(pQuery.getPage() * pQuery.getSize() - pQuery.getSize()).setMaxResults(pQuery.getSize());
+
+		resultList = nativeQuery.getResultList();
+		return resultList;
+	}
+
+	@Override
+	public List<Car> findAll() {
+		// TODO Auto-generated method stub
+		return carRepository.findAllGpsIsNotNull();
+	}
+
+	@Override
+	public List<MapVo> showTrack1(Date startDate, Date endDate, String vSn) {
+
+		MapVo vo = new MapVo();
+		ArrayList<MapVo> list = new ArrayList<>();
+		String gpsSN = null;
+		Car car = carRepository.findByVSn(vSn);
+		if (car != null) {
+			gpsSN = car.getGpsSN();
+			// 进行点的筛选
+			String[] findGps = carPositionRepository.findGps(startDate, endDate, gpsSN);
+			int j = findGps.length;
+			if (j <= 0) {
+				throw new PermissionException("没有查到坐标点");
+			}
+			// 查到这个时间段的第一坐标
+			String[] oneGps = carPositionRepository.findOneGps(startDate, endDate, gpsSN);
+
+			if (!"0.0".equals(oneGps[0])) {
+				addGps(vSn, vo, list, oneGps, car);
+			}
+
+			for (int k = 0; k < findGps.length; k++) {
+				MapVo vo1 = new MapVo();
+				String gpsString = findGps[k];
+				String[] split = gpsString.split(",");
+				if ("0.0".equals(split[0])) {
+					continue;
+				}
+				if ("0.0".equals(split[1])) {
+					continue;
+				}
+				vo1.setLongitude(split[0]);
+				vo1.setLatitude(split[1]);
+				vo1.setTowards(split[2]);
+				vo1.setvSn(vSn);
+				vo1.setDriverName(null);
+				vo1.setLicenseNo(car.getLicenseNo());
+				list.add(vo1);
+			}
+			MapVo vo2 = new MapVo();
+			// 车道这个时间段的最后一个坐标
+			String[] lastGps = carPositionRepository.findLastGps(startDate, endDate, gpsSN);
+
+			if (!"0.0".equals(lastGps[0])) {
+				addGps(vSn, vo2, list, lastGps, car);
+			}
+
+			return list;
+		}
+		throw new PermissionException("请选择车辆");
+	}
+
+	private void addGps(String vSn, MapVo vo, ArrayList<MapVo> list, String[] lastGps, Car car) {
+		String string2 = lastGps[0];
+		String[] split = string2.split(",");
+		vo.setLongitude(split[0]);
+		vo.setLatitude(split[1]);
+		vo.setTowards(split[2]);
+		vo.setvSn(vSn);
+		vo.setDriverName(null);
+		vo.setLicenseNo(car.getLicenseNo());
+		list.add(vo);
+	}
+
+	// 导入车辆
+	@Override
+	public int insertDBByExcel(MultipartFile file, String filename)
+			throws IllegalStateException, InvalidFormatException, IOException {
+		int count = 0;
+
+		// 调用excel工具类
+		List<String[]> readExcel = ExcelUtils.readExcel(file);
+		if (readExcel != null && readExcel.size() > 0) {
+			// 存库或者其他逻辑的处理
+			for (int i = 1; i < readExcel.size(); i++) {
+				CarBase carBase = new CarBase();
+				log.info("readExcel.get(i):{}", JsonMapper.obj2String(readExcel.get(i)));
+				String[] strings = readExcel.get(i);
+				String vSn = strings[2]; // 车辆编号
+				log.info("vSn:{}", vSn);
+				Car checkCar = carRepository.findByvSn(vSn);
+				if (checkCar != null) {
+					continue;
+				}
+				Car car = new Car();
+				car.setvSn(vSn);
+				carBase.setvSn(vSn);
+				String explanation = strings[1]; // 说明
+				car.setExplanation(explanation);
+				log.info("explanation:{}", explanation);
+
+				String project_sn = strings[3]; // 项目号
+				String projectstatus = strings[4]; // 项目号
+
+				Project project = projectRepository.findByProject_sn(project_sn);
+				if (project == null) {
+					project = new Project();
+					project.setProject_sn(project_sn);
+					project.setProject_status(projectstatus);
+					projectRepository.save(project);
+				}
+				car.setProject(project);
+				carBase.setProject_sn(project.getProject_sn());
+				carBase.setProject_name(project.getProjectName());
+				log.info("project_sn", project_sn);
+
+				String customer = strings[5]; // 客户
+				car.setCustomer(customer);
+				carBase.setCustomer(customer);
+				log.info("customer:{}", customer);
+				String projectEngineer = strings[6]; // 主管工程师
+				car.setProjectEngineer(projectEngineer);
+				carBase.setProjectEngineer(projectEngineer);
+				log.info("projectEngineer:{}", projectEngineer);
+				String car_status = strings[7]; // 车辆状态
+				car.setCar_status(car_status);
+				log.info("car_status:{}", car_status);
+				String upcheckTime = strings[8]; // 接车日期
+				car.setUpcheckTime(DateUtils.String2date(upcheckTime));
+				log.info("upcheckTime:{}", upcheckTime);
+				String backchecktime = strings[9];
+				car.setBackchecktime(DateUtils.String2date(backchecktime)); // 还车日期
+				log.info("backchecktime:{}", backchecktime);
+				String brandModelone = strings[10];
+				car.setBrandModelone(brandModelone); // 厂牌型号1
+				carBase.setBrandModelone(brandModelone);
+				log.info("brandModelone:{}", brandModelone);
+				String brandModeltwo = strings[11];
+				car.setBrandModeltwo(brandModeltwo); // 厂牌型号2
+				log.info("brandModeltwo:{}", brandModeltwo);
+
+				String color = strings[12]; // 车辆颜色
+				car.setColor(color);
+				carBase.setColor(color);
+				log.info("color:{}", color);
+
+				String type = strings[13]; // 车辆类型
+				car.setvCarType(type);
+				carBase.setvCarType(type);
+				log.info("type:{}", type);
+
+				String engineCapacity = strings[14];
+				car.setEngineCapacity(engineCapacity); // 发动机排量
+				carBase.setEngineCapacity(engineCapacity);
+				log.info("engineCapacity:{}", engineCapacity);
+
+				String seats = strings[15]; // 座位数
+				if (StringUtils.isNotBlank(seats)) {
+					car.setSeats(Integer.parseInt(seats));
+					carBase.setSeats(Integer.parseInt(seats));
+					log.info("seats:{}", seats);
+				}
+
+				String vehicleQuality = strings[16];
+				car.setVehicleQuality(vehicleQuality); // 吨位
+				carBase.setVehicleQuality(vehicleQuality);
+				log.info("vehicleQuality:{}", vehicleQuality);
+
+				String engineNumber = strings[17];
+				car.setEngineNumber(engineNumber); // 发动机编号
+				// carBase.setEngineNumber(engineNumber);
+				// log.info("engineNumber:{}", engineNumber);
+				String vin = strings[13];
+				car.setVin(vin); // 车架号
+				// carBase.setVin(vin);
+				log.info("vin:{}", vin);
+				String NO = strings[18];
+				car.setInsNo(NO); // 保险编号
+				log.info("NO:{}", NO);
+				String startTime = strings[19];
+				car.setStartTime(DateUtils.String2date(startTime)); // 保险起始日
+				log.info("startTime:{}", startTime);
+				String endTime = strings[21];
+				car.setEndTime(DateUtils.String2date(endTime)); // 保险终止日
+				log.info("endTime:{}", endTime);
+
+				String licenseEndTime = strings[22]; // 牌照起始日
+				car.setLicenseEndTime(DateUtils.String2date(licenseEndTime));
+				log.info("licenseEndTime:{}", licenseEndTime); // 牌照终止日
+
+				String iremark = strings[23];
+				car.setInsremark(iremark);
+				log.info("iremark:{}", iremark); // 牌照终止日
+				String LicenseNo = strings[24];
+				car.setLicenseNo(LicenseNo); // 牌照编号
+				log.info("LicenseNo:{}", LicenseNo);
+				String adminName = strings[25];
+				car.setAdminName(adminName); // 车管
+				carBase.setAdminName(adminName);
+				log.info("adminName:{}", adminName);
+				String remark = strings[26];
+				car.setRemark(remark); // 备注
+				carBase.setRemark(remark);
+				log.info("remark:{}", remark);
+				carRepository.save(car);
+				carBaseRepository.save(carBase);
+				count++;
+			}
+			log.info("readExcel:{}", readExcel);
+		}
+		return count;
+
+	}
+
+	@Override
+	public JsonData upload(MultipartFile uploadFile, String vSn, String IMAGE_SERVER_URL) {
+		try {
+			Thread.sleep(200);
+			// 获取文件的扩展名字
+			String filename = uploadFile.getOriginalFilename();
+			String extName = filename.substring(filename.lastIndexOf(".") + 1);
+			// 创建一个FastDNFS的客户端
+			FastDFSClient dfsClient = new FastDFSClient("classpath:resource/client.conf");
+			// 执行上传处理
+			String path = dfsClient.uploadFile(uploadFile.getBytes(), extName);
+			// 拼接返回的url和ip地址,拼装完成的url
+			String url = IMAGE_SERVER_URL + path;
+			log.info("url:{}", url);
+			Car car = carRepository.findByVSn(vSn);
+			CarBase carBase = carBaseRepository.findByvSn(vSn);
+			car.setPicurl(url);
+			carBase.setPicurl(url);
+			carRepository.save(car);
+			carBaseRepository.save(carBase);
+			return JsonData.success("图片上传成功");
+		} catch (Exception e) {
+			return JsonData.fail("图片上传失败");
+
+		}
+	}
+
+	@Override
+	public JsonData circuitPicUpload(MultipartFile uploadFile, String vSn, String iMAGE_SERVER_URL) {
+		try {
+			Thread.sleep(20);
+			// 获取文件的扩展名字
+			String filename = uploadFile.getOriginalFilename();
+			String extName = filename.substring(filename.lastIndexOf(".") + 1);
+			// 创建一个FastDNFS的客户端
+			FastDFSClient dfsClient = new FastDFSClient("classpath:resource/client.conf");
+			// 执行上传处理
+			String path = dfsClient.uploadFile(uploadFile.getBytes(), extName);
+			// 拼接返回的url和ip地址,拼装完成的url
+			String url = iMAGE_SERVER_URL + path;
+			log.info("url:{}", url);
+			Car car = carRepository.findByVSn(vSn);
+			CarBase carBase = carBaseRepository.findByvSn(vSn);
+			car.setCircuiturl(url);
+			carBase.setCircuiturl(url);
+			return JsonData.success("图片上传成功");
+		} catch (Exception e) {
+			return JsonData.fail("图片上传失败");
+
+		}
+	}
+
+	@Override
+	public JsonData updateVehicleTestingStationType(String vSn, String type) {
+		if (StringUtils.isBlank(vSn)) {
+			return JsonData.fail("车辆编号不能为空");
+		}
+		if (StringUtils.isBlank(type)) {
+			return JsonData.fail("车型不能为空");
+		}
+		carRepository.updateVehicleTestingStationType(vSn, type);
+		return JsonData.success("检测站车型更新成功");
+	}
+
+	@Override
+	public JsonData vehicleRelateGps(String vSn, String gps) {
+		carRepository.updateGps(vSn, gps);
+		return JsonData.success("绑定成功");
+	}
+
+	@Override
+	public JsonData vehicleCancleGps(String vSn) {
+		carRepository.updateCancleGps(vSn);
+		return JsonData.success("解绑成功");
+	}
+
+}

@@ -1,0 +1,385 @@
+package com.bailian.car.controller.cars.check;
+
+import java.io.IOException;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import com.bailian.car.annotation.SystemLog;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.cars.car.CarRepository;
+import com.bailian.car.domain.carcheck.*;
+import com.bailian.car.domain.carcheckresult.EmsAndBomCheckResult;
+import com.bailian.car.domain.carcheckresult.HIResult;
+import com.bailian.car.domain.carcheckresult.SafeCheckResult;
+import com.bailian.car.domain.cars.develop.DevelopToolsRecord;
+import com.bailian.car.emnu.OperationType;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.CheckResult;
+import com.bailian.car.param.ReviewerInfo;
+import com.bailian.car.service.cars.check.CarCheckService;
+import com.bailian.car.service.cars.develop.DevelopToolsRecordService;
+import com.bailian.car.utils.BeanValidator;
+import com.bailian.car.utils.JsonMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+
+@Api(value = "api", description = "车辆相关检查、详情、更新")
+@Slf4j
+@Controller
+@RequestMapping("/car")
+@Scope("prototype")
+public class CarCheckController {
+	@Autowired
+	private CarCheckService carCheckService;
+
+	@Autowired
+	private DevelopToolsRecordService developToolsRecordService;
+
+	@Autowired
+	private CarRepository carRepository;
+
+	@Autowired
+	private HttpServletRequest request;
+
+	// 生成车辆编号
+	@RequestMapping("/getvSn.action")
+	@ResponseBody
+	@ApiOperation(value = "接车点检时生成车辆编号", notes = "车辆编号格式2018ICECTC001。当前年份+ICECTC+号码")
+	public String getvSn() {
+
+		String vSn = carRepository.getvSn();
+		synchronized (this) {
+			vSn = carCheckService.getvSn(vSn);
+			return vSn;
+		}
+	}
+
+	// 接车点检
+	@RequestMapping("/upcheck.action")
+	@ResponseBody
+	@ApiOperation(value = "接车点检信息", notes = "填写接车点检信息")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "接车点检")
+	public JsonData upcheck(@RequestBody PickUpCheck pickUpCheck) {
+		log.info("pickUpCheck:{}", JsonMapper.obj2String(pickUpCheck));
+		BeanValidator.check(pickUpCheck);
+		try {
+			synchronized (this) {
+				JsonData save = carCheckService.save(pickUpCheck);
+				return save;
+			}
+
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备接车人员角色/权限");
+		}
+
+	}
+
+	// 查询接车点检
+	@RequestMapping("/findUpcheck/{vSn}.action")
+	@ResponseBody
+	@ApiOperation(value = "查询接车点检信息", notes = "通过车辆编号进行，url传参")
+	public PickUpCheck findUpcheck(@PathVariable String vSn) {
+		log.info("vSn:{}", vSn);
+		return carCheckService.findByvSn(vSn);
+
+	}
+
+	// 修改接车点检信息
+	@RequestMapping("/updateUpcheck.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "修改接车点检")
+	@ResponseBody
+	@ApiOperation(value = "修改接车点检", notes = "修改时一定要携带原有数据id")
+	public JsonData updateUpcheck(@RequestBody PickUpCheck pickUpCheck) {
+		log.info("pickUpCheck:{}", JsonMapper.obj2String(pickUpCheck));
+		BeanValidator.check(pickUpCheck);
+		return carCheckService.update(pickUpCheck);
+
+	}
+
+	// 还车点检
+	@RequestMapping("/backCheck.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "还车点检信息填写")
+	@ResponseBody
+	@ApiOperation(value = "还车点检", notes = "填写还车点检信息")
+	public JsonData backCheck(@RequestBody BackCheck backCheck) {
+		log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+		// BeanValidator.check(backCheck);
+		try {
+			return carCheckService.backCheck(backCheck);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修技师机角色/还车权限");
+		}
+
+	}
+
+	// 还车
+
+	@RequestMapping("/backCar.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "还车")
+	@ResponseBody
+	@ApiOperation(value = "还车点检", notes = "填写还车点检信息")
+	public JsonData backCheck(String vSn) {
+		log.info("vSn:{}", JsonMapper.obj2String(vSn));
+		// BeanValidator.check(backCheck);
+		return carCheckService.backCar(vSn);
+
+	}
+
+	// 查询还车点检
+	@RequestMapping("/findBackcheck/{vSn}.action")
+	@ResponseBody
+	@ApiOperation(value = "查询还车点检", notes = "通过车辆编号进行查询，查询时为url 传参")
+	public BackCheck findBackcheck(@PathVariable String vSn) {
+
+		log.info("vSn:{}", vSn);
+
+		BackCheck backCheck = carCheckService.findBackByvSn(vSn);
+
+		log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+		return backCheck;
+	}
+
+	// 修改还车点检
+	@RequestMapping("/updateBackcheck.action")
+	@ResponseBody
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "修改还车点检")
+	@ApiOperation(value = "更新还车点检", notes = "更新时携带原有数据的id")
+	public JsonData updateBackCheck(@RequestBody BackCheck backCheck) {
+		log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+		BeanValidator.check(backCheck);
+
+		try {
+			return carCheckService.updateBackCheck(backCheck);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/还车权限");
+		}
+
+	}
+
+	// 缸压检查
+	@RequestMapping("/saveClacyLindersss.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "车辆缸压添加")
+	@ResponseBody
+	@ApiOperation(value = "车辆缸压检查", notes = "车辆缸压检查")
+	public JsonData addClacyLindersss(@RequestBody ClacyLindersss clacyLindersss) {
+		log.info("clacyLindersss:{}", JsonMapper.obj2String(clacyLindersss));
+		BeanValidator.check(clacyLindersss);
+		try {
+			return carCheckService.save(clacyLindersss);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/安全检查权限");
+		}
+	}
+
+	// 车辆缸压检查修改
+	@RequestMapping("/updateCldCheckByvSn.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "车辆缸压修改")
+	@ResponseBody
+	@ApiOperation(value = "车辆缸压修改", notes = "修改时携带原有数据id")
+	public JsonData updateCldCheckByvSn(@RequestBody ClacyLindersss clacyLindersss) {
+
+		try {
+			return carCheckService.updateCld(clacyLindersss);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/安全检查权限");
+		}
+
+	}
+
+	// 车辆缸压检查查看ClacyLindersss
+	@RequestMapping("/findCldCheckByvSn/{vSn}.action")
+	@ResponseBody
+	@ApiOperation(value = "车辆缸压查询", notes = "通过车辆编号查询，查询为url传参")
+	public ClacyLindersss findCldCheckByvSn(@PathVariable String vSn) {
+
+		return carCheckService.findCld(vSn);
+	}
+
+	// 车辆安全检查
+	@RequestMapping("/addSafeCheck/{vSn}.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "添加车辆安全检查")
+	@ResponseBody
+	@ApiOperation(value = "车辆缸安全检查", notes = "车辆安全检查,传递安全检查数组,以及车辆编号,车辆编号为url传参")
+	public JsonData addSafeCheck(@RequestBody List<SafeCheckResult> safeCheckResult,
+			@ApiParam(value = "车辆编号") @PathVariable String vSn)
+			throws JsonProcessingException, JsonMappingException, IOException {
+		log.info("safeCheckResult:{}", JsonMapper.obj2String(safeCheckResult));
+		BeanValidator.validateList(safeCheckResult);
+
+		try {
+			return carCheckService.saveSafeCheck(safeCheckResult, vSn);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/安全检查权限");
+		}
+
+	}
+
+	// 车辆安全检查查看
+	@RequestMapping("/findSafeCheckByvSn/{vSn}.action")
+	@ResponseBody
+	@ApiOperation(value = "车辆安全检查查看", notes = "通过车辆编号进行查看，url传参")
+	public CheckResult findSafeCheckByvSn(@ApiParam(value = "车辆编号") @PathVariable String vSn) {
+
+		CheckResult safeResult = carCheckService.findSafeResult(vSn);
+		return safeResult;
+	}
+
+	// 车辆安全检查修改
+	@RequestMapping("/updateSafeCheckByvSn/{vSn}.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "车辆安全检查修改")
+	@ResponseBody
+	@ApiOperation(value = "车辆安全检查修改", notes = "携带原有数据id,修改时以url传参的形式携带车辆编号")
+	public JsonData updateSafeCheckByvSn(@RequestBody @ApiParam(value = "安全检查模型") List<SafeCheckResult> safeCheckResult,
+			@PathVariable @ApiParam(value = "车辆编号") String vSn) {
+		try {
+			return carCheckService.update(safeCheckResult, vSn);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/安全检查核对权限");
+		}
+
+	}
+
+	// 线束检查
+	@RequestMapping("/addHiCheck/{vSn}.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "添加线束检查")
+	@ResponseBody
+	@ApiOperation(value = "线束检查", notes = "线束检查,传递参数为线束检查的集合HIResults,支持url传参/vSn ")
+	public JsonData addHiCheck(@PathVariable @ApiParam(value = "车辆编号") String vSn,
+			@ApiParam(value = "线束检查模型") @RequestBody List<HIResult> HIResults) {
+		log.info("HIResults:{}", JsonMapper.obj2String(HIResults));
+		BeanValidator.validateList(HIResults);
+		try {
+			return carCheckService.save(HIResults, vSn);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/线束检查权限");
+		}
+
+	}
+
+	// 线束检查修改
+	@RequestMapping("/updateHiCheckByvSn/{vSn}.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "修改线束检查")
+	@ResponseBody
+	@ApiOperation(value = "线束检查修改", notes = "线束检查,传递参数为线束检查的集合HIResults,支持url传参/vSn ")
+	public JsonData updateHiCheckByvSn(@PathVariable @ApiParam(value = "车辆编号") String vSn,
+			@RequestBody @ApiParam(value = "线束检查结果集") List<HIResult> HIResult) {
+
+		try {
+			return carCheckService.hiupdate(HIResult, vSn);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/线束检查核对权限");
+		}
+
+	}
+
+	// 车辆线束检查查看
+	@RequestMapping("/findHiCheckByvSn/{vSn}.action")
+	@ResponseBody
+	@ApiOperation(value = "线束检查查看", notes = "线束检查查看,url传参 ")
+	public CheckResult findHiCheckByCar(@PathVariable @ApiParam(value = "车辆编号") String vSn) {
+		CheckResult hiResult = carCheckService.findHiResult(vSn);
+		return hiResult;
+	}
+
+	// bom零部件检查
+	@RequestMapping("/addEmsAndBomCheck/{vSn}.action")
+	@ApiOperation(value = "bom检查", notes = "线束检查查看,url传参 ")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "bom零部件检查")
+	@ResponseBody
+	public JsonData addEmsAndBomCheck(@PathVariable @ApiParam(value = "车辆编号") String vSn,
+			@RequestBody @ApiParam(value = "Bom检查结果") List<EmsAndBomCheckResult> emsAndBomCheckResults) {
+
+		BeanValidator.validateList(emsAndBomCheckResults);
+
+		try {
+			return carCheckService.saveBom(emsAndBomCheckResults, vSn);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/BOM检查权限");
+		}
+	}
+
+	// 查看车辆Bom零部件检查
+	@RequestMapping("/findEmsAndBomCheckByvSn/{vSn}.action")
+	@ApiOperation(value = "bom检查查看", notes = "线束检查查看,url传参 ")
+	@ResponseBody
+	public CheckResult findEmsAndBomCheckByvSn(@PathVariable @ApiParam(value = "车辆编号") String vSn) {
+
+		CheckResult bomResult = carCheckService.findBomResult(vSn);
+		return bomResult;
+
+	}
+
+	@RequestMapping("/updateEmsAndBomCheckByCar/{vSn}.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "修改bom零部件")
+	@ApiOperation(value = "bom更新", notes = "线束检查查看,url传参 ")
+	@ResponseBody
+	public JsonData updateEmsAndBomCheckByCar(@PathVariable @ApiParam(value = "车辆编号") String vSn,
+			@RequestBody @ApiParam(value = "bom结果") List<EmsAndBomCheckResult> emsAndBomCheckResults) {
+
+		try {
+			return carCheckService.updateEmsAndBom(emsAndBomCheckResults, vSn);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修计技师角色/BOM检查核对权限");
+		}
+
+	}
+
+	// 获取审核视图
+	@RequestMapping("/getReviewInfo/{vSn}.action")
+	@ResponseBody
+	@ApiOperation(value = "获取审核视图", notes = "根据车辆编号查询这辆车的审核详情 ")
+	public ReviewerInfo getReviewInfo(@ApiParam(value = "车辆编号") @PathVariable String vSn) {
+
+		return carCheckService.getReviewInfo(vSn);
+	}
+
+	// 车辆审核
+	@RequestMapping("/doReview.action")
+	@ResponseBody
+	@ApiOperation(value = "审核", notes = "根据车辆编号查询这辆车的审核详情 ")
+	@SystemLog(type = OperationType.OTHERT, medoule = "车辆管理", methods = "检查审核")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "status", value = "状态", dataType = "string"),
+			@ApiImplicitParam(name = "explanation", value = "说明", dataType = "string") })
+
+	public JsonData doReview() {
+		String vSn = request.getParameter("vSn");
+		String status = request.getParameter("status");
+		String explanation = request.getParameter("explanation");
+
+		try {
+			return carCheckService.doReview(vSn, status, explanation);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备超级管理员校色/审核权限");
+		}
+
+	}
+
+	// 车辆审核详情
+	@RequestMapping("/findReview.action")
+	@ResponseBody
+	@ApiOperation(value = "审核查看", notes = "根据车辆编号查询这辆车的审核详情 ")
+	public Reviewer findReview(@ApiParam(value = "车辆编号") String vSn) {
+
+		return carCheckService.findReview(vSn);
+	}
+
+	// 车辆研发工具记录详情
+	@RequestMapping("/findDevelop.action")
+	@ResponseBody
+	@ApiOperation(value = "查看车辆研发记录", notes = "根据车辆编号")
+	public List<DevelopToolsRecord> findDevelopToolsRecordByvSn(@ApiParam(value = "车辆编号") String vSn) {
+		return developToolsRecordService.findDevelopToolsRecordByvSn(vSn);
+	}
+
+}

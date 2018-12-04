@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.shengrui.management.mapper.TOperationLogMapper">
+    <resultMap id="BaseResultMap" type="cn.shengrui.management.entity.TOperationLog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="action" property="action" jdbcType="VARCHAR"/>
+        <result column="operate_ip" property="operateIp" jdbcType="VARCHAR"/>
+        <result column="action_type" property="actionType" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, operator, operate_time, action, operate_ip, action_type
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="cn.shengrui.management.entity.TOperationLogExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_operation_log
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_operation_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_operation_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="cn.shengrui.management.entity.TOperationLogExample">
+        delete from t_operation_log
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cn.shengrui.management.entity.TOperationLog">
+    insert into t_operation_log (id, operator, operate_time, 
+      action, operate_ip, action_type
+      )
+    values (#{id,jdbcType=INTEGER}, #{operator,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, 
+      #{action,jdbcType=VARCHAR}, #{operateIp,jdbcType=VARCHAR}, #{actionType,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="cn.shengrui.management.entity.TOperationLog">
+        insert into t_operation_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="operator != null">
+                operator,
+            </if>
+            <if test="operateTime != null">
+                operate_time,
+            </if>
+            <if test="action != null">
+                action,
+            </if>
+            <if test="operateIp != null">
+                operate_ip,
+            </if>
+            <if test="actionType != null">
+                action_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="operator != null">
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="operateTime != null">
+                #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="action != null">
+                #{action,jdbcType=VARCHAR},
+            </if>
+            <if test="operateIp != null">
+                #{operateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null">
+                #{actionType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cn.shengrui.management.entity.TOperationLogExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_operation_log
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_operation_log
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.operator != null">
+                operator = #{record.operator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operateTime != null">
+                operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.action != null">
+                action = #{record.action,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operateIp != null">
+                operate_ip = #{record.operateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="record.actionType != null">
+                action_type = #{record.actionType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_operation_log
+        set id = #{record.id,jdbcType=INTEGER},
+        operator = #{record.operator,jdbcType=VARCHAR},
+        operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+        action = #{record.action,jdbcType=VARCHAR},
+        operate_ip = #{record.operateIp,jdbcType=VARCHAR},
+        action_type = #{record.actionType,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.shengrui.management.entity.TOperationLog">
+        update t_operation_log
+        <set>
+            <if test="operator != null">
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="operateTime != null">
+                operate_time = #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="action != null">
+                action = #{action,jdbcType=VARCHAR},
+            </if>
+            <if test="operateIp != null">
+                operate_ip = #{operateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null">
+                action_type = #{actionType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.shengrui.management.entity.TOperationLog">
+    update t_operation_log
+    set operator = #{operator,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      action = #{action,jdbcType=VARCHAR},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      action_type = #{actionType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <select id="pageQuery" parameterType="map" resultMap="BaseResultMap">
+
+        SELECT * FROM t_operation_log t  ORDER BY  t.operate_time
+
+    </select>
+</mapper>

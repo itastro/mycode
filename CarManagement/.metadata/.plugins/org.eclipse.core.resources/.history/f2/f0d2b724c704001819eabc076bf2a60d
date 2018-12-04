@@ -1,0 +1,62 @@
+package com.bailian.car.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.bailian.car.dao.PermissionRepository;
+import com.bailian.car.domain.system.Permission;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.service.PermissionService;
+
+@Service
+@Transactional
+public class PermissionServiceImpl implements PermissionService {
+	@Autowired
+	private PermissionRepository permissionRepository;
+
+	@Override
+	public List<Permission> findByUser(User user) {
+		if (user.getUsername().equals("admin")) {
+			// 返回所有的权限
+			return permissionRepository.findAll();
+		} else {
+			// 根据用户查询
+			return permissionRepository.findByUser(user.getId());
+		}
+
+	}
+
+	// 查询所有的权限
+	@Override
+	public List<Permission> findALL() {
+		// TODO Auto-generated method stub
+		List<Permission> permissions = permissionRepository.findAll();
+
+		return permissions;
+	}
+
+	// 添加权限
+	@Override
+	public void add(Permission permission) {
+		try {
+			// TODO Auto-generated method stub
+			if (permission != null) {
+				permissionRepository.save(permission);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+
+		}
+
+	}
+
+	@Override
+	public void deletePermission(String[] pids) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

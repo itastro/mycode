@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+	<table id="table" border="1" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>车辆编号</th>
+			<th>驾驶员</th>
+			<th>牌照有效期</th>
+			<th>进出时间</th>
+			<th>是否授权</th>
+			<th>是否允许通过</th>
+		</tr>
+	</table>
+
+	<script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+	<script>
+	setInterval(function() {
+		
+		var table = document.getElementById("table");
+		$.ajax({
+			url: "/car-management/inAndOut/all.action",
+			type: 'GET',
+			dataType: "jsonp",
+			// 数据类型为jsonp 
+			jsonp: "jsonpCallback",
+			// 服务端用于接收callback调用的function名的参数 
+			success(data) {
+				for (var i = 0; i < data.length; i++) {
+					var row = table.insertRow(table.rows.length);
+					var c1 = row.insertCell(0);
+					c1.innerHTML = data[i].BrandName;
+					var c2 = row.insertCell(1);
+					c2.innerHTML = data[i].Modul;
+					var c3 = row.insertCell(2);
+					c3.innerHTML = data[i].Quantity;
+					var c4 = row.insertCell(3);
+					c4.innerHTML = data[i].Datecode;
+					var c5 = row.insertCell(4);
+					c5.innerHTML = data[i].Remark;
+					var c6 = row.insertCell(5);
+					c5.innerHTML = data[i].Remark;
+				}
+			}
+		})
+	}, 1)
+	
+		
+		
+	</script>
+</body>
+</html>

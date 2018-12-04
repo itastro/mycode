@@ -1,0 +1,17 @@
+package com.bailian.car.service.driver;
+import java.util.HashMap;
+
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.domain.cardriver.InAndOut;
+
+public interface InAndOutService {
+
+	PageBean<InAndOut> pageQuery(PageQuery pageQuery);
+
+	JsonData delete(String[] ids);
+
+	HashMap<String, Object> getNewInAndOut();
+
+}

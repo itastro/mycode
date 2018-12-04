@@ -1,0 +1,294 @@
+package com.bailian.car.service.system.impl;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.system.MenuRepository;
+import com.bailian.car.dao.system.PermissionRepository;
+import com.bailian.car.dao.system.RoleRepository;
+import com.bailian.car.domain.system.Menu;
+import com.bailian.car.domain.system.Permission;
+import com.bailian.car.domain.system.Role;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.RoleSearchParam;
+import com.bailian.car.service.system.RoleService;
+import com.bailian.car.utils.ComputerInfoUtils;
+import com.bailian.car.utils.ExcelUtils;
+import com.bailian.car.utils.TokenManagerUtils;
+
+@Service
+@Transactional
+public class RolseServiceImpl implements RoleService {
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private PermissionRepository permissionRepository;
+	@Autowired
+	private MenuRepository menuRepository;
+
+	@Cacheable("role")
+	@Override
+	public List<Role> findByUser(User user) {
+		if (user.getNetid().equals("fzfdvl")) {
+			return roleRepository.findAll();
+		} else {
+			return roleRepository.findByUser(user.getUid());
+		}
+
+	}
+
+	@Override
+	// @RequiresRoles("system")
+	public JsonData add(Role role, String[] permissionIds, String menuIds) {
+		// TODO Auto-generated method stub
+		try {
+			// 关联权限
+			if (permissionIds != null) {
+				if (permissionIds.length != 0) {
+					for (String permissionId : permissionIds) {
+						Permission permission = permissionRepository.findOne(Integer.parseInt(permissionId));
+						role.getPermissions().add(permission);
+					}
+				}
+			}
+
+			// 关联菜菜单
+			if (StringUtils.isNoneBlank(menuIds)) {
+				String[] ids = menuIds.split(",");
+				for (String id : ids) {
+					Menu menu = menuRepository.findOne(Integer.parseInt(id));
+					role.getMenus().add(menu);
+				}
+			}
+			role.setOperate_ip(ComputerInfoUtils.getIpAddr());
+			role.setOperator(TokenManagerUtils.getNickname());
+			role.setCreateTime(new Date());
+			// 保存角色信息
+			roleRepository.save(role);
+			return JsonData.success("保存成功");
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			return JsonData.fail("添加失败");
+		}
+
+	}
+
+	@Cacheable("role")
+	@Override
+	public PageBean<Role> query(PageQuery pQuery, RoleSearchParam SearchParam) {
+		PageBean<Role> bean = new PageBean<Role>();
+		Sort sort = new Sort(Direction.DESC, "rid");
+
+		Pageable pageable = new PageRequest(pQuery.getPage(), pQuery.getSize(), sort);
+		List<Predicate> p = new ArrayList<>();
+		Specification<Role> querySpecifi = new Specification<Role>() {
+			@Override
+			public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+				return cb.and(p.toArray(new Predicate[p.size()]));
+			}
+
+		};
+		Page<Role> pageData = roleRepository.findAll(querySpecifi, pageable);
+		bean.setTotal(pageData.getTotalElements());
+		bean.setRows(pageData.getContent());
+		return bean;
+	}
+
+	@Cacheable("role")
+	@Override
+	public List<Role> findALL() {
+		List<Role> roles = roleRepository.findAll();
+		return roles;
+	}
+
+	@Override
+	// @RequiresRoles("system")
+	public JsonData delete(String[] roleIds) {
+		Set<User> users = null;
+		// TODO Auto-generated method stub
+		if (roleIds.length != 0) {
+			for (String rid : roleIds) {
+				int id = Integer.parseInt(rid);
+				Role role = roleRepository.findOne(id);
+				if (role != null) {
+					users = role.getUsers();
+					if (users.size() != 0) {
+						for (User user : users) {
+							user.getRoles().remove(role);
+						}
+						roleRepository.delete(role);
+						return JsonData.success("删除成功");
+					}
+					roleRepository.delete(role);
+					return JsonData.success("删除成功");
+				}
+			}
+
+			return JsonData.success("删除成功");
+		}
+		return JsonData.fail("删除失败");
+	}
+
+	@Override
+	// @RequiresRoles("system")
+	public JsonData roleRelatedPermissionId(Integer rid, String[] pids) {
+		if (rid != null) {
+			roleRelatePer(rid, pids);
+			return JsonData.success("关联成功");
+		}
+		return JsonData.fail("请选择一个角色");
+	}
+
+	private void roleRelatePer(Integer rid, String[] pids) {
+		Role role = roleRepository.findOne(rid);
+		for (String pid : pids) {
+			Permission permission = permissionRepository.findOne(Integer.parseInt(pid));
+			role.getPermissions().add(permission);
+			roleRepository.save(role);
+		}
+	}
+
+	@Override
+	public JsonData bacthRoleRelatedPermission(String[] rids, String[] pids) {
+		for (String rid : rids) {
+			roleRelatePer(Integer.parseInt(rid), pids);
+			return JsonData.success("关联成功");
+		}
+		return JsonData.success("关联成功");
+	}
+
+	@Override
+	// @RequiresRoles("system")
+	public JsonData roleRelatedMenu(Integer rid, String[] mids) {
+		if (rid != null) {
+			roleRelateMenu(rid, mids);
+			return JsonData.success("关联成功");
+		}
+		return JsonData.fail("请选择一个角色");
+	}
+
+	private void roleRelateMenu(Integer rid, String[] mids) {
+		Role role = roleRepository.findOne(rid);
+		for (String mid : mids) {
+			Menu menu = menuRepository.findOne(Integer.parseInt(mid));
+			role.getMenus().add(menu);
+			roleRepository.save(role);
+		}
+	}
+
+	@Override
+	public JsonData bacthRoleRelatedMenu(String[] rids, String[] mids) {
+		for (String rid : rids) {
+			roleRelateMenu(Integer.parseInt(rid), mids);
+		}
+		return JsonData.success("关联成功");
+	}
+
+	@Override
+	public JsonData checkRoleByName(String name) {
+		Role role = roleRepository.findByName(name);
+		if (role != null) {
+			return JsonData.fail("此名称已存在");
+		}
+		return JsonData.success();
+	}
+
+	@Override
+	public JsonData checkRoleBykeyWord(String keyWord) {
+		Role role = roleRepository.findByKeyWord(keyWord);
+		if (role != null) {
+			return JsonData.fail("此关键字已存在");
+		}
+		return JsonData.success();
+	}
+
+	@Override
+	public JsonData import_role(MultipartFile file) {
+		try {
+			List<String[]> readExcel = ExcelUtils.readExcel(file);
+			for (int i = 1; i < readExcel.size(); i++) {
+				String[] strings = readExcel.get(i);
+				String keyWord = strings[1];
+				Role role = roleRepository.findByKeyWord(keyWord);
+				if (role != null) {
+					continue;
+				}
+				Role excelrole = new Role();
+				excelrole.setKeyWord(keyWord);
+				String roleName = strings[0];
+				excelrole.setName(roleName);
+				String remark = strings[2];
+				excelrole.setRemark(remark);
+				excelrole.setOperator(TokenManagerUtils.getNickname());
+				excelrole.setCreateTime(new Date());
+				excelrole.setOperate_ip(ComputerInfoUtils.getComputerID());
+				roleRepository.save(excelrole);
+			}
+			return JsonData.success("导入角色信息,冲突的角色自动忽略");
+		} catch (Exception e) {
+			throw new PermissionException("excel导入异常");
+		}
+	}
+
+	@Cacheable("role")
+	@Override
+	public List<Menu> findCurrentRoleIsNotRelatedMenu(Integer rid) {
+
+		return menuRepository.findCurrentRoleIsNotRelatedMenu(rid);
+	}
+
+	@Cacheable("role")
+	@Override
+	public List<Permission> findCurrentRoleIsNotRelatedPer(Integer rid) {
+
+		return permissionRepository.findCurrentRoleIsNotRelatedPer(rid);
+	}
+
+	@Override
+	public JsonData roleCancleMenu(Integer rid, String[] mids) {
+		for (String mid : mids) {
+			Menu menu = menuRepository.findOne(Integer.parseInt(mid)); // 查询这个菜单
+			
+			if (menu.getChildrenMenus().size() > 0) { // 如果当前菜单下有子菜单 则不进行解除
+				continue;  //中断本次循环进行下一次
+			}
+			int id = Integer.parseInt(mid);
+			roleRepository.roleCancleMenu(rid, id);
+
+		}
+		return JsonData.success("取消关联成功");
+	}
+
+	@Override
+	public JsonData roleCanclePer(Integer rid, String[] pids) {
+		for (String pid : pids) {
+			int id = Integer.parseInt(pid);
+			roleRepository.roleCanclePer(rid, id);
+
+		}
+		return JsonData.success("取消关联成功");
+	}
+
+}

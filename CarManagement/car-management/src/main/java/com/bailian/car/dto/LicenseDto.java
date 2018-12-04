@@ -1,0 +1,308 @@
+package com.bailian.car.dto;
+
+import java.util.Date;
+import com.bailian.car.domain.cars.car.Project;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class LicenseDto {
+
+	public String getInsRemark() {
+		return insRemark;
+	}
+
+	public void setInsRemark(String insRemark) {
+		this.insRemark = insRemark;
+	}
+
+	public String getPicurl() {
+		return picurl;
+	}
+
+	public void setPicurl(String picurl) {
+		this.picurl = picurl;
+	}
+
+	public String getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
+
+	public String getLicenseNo() {
+		return licenseNo;
+	}
+
+	public void setLicenseNo(String licenseNo) {
+		this.licenseNo = licenseNo;
+	}
+
+	public Date getApplytime() {
+		return applytime;
+	}
+
+	public void setApplytime(Date applytime) {
+		this.applytime = applytime;
+	}
+
+	public String getApplyperson() {
+		return applyperson;
+	}
+
+	public void setApplyperson(String applyperson) {
+		this.applyperson = applyperson;
+	}
+
+	public Date getMaketime() {
+		return maketime;
+	}
+
+	public void setMaketime(Date maketime) {
+		this.maketime = maketime;
+	}
+
+	public String getAddPerson() {
+		return addPerson;
+	}
+
+	public void setAddPerson(String addPerson) {
+		this.addPerson = addPerson;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public String getProjectEngineer() {
+		return projectEngineer;
+	}
+
+	public void setProjectEngineer(String projectEngineer) {
+		this.projectEngineer = projectEngineer;
+	}
+
+	public String getCar_status() {
+		return car_status;
+	}
+
+	public void setCar_status(String car_status) {
+		this.car_status = car_status;
+	}
+
+	public Date getUpcheckTime() {
+		return upcheckTime;
+	}
+
+	public void setUpcheckTime(Date upcheckTime) {
+		this.upcheckTime = upcheckTime;
+	}
+
+	public Date getBackchecktime() {
+		return backchecktime;
+	}
+
+	public void setBackchecktime(Date backchecktime) {
+		this.backchecktime = backchecktime;
+	}
+
+	public String getBrandModelone() {
+		return brandModelone;
+	}
+
+	public void setBrandModelone(String brandModelone) {
+		this.brandModelone = brandModelone;
+	}
+
+	public String getBrandModeltwo() {
+		return brandModeltwo;
+	}
+
+	public void setBrandModeltwo(String brandModeltwo) {
+		this.brandModeltwo = brandModeltwo;
+	}
+
+	public String getVehicleQuality() {
+		return vehicleQuality;
+	}
+
+	public void setVehicleQuality(String vehicleQuality) {
+		this.vehicleQuality = vehicleQuality;
+	}
+
+	public String getEngineNumber() {
+		return engineNumber;
+	}
+
+	public void setEngineNumber(String engineNumber) {
+		this.engineNumber = engineNumber;
+	}
+
+	public String getVin() {
+		return vin;
+	}
+
+	public void setVin(String vin) {
+		this.vin = vin;
+	}
+
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public Date getLicenseEndTime() {
+		return licenseEndTime;
+	}
+
+	public void setLicenseEndTime(Date licenseEndTime) {
+		this.licenseEndTime = licenseEndTime;
+	}
+
+	public Date getLicenseStartTime() {
+		return licenseStartTime;
+	}
+
+	public void setLicenseStartTime(Date licenseStartTime) {
+		this.licenseStartTime = licenseStartTime;
+	}
+
+	public Integer getLlave() {
+
+		if (licenseEndTime == null) {
+			return llave;
+		}
+		if (licenseStartTime == null) {
+			return llave;
+		}
+		Long etime = licenseEndTime.getTime();
+		Long stime = new Date().getTime();
+		Long l = etime - stime;
+		llave = (int) (l / 1000 / 60 / 60 / 24);
+		return llave;
+	}
+
+	public void setLlave(Integer llave) {
+		this.llave = llave;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getVehicleInspection() {
+		return vehicleInspection;
+	}
+
+	public void setVehicleInspection(String vehicleInspection) {
+		this.vehicleInspection = vehicleInspection;
+	}
+
+	public String getCheckStaionType() {
+		return checkStaionType;
+	}
+
+	public void setCheckStaionType(String checkStaionType) {
+		this.checkStaionType = checkStaionType;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	private Integer id;
+
+	private Project project;
+
+	private String projectEngineer;
+
+	private String car_status; // 车辆状态
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date upcheckTime; // 接车日期
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date backchecktime; // 还车日期
+
+	private String brandModelone; // 厂牌型号1 （来自车辆录入）
+
+	private String brandModeltwo; // 厂牌型号2 （来自保险）
+
+	private String vehicleQuality; // 车辆整备质量
+
+	private String engineNumber; // 发动机编号
+
+	private String vin; // 车架号
+
+	private String adminName; // 车管
+
+	private String vSn;// 车辆编号
+
+	private String licenseNo; // 车牌号
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date licenseEndTime; // 牌照结束时间
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date licenseStartTime; // 牌照起始日期
+
+	private Integer llave; // 牌照剩余日期
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date endTime; // 保险结束时间
+
+	private String vehicleInspection; // 验车状态
+
+	private String checkStaionType; // 监测站车型
+
+	private String remark;
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date applytime; // 申请时间
+
+	private String applyperson; // 验车人
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date maketime; // 牌照制作日期
+
+	private String addPerson;// 临牌录入人
+
+	private String customer; // 客户
+
+	private String picurl; // 图片
+	
+	private String insRemark; // 图片
+
+}

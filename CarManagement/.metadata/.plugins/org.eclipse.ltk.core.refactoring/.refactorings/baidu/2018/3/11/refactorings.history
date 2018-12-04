@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;baidusuanfa.CoodinateCovertor&apos; to &apos;Coodinate&apos;&#x0D;&#x0A;- Original project: &apos;baidu&apos;&#x0D;&#x0A;- Original element: &apos;baidusuanfa.CoodinateCovertor&apos;&#x0D;&#x0A;- Renamed element: &apos;baidusuanfa.Coodinate&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;CoodinateCovertor&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;baidusuanfa{CoodinateCovertor.java[CoodinateCovertor" matchStrategy="1" name="Coodinate" qualified="false" references="true" similarDeclarations="false" stamp="1520818606240" textual="false" version="1.0"/>
+</session>

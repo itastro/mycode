@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<classpath>
+  <source-attachment entry="E:/bailian/tomcat/lib/servlet-api.jar" runtime-id="Apache Tomcat v8.0" source-attachment-path="E:/bailian/MavenRepository/org/apache/geronimo/specs/geronimo-servlet_2.5_spec/1.2/geronimo-servlet_2.5_spec-1.2-sources.jar"/>
+</classpath>

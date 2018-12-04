@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  servlet:
+   context-path: /blstation-web
+
+# 数据库访问配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://222.91.98.78:3306/station?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: Blct2018mysql
+    jackson:
+          date-format: yyyy-MM-dd HH:mm:ss
+          time-zone: GMT+8
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+  type-aliases-package: com.bl.station.entity  # 注意：对应实体类的路径
+
+#pagehelper
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+    returnPageInfo: check
+
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  thumbImage:             #缩略图生成参数
+    width: 150
+    height: 150
+  trackerList:            #TrackerList参数,支持多个
+    - 47.98.182.165:22122
+#http:
+ # multipart:
+     # enabled: true
+     # max-file-size: 10MB
+      #max-request-size: 500MB

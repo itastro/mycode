@@ -1,0 +1,41 @@
+package com.bailian.car.service.maintenance.impl;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.dao.maintenance.MaintenanceItemRepository;
+import com.bailian.car.dao.maintenance.VehicleMaintenanceRecordsRepository;
+import com.bailian.car.domain.caarmaintenance.MaintenanceItem;
+import com.bailian.car.domain.caarmaintenance.VehicleMaintenanceRecords;
+import com.bailian.car.service.maintenance.MaintenanceService;
+
+@Service
+@Transactional
+public class MaintenanceServiceImpl implements MaintenanceService {
+	@Autowired
+	private MaintenanceItemRepository maintenanceItemRepository;
+	@Autowired
+	private VehicleMaintenanceRecordsRepository vehicleMaintenanceRecordsRepository;
+
+	@Override
+	public JsonData save(List<MaintenanceItem> maintenanceItems, VehicleMaintenanceRecords vehicleMaintenanceRecords,
+			Integer id) {
+		List<MaintenanceItem> save
+		if (maintenanceItems.size() != 0) {
+			List<MaintenanceItem> save = maintenanceItemRepository.save(maintenanceItems);
+		}
+
+		if (vehicleMaintenanceRecords != null) {
+			VehicleMaintenanceRecords maintenanceRecords = vehicleMaintenanceRecordsRepository.save(vehicleMaintenanceRecords);
+			maintenanceRecords.getMaintenanceItem().addAll(save);
+			
+		}
+		return null;
+	}
+
+}

@@ -1,0 +1,166 @@
+package com.bailian.car.service.check.impl;
+
+import java.util.Date;
+import java.util.List;
+import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.common.utils.TokenManagerUtils;
+import com.bailian.car.dao.check.PickUpCheckRepository;
+import com.bailian.car.dao.checktable.CarCheckNameRepository;
+import com.bailian.car.dao.checktable.CarCheckParentItemRepository;
+import com.bailian.car.dao.data.CarRepository;
+import com.bailian.car.domain.checktable.CheckParentItem;
+import com.bailian.car.domain.checktable.CheckType;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.service.check.CarCheckService;
+
+
+@Service
+@Transactional
+public class CarCheckServiceImpl implements CarCheckService {
+	@Autowired
+	private CarRepository carRepository;
+	@Autowired
+	private PickUpCheckRepository pickUpCheckRepository;
+	@Autowired
+	private BackCheckRepository backCheckRepository;
+	@Autowired
+	private CarCheckNameRepository carCheckNameRepository;
+	@Autowired
+	private CarCheckParentItemRepository carCheckParentItemRepository;
+	@Autowired
+	private ClacyLindersssRepository clacyLindersssRepository;
+
+	@Autowired
+	private SafeCheckResultRepository safeCheckResultRepository;
+
+	@Override
+	public JsonData create(PickUpCheck pickUpCheck, String carid) {
+
+		if (StringUtils.isNotEmpty(carid) & pickUpCheck != null) {
+			String[] split = carid.split(",");
+			int L = split.length;
+			if (L == 1) {
+
+				for (String id : split) {
+					Car car = carRepository.findOne(Integer.parseInt(id));
+					if ((StringUtils.isNotBlank(pickUpCheck.getVin())
+							&& StringUtils.isNotBlank(pickUpCheck.getEngineNumber()))
+							&& pickUpCheck.getVin().equals(car.getVin())
+									& pickUpCheck.getEngineNumber().equals(car.getEngineNumber())) {
+						pickUpCheckRepository.save(pickUpCheck);
+						car.setPickUpCheck(pickUpCheck);
+						car.setCheck_s("1");
+						carRepository.save(car);
+						return JsonData.success(pickUpCheck, "接车点检成功");
+					}
+					return JsonData.fail("请正确填写发动机号或车架号");
+				}
+			}
+			return JsonData.fail("只能选择一辆车");
+		}
+		return JsonData.fail("接车点检失败");
+
+	}
+
+	@Override
+	public PickUpCheck findUpCheck(String carid) {
+		PickUpCheck pickUpCheck = null;
+
+		if (StringUtils.isNotEmpty(carid)) {
+			String[] split = carid.split(",");
+			for (String id : split) {
+				Car car = carRepository.findOne(Integer.parseInt(id));
+				pickUpCheck = car.getPickUpCheck();
+			}
+		}
+		return pickUpCheck;
+	}
+
+	@Override
+	public JsonData create(BackCheck backCheck, String carid) {
+		if (backCheck != null & StringUtils.isNoneEmpty(carid)) {
+			String[] split = carid.split(",");
+			for (String id : split) {
+				Car car = carRepository.findOne(Integer.parseInt(id));
+
+				User currentUser = TokenManagerUtils.getToken();
+				backCheck.setOperator(currentUser.getNickname());
+
+				backCheck.setOperate_time(new Date());
+				backCheckRepository.save(backCheck);
+				car.setBackCheck(backCheck);
+				car.setCheck_s("6");
+				carRepository.save(car);
+				return JsonData.success(backCheck, "还车点检成功");
+			}
+		}
+		return JsonData.fail("还车点检失败");
+	}
+
+	@Override
+	public BackCheck findBackcheck(String carid) {
+		// TODO Auto-generated method stub
+		BackCheck backCheck = null;
+		if (StringUtils.isNotEmpty(carid)) {
+			String[] split = carid.split(",");
+			for (String id : split) {
+				Car car = carRepository.findOne(Integer.parseInt(id));
+				backCheck = car.getBackCheck();
+			}
+		}
+		return backCheck;
+	}
+
+	@Override
+	public List<CheckType> findAllCheckName() {
+		List<CheckType> list = carCheckNameRepository.findAll();
+		return list;
+	}
+
+	@Override
+	public List<CheckParentItem> findAlllParentItem() {
+		// TODO Auto-generated method stub
+		return carCheckParentItemRepository.findAll();
+	}
+
+	@Override
+	public JsonData save(ClacyLindersss clacyLindersss, Integer carid) {
+		Car car = null;
+		if (carid != null && clacyLindersss != null) {
+			clacyLindersssRepository.save(clacyLindersss);
+			car = carRepository.findOne(carid);
+			car.setClacyLindersss(clacyLindersss);
+			carRepository.save(car);
+
+			return JsonData.success("成功");
+		}
+		return JsonData.fail("失败");
+	}
+
+	@Override
+	public List<CheckParentItem> findAlllParentItemByCNID(Integer cNID) {
+		List<CheckParentItem> parentItems = null;
+		if (cNID != null) {
+			CheckType checkName = carCheckNameRepository.findOne(cNID);
+			parentItems = checkName.getCarCheckParentItems();
+		}
+
+		return parentItems;
+	}
+
+	@Override
+	public String SafeCheck(Integer carid, List<SafeCheckResult> safeCheckResults) {
+		Car car = carRepository.findOne(carid);
+
+		for (SafeCheckResult safeCheckResult : safeCheckResults) {
+			safeCheckResultRepository.save(safeCheckResult);
+			car.getSafeCheckResults().add(safeCheckResult);
+			carRepository.save(car);
+		}
+		return null;
+	}
+}

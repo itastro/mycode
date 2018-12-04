@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>车辆轨迹</title>
+    <link href="../css/mapcontrol.css" rel="stylesheet">
+    <style>
+        .liketips {
+            margin-top: 43px;
+            font-size: 13px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="whole">
+        <div class="wrap">
+            <div id="cmapcontainer"></div>
+            <div id="amapcontainer"></div>
+            <div class="mapcontrol">
+                <div class="controlnav">
+                    <p>车辆管理系统 <img class="uparrow" src="../img/map/uparrow.png" alt=""></p>
+                </div>
+                <div class="control_box">
+                    <div class="controlbody">
+                        <div class="current curr_btn">
+                            <img src="../img/map/control.png" alt="">
+                            <span>实时监控</span>
+                        </div>
+                        <div class="current guiji_btn">
+                            <img src="../img/map/guiji.png" alt="">
+                            <span>轨迹查询</span>
+                        </div>
+                        <div class="pointerTabLeft"></div>
+                    </div>
+                    <div class="controlfoot">
+                        <div class="controlbox footbox">
+                            <div class="search_input_box input_box">
+                                <input class="search_input getsearchjson" id="current_input" type="text" name="" placeholder="请输入要查询的车辆编号">
+                            </div>
+                            <div class="controlRight">
+                                <button id="currenttrack_btn">确定搜索</button>
+                            </div>
+                        </div>
+                        <div class="guijibox footbox">
+                            <div class="date_input_box input_box">
+                                <input placeholder="开始日期" class="form-control layer-date mydata_input" id="startDate" name="startDate">
+                            </div>
+                            <div class="date_input_box input_box">
+                                <input placeholder="结束日期" class="form-control layer-date mydata_input" id="endDate" name="endDate">
+                            </div>
+                            <div class="search_input_box input_box">
+                                <input class="search_input" id="ago_input" type="text" name="" value="" placeholder="请输入车辆编号">
+                            </div>
+                            <div class="controlRight">
+                                <button id="track_playback_btn">轨迹回放</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=qIVEmOSVWxsby5OEWwm6UIbEfHKEDcZz"></script>
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/laydate.js"></script>
+    <script>
+        //转换日期格式(时间戳转换为datetime格式)
+        function changeDateFormat(cellval) {
+            var dateVal = cellval + "";
+            if (cellval != null) {
+                var date = new Date(parseInt(dateVal.replace("/Date(", "").replace(")/", ""), 10));
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+                var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+                return date.getFullYear() + "-" + month + "-" + currentDate + " " + hours + ":" + minutes + ":" + seconds;
+            }
+        }
+    </script>
+    <!--实时轨迹-->
+    <script src="../js/cartrack.js"></script>
+    <script src="../js/aaatrack.js"></script>
+    <!--start轨迹回放-->
+    <script id="current_script" src="../js/track.js"></script>
+</body>
+
+</html>

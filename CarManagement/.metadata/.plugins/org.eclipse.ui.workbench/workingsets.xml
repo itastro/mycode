@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workingSetManager>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1515664324546_2" label="mycar" name="mycar">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/car-domain" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/common-parent" type="4"/>
+<item elementID="=car-management" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1515903611719_3" label="MyPermissions" name="MyPermissions">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/permission" type="4"/>
+</workingSet>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1515639030870_0" label="Window Working Set" name="Aggregate for window 1515639030869"/>
+<mruList name="mycar"/>
+</workingSetManager>

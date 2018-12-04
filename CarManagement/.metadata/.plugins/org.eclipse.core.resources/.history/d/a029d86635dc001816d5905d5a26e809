@@ -1,0 +1,11 @@
+package com.bailian.car.domain.cargps;
+
+public class CarGps {
+	
+	private Integer id;
+	
+	private String vSn;
+	
+	private String gpsSn;
+
+}

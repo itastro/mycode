@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="shiro-example-chapter15-server">
+        <property name="context-root" value="cas"/>
+        <property name="java-output-path" value="/shiro-example-chapter15-server/target/classes"/>
+    </wb-module>
+</project-modules>

@@ -1,0 +1,14 @@
+package com.bailian.car.domain.cardriver;
+
+public class InAndOut {
+	
+	private Integer id;
+	
+	private String vSn;
+	
+	private String driverName;
+	
+	private Date endTime;
+	
+
+}

@@ -1,0 +1,20 @@
+1526362031272	Delete element
+1526362047381	Delete element
+1526362130855	Delete element
+1526363347774	Delete element
+1526363361395	Delete element
+1526363539751	Delete element
+1526363583683	Delete element
+1526737073752	Delete element
+1526737751885	Delete element
+1526738360268	Rename package 'com.bailian.car.controller.cardriver'
+1526738381486	Rename type 'CarDriverController'
+1526738406076	Delete element
+1526738912802	Rename package 'com.bailian.car.service.cardriver'
+1526738924790	Rename package 'com.bailian.car.service.cardriver.impl'
+1526738936292	Rename type 'CarDriverServiceImpl'
+1526738946705	Rename type 'CarDriverService'
+1526740840815	Rename package 'com.bailian.car.dao.cardriver'
+1526740850595	Rename type 'CarDriverRepository'
+1526742740356	Rename type 'DriverGroup'
+1526743039685	Delete element

@@ -1,0 +1,48 @@
+package com.bailian.car.domain.system;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import lombok.Data;
+
+/**
+ * 系统日志
+ * 
+ * @ClassName: Log
+ * @Description: TODO(这里用一句话描述这个类的作用)
+ * @author itastro
+ * @date 2018年1月15日
+ *
+ */
+@Data
+@Entity
+@Table(name = "C_LOG")
+public class SysLog implements Serializable {
+	private static final long serialVersionUID = 6624546559697488917L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false)
+	private Integer id; // 主键
+	@Column(name = "C_USERID")
+	private String module;
+	@Column(name = "C_METHOD")
+	private String method;
+	@Column(name = "C_REPONSE_DATA")
+	private String rsponse_data;
+	@Column(name = "C_CREATETIME")
+	private Date createTime;// 执行时间
+	@Column(name = "C_OPERATOR")
+	private String operator; // 操作者
+	@Column(name = "C_OPERATE_IP") // 操作IP
+	private String operate_ip;
+	@Column(name = "C_DESCRIPTION")
+	private String description; // 执行描述
+
+}

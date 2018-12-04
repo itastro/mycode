@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;com.bailian.car.domain.system.Log&apos; to &apos;SysLog&apos;&#x0D;&#x0A;- Original project: &apos;car-domain&apos;&#x0D;&#x0A;- Original element: &apos;com.bailian.car.domain.system.Log&apos;&#x0D;&#x0A;- Renamed element: &apos;com.bailian.car.domain.system.SysLog&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Log&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java&lt;com.bailian.car.domain.system{Log.java[Log" matchStrategy="1" name="SysLog" qualified="false" references="true" similarDeclarations="false" stamp="1517537095614" textual="false" version="1.0"/>
+</session>

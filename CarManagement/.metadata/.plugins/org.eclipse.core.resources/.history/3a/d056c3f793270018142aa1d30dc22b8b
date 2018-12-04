@@ -1,0 +1,5 @@
+package com.bailian.car.common.vo;
+
+public class ExcelView {
+
+}

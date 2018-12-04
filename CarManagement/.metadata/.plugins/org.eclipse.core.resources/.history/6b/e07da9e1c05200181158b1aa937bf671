@@ -1,0 +1,34 @@
+package com.bailian.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+import com.bailian.data.domain.Customer;
+
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+
+	Customer findByUsername(String username);
+
+	Customer findByUsernameAndPassword(String username, String passowrd);
+
+	@Query(value = "SELECT * FROM customer", nativeQuery = true)
+	List<Customer> allCustomer();
+
+	@Query(value = "SELECT  t.num , t.remark,t.`name`,v.`name` vname,v.vSn,v.remark vremark FROM customer c , terminal t,vehicle v WHERE ?1=t.customer_id AND t.id=v.terminal_id", nativeQuery = true)
+	List<Object> terminalsAndvehicle(Integer id);
+
+	@Query(value = "SELECT c.username, c.nickname, t.num , t.remark,t.`name`,v.`name` vname,v.vSn,v.remark vremark FROM customer c , terminal t,vehicle v WHERE c.id=t.customer_id AND t.id=v.terminal_id", nativeQuery = true)
+	List<Object> customerAndTerminalAndVehicle();
+
+	Customer findByNickname(String nickname);
+
+	@Modifying
+	@Query(value = "UPDATE customer SET password=?1 WHERE nickname=?2", nativeQuery = true)
+	void updatePassword(String encrypt, String nickname);
+
+	int countByNicknameAndUsername(String nickname, String username);
+
+}

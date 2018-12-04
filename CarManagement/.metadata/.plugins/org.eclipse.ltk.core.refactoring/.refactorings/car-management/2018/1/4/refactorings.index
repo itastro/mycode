@@ -1,0 +1,15 @@
+1516513669669	Delete element
+1516609401425	Delete element
+1516668724284	Delete element
+1516669401395	Delete element
+1516670286641	Delete element
+1516673307117	Delete element
+1516673661878	Delete element
+1516673667238	Delete element
+1516689273773	Delete element
+1516689366365	Rename type 'ParamException'
+1516693729292	Delete element
+1516696231511	Rename resource 'applicationContext-data.xml'
+1516697984744	Rename resource 'applicationContext-dataSource.xml'
+1517033942468	Rename type 'PermissionsAuthorizationFilter'
+1517047813302	Extract method 'code'

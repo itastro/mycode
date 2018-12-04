@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="false" key="EXT_FOLDER_LAST_SUBDIR_SETTING"/>
+	<item value="E:\bailian_xian\java_project\maven\MavenRepository\commons-io" key="EXT_FOLDER_LAST_PATH_SETTING"/>
+	<item value="E:\bailian\MavenRepository\commons-io\commons-io\2.6" key="org.eclipse.debug.internal.ui.sourcelookup.browsers.ExternalArchiveSourceContainerBrowser.rootDir"/>
+	<section name="org.eclipse.debug.ui.STRING_VARIABLE_SELECTION_DIALOG_SECTION">
+		<item value="398" key="DIALOG_WIDTH"/>
+		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
+		<item value="663" key="DIALOG_HEIGHT"/>
+		<item value="63" key="DIALOG_X_ORIGIN"/>
+		<item value="-165" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.debug.ui.sourcelookup.SourceLookupDialog">
+		<item value="525" key="DIALOG_WIDTH"/>
+		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
+		<item value="443" key="DIALOG_HEIGHT"/>
+		<item value="704" key="DIALOG_X_ORIGIN"/>
+		<item value="243" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.debug.ui.LAUNCH_CONFIGURATIONS_DIALOG_SECTION">
+		<item value="1145" key="DIALOG_WIDTH"/>
+		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
+		<item value=", org.eclipse.jdt.junit.launchconfig, org.eclipse.m2e.Maven2LaunchConfigurationType, " key="org.eclipse.debug.ui.EXPANDED_NODES"/>
+		<item value="762" key="org.eclipse.debug.ui.DIALOG_SASH_WEIGHTS_2"/>
+		<item value="702" key="DIALOG_HEIGHT"/>
+		<item value="237" key="org.eclipse.debug.ui.DIALOG_SASH_WEIGHTS_1"/>
+	</section>
+	<section name="org.eclipse.debug.ui.SINGLE_LAUNCH_CONFIGURATION_DIALOG_SECTION">
+		<item value="677" key="DIALOG_WIDTH"/>
+		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
+		<item value="702" key="DIALOG_HEIGHT"/>
+	</section>
+</section>

@@ -1,0 +1,102 @@
+2018-01-22 09:31:24.300 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 09:31:24.440 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 09:31:24.619 [localhost-startStop-1] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 10:05:52.464 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 10:05:52.783 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 10:05:53.061 [main] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 11:28:04.922 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 11:28:05.509 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 11:28:06.046 [main] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 11:29:02.006 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 11:29:02.370 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 11:29:02.773 [main] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 11:40:42.455 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 11:40:42.797 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 11:40:43.098 [localhost-startStop-1] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 15:57:35.519 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 15:57:36.199 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 15:57:36.991 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 108 in HQL: [from com.bailian.car.domain.system.Menu m inner join fetch m.roles r inner join fetch r.users u where u.id=? and m.parentMenu=null order by m.priority].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 15:57:38.109 [main] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 15:57:39.242 [main] WARN  org.springframework.context.support.GenericApplicationContext -
+				Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'menuController': Unsatisfied dependency expressed through field 'menuService'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.bailian.car.service.MenuService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2018-01-22 16:01:02.425 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:01:02.564 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:01:02.693 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 108 in HQL: [from com.bailian.car.domain.system.Menu m inner join fetch m.roles r inner join fetch r.users u where u.id=? and m.parentMenu=null order by m.priority].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:01:02.862 [localhost-startStop-1] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 16:01:03.069 [localhost-startStop-1] WARN  org.springframework.web.context.support.XmlWebApplicationContext -
+				Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'menuController': Unsatisfied dependency expressed through field 'menuService'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.bailian.car.service.MenuService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2018-01-22 16:05:17.400 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:05:17.552 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:05:17.735 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 108 in HQL: [from com.bailian.car.domain.system.Menu m inner join fetch m.roles r inner join fetch r.users u where u.id=? and m.parentMenu=null order by m.priority].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:05:17.865 [localhost-startStop-1] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 16:06:07.378 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:06:07.617 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:06:07.888 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 108 in HQL: [from com.bailian.car.domain.system.Menu m inner join fetch m.roles r inner join fetch r.users u where u.id=? and m.parentMenu=null order by m.priority].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:06:08.150 [main] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 16:06:08.250 [main] WARN  net.sf.ehcache.DiskStorePathManager -
+				diskStorePath 'C:\Users\itastro\AppData\Local\Temp' is already used by an existing CacheManager either in the same VM or in a different process.
+The diskStore path for this CacheManager will be set to C:\Users\itastro\AppData\Local\Temp\ehcache_auto_created7587749519754883823diskstore.
+To avoid this warning consider using the CacheManager factory methods to create a singleton CacheManager or specifying a separate ehcache configuration (ehcache.xml) for each CacheManager instance.
+2018-01-22 16:12:25.247 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:12:25.528 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:12:25.789 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 108 in HQL: [from com.bailian.car.domain.system.Menu m inner join fetch m.roles r inner join fetch r.users u where u.id=? and m.parentMenu=null order by m.priority].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:12:26.045 [main] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 16:12:26.169 [main] WARN  net.sf.ehcache.DiskStorePathManager -
+				diskStorePath 'C:\Users\itastro\AppData\Local\Temp' is already used by an existing CacheManager either in the same VM or in a different process.
+The diskStore path for this CacheManager will be set to C:\Users\itastro\AppData\Local\Temp\ehcache_auto_created7686765137179607359diskstore.
+To avoid this warning consider using the CacheManager factory methods to create a singleton CacheManager or specifying a separate ehcache configuration (ehcache.xml) for each CacheManager instance.
+2018-01-22 16:14:03.364 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:14:03.673 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:14:03.908 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 108 in HQL: [from com.bailian.car.domain.system.Menu m inner join fetch m.roles r inner join fetch r.users u where u.id=? and m.parentMenu=null order by m.priority].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:14:04.174 [main] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.
+2018-01-22 16:14:04.287 [main] WARN  net.sf.ehcache.DiskStorePathManager -
+				diskStorePath 'C:\Users\itastro\AppData\Local\Temp' is already used by an existing CacheManager either in the same VM or in a different process.
+The diskStore path for this CacheManager will be set to C:\Users\itastro\AppData\Local\Temp\ehcache_auto_created2220937622120806103diskstore.
+To avoid this warning consider using the CacheManager factory methods to create a singleton CacheManager or specifying a separate ehcache configuration (ehcache.xml) for each CacheManager instance.
+2018-01-22 16:22:11.904 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 81 in HQL: [from com.bailian.car.domain.system.Role r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:22:12.049 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 114 in HQL: [from com.bailian.car.domain.system.Permission p inner join fetch p.roles r inner join fetch r.users u where u.id=?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:22:12.171 [localhost-startStop-1] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker -
+				[DEPRECATION] Encountered positional parameter near line 1, column 108 in HQL: [from com.bailian.car.domain.system.Menu m inner join fetch m.roles r inner join fetch r.users u where u.id=? and m.parentMenu=null order by m.priority].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2018-01-22 16:22:12.307 [localhost-startStop-1] WARN  net.sf.ehcache.CacheManager -
+				One or more caches require a DiskStore but there is no diskStore element configured. Using the default disk store path of C:\Users\itastro\AppData\Local\Temp\. Please explicitly configure the diskStore element in ehcache.xml.

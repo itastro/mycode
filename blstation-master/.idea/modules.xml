@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/blstation-common/blstation-common.iml" filepath="$PROJECT_DIR$/blstation-common/blstation-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/blstation-dao/blstation-dao.iml" filepath="$PROJECT_DIR$/blstation-dao/blstation-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/blstation-entity/blstation-entity.iml" filepath="$PROJECT_DIR$/blstation-entity/blstation-entity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/blstation-interface/blstation-interface.iml" filepath="$PROJECT_DIR$/blstation-interface/blstation-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/blstation-master.iml" filepath="$PROJECT_DIR$/blstation-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/blstation-service/blstation-service.iml" filepath="$PROJECT_DIR$/blstation-service/blstation-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/blstation-web/blstation-web.iml" filepath="$PROJECT_DIR$/blstation-web/blstation-web.iml" />
+    </modules>
+  </component>
+</project>

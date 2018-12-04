@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>bom文件上传</title>
+    <style lang="">
+        /*文件上传*/
+        
+        .a-upload {
+            padding: 3px 12px;
+            font-size: 13px;
+            position: relative;
+            cursor: pointer;
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+            border-radius: 4px;
+            overflow: hidden;
+            top: 9px;
+            left: 5px;
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+        }
+        
+        span.showFileName {
+            position: relative;
+            left: 20px;
+            font-size: 11px;
+        }
+        
+        input#uploadBtn {
+            margin-left: 20px;
+        }
+        
+        .a-upload input {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            cursor: pointer
+        }
+        
+        .a-upload:hover {
+            color: #FFFFFF;
+            background: #337ab7;
+            border-color: #204d74;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="bom_box">
+        <form action="" id="uploadnewBomForm" enctype="multipart/form-data">
+            <a href="javascript:;" id="upload_newbom_a" class="a-upload"><input type="file" id="newbom_file" name="uploadFile"><i class="glyphicon glyphicon-import"></i>上传bom文件</a>
+            <span class="shownewBomName"></span><input id="uploadnewBomBtn" type="button" class="btn btn-primary" value="上传">
+        </form>
+        <div class="cartypein_btn_group">
+            <button type="button" class="btn btn-default btn-primary sub_btn">提交</button>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(function() {
+
+        //bom文件上传
+        var bomformData;
+        $("#uploadnewBomBtn").hide();
+        $(".shownewBomName").hide();
+        $("#newbom_file").on("change", function() {
+            var fileM = document.getElementById("newbom_file");
+            bomformData = new FormData();
+            bomformData.append('uploadFile', fileM.files[0].name);
+            $(".shownewBomName").show();
+            $(".shownewBomName").html(fileM.files[0].name);
+        });
+        // var allurl = window.allurl = "http://36.110.56.189:8848";
+        var allurl = window.allurl = "";
+        $(".sub_btn").click(function() {
+            if ($(".shownewBomName").html() != "" && $(".shownewBomName").html() != null) {
+                console.log(new FormData($('#newbom_file')[0]));
+                bomformData.append('vSn', '2018-312');
+
+                $.ajax({ //上传bom文件
+                    url: allurl + "/car-management/car/bomUpload.action",
+                    type: "post",
+                    async: false,
+                    data: bomformData,
+                    /* headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }, */
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                        if (res.ret == true) {
+                            toastr.success(res.msg, '提示', messageOpts);
+                        } else {
+                            toastr.warning(res.msg, '提示', messageOpts);
+                        }
+                    },
+                    error: function name() {
+                        toastr.error(res.msg, '提示', messageOpts);
+                    }
+                });
+            }
+            // $.post({
+            //         ids: "4,5",
+            //         url: "http://192.168.0.117:8888/station-manager/news/delete"
+            //     },
+            //     function(data, status) {
+            //         alert("数据: \n" + data + "\n状态: " + status);
+            //     });
+        });
+    });
+</script>
+
+</html>

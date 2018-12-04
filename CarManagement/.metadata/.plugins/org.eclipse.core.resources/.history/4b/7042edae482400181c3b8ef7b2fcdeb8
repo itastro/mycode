@@ -1,0 +1,351 @@
+package com.bailian.car.domain.basedata;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "T_CAR")
+public class Car implements Serializable{
+
+	
+	    
+	public CarPosition getCarPosition() {
+		return carPosition;
+	}
+
+	public void setCarPosition(CarPosition carPosition) {
+		this.carPosition = carPosition;
+	}
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+
+	private String product_sn; // 项目号
+
+	private String product_name; // 项目名称
+
+	private String carName; // 车辆名称
+
+	private String vCarSn; // 实验车号
+
+	private String vSn; // 车辆编号
+
+	private String vCarType; // 车辆类型
+
+	private String customer; // 客戶
+
+	private String projectEngineer; // 項目工程師
+
+	private String contactNumber; // 联系电话
+
+	private String engineType; // 发动机型号
+
+	private String engineNumber; // 发动机编号
+
+	private double engineCapacity; // 发动机排量
+
+	private String FuelType; // 燃油排量
+
+	private String vin; // 车辆识别码
+
+	private String operator; // 填写人
+
+	private Date makeTime; // 制作日期
+
+	private int runsumtime; // 车辆行驶总时间
+
+	private double longitude; // 经度
+ 
+	private double latitude; // 维度
+
+	private String runStatic; // 行驶状态
+
+	private float batteryvoltage; // 电瓶电压
+	@Column(name = "GPSSN")
+	private String gpsSN; // gps编号
+
+	private String iccard; // ic卡
+
+	private Date dAllowStartTm; // 允许行驶开始时间
+
+	private Date dAllowEndTm; // 允许行驶结束时间
+
+	private String isAllow; // 是否允许
+
+	private Date fromtime; // 开始时间
+
+	private Date lastTime; // 结束时间
+
+	private double speed; // 行驶速度
+
+	@ManyToOne
+	@JoinColumn(name = "G_ID")
+	private CarGroup cGroup;
+
+	@OneToOne
+	@JoinColumn(name = "CARPOSITION_ID")
+	private CarPosition carPosition;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getProduct_sn() {
+		return product_sn;
+	}
+
+	public void setProduct_sn(String product_sn) {
+		this.product_sn = product_sn;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+	public String getCarName() {
+		return carName;
+	}
+
+	public void setCarName(String carName) {
+		this.carName = carName;
+	}
+
+	public String getvCarSn() {
+		return vCarSn;
+	}
+
+	public void setvCarSn(String vCarSn) {
+		this.vCarSn = vCarSn;
+	}
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public String getvCarType() {
+		return vCarType;
+	}
+
+	public void setvCarType(String vCarType) {
+		this.vCarType = vCarType;
+	}
+
+	public String getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
+
+	public String getProjectEngineer() {
+		return projectEngineer;
+	}
+
+	public void setProjectEngineer(String projectEngineer) {
+		this.projectEngineer = projectEngineer;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
+	public String getEngineType() {
+		return engineType;
+	}
+
+	public void setEngineType(String engineType) {
+		this.engineType = engineType;
+	}
+
+	public String getEngineNumber() {
+		return engineNumber;
+	}
+
+	public void setEngineNumber(String engineNumber) {
+		this.engineNumber = engineNumber;
+	}
+
+	public double getEngineCapacity() {
+		return engineCapacity;
+	}
+
+	public void setEngineCapacity(float engineCapacity) {
+		this.engineCapacity = engineCapacity;
+	}
+
+	public String getFuelType() {
+		return FuelType;
+	}
+
+	public void setFuelType(String fuelType) {
+		FuelType = fuelType;
+	}
+
+	public String getVin() {
+		return vin;
+	}
+
+	public void setVin(String vin) {
+		this.vin = vin;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Date getMakeTime() {
+		return makeTime;
+	}
+
+	public void setMakeTime(Date makeTime) {
+		this.makeTime = makeTime;
+	}
+
+	public int getRunsumtime() {
+		return runsumtime;
+	}
+
+	public void setRunsumtime(int runsumtime) {
+		this.runsumtime = runsumtime;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getRunStatic() {
+		return runStatic;
+	}
+
+	public void setRunStatic(String runStatic) {
+		this.runStatic = runStatic;
+	}
+
+	public float getBatteryvoltage() {
+		return batteryvoltage;
+	}
+
+	public void setBatteryvoltage(float batteryvoltage) {
+		this.batteryvoltage = batteryvoltage;
+	}
+
+	public String getGpsSN() {
+		return gpsSN;
+	}
+
+	public void setGpsSN(String gpsSN) {
+		this.gpsSN = gpsSN;
+	}
+
+	public String getIccard() {
+		return iccard;
+	}
+
+	public void setIccard(String iccard) {
+		this.iccard = iccard;
+	}
+
+	public Date getdAllowStartTm() {
+		return dAllowStartTm;
+	}
+
+	public void setdAllowStartTm(Date dAllowStartTm) {
+		this.dAllowStartTm = dAllowStartTm;
+	}
+
+	public Date getdAllowEndTm() {
+		return dAllowEndTm;
+	}
+
+	public void setdAllowEndTm(Date dAllowEndTm) {
+		this.dAllowEndTm = dAllowEndTm;
+	}
+
+	public String getIsAllow() {
+		return isAllow;
+	}
+
+	public void setIsAllow(String isAllow) {
+		this.isAllow = isAllow;
+	}
+
+	public Date getFromtime() {
+		return fromtime;
+	}
+
+	public void setFromtime(Date fromtime) {
+		this.fromtime = fromtime;
+	}
+
+	public Date getLastTime() {
+		return lastTime;
+	}
+
+	public void setLastTime(Date lastTime) {
+		this.lastTime = lastTime;
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
+
+	public CarGroup getcGroup() {
+		return cGroup;
+	}
+
+	public void setcGroup(CarGroup cGroup) {
+		this.cGroup = cGroup;
+	}
+
+}

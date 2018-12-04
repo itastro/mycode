@@ -1,0 +1,68 @@
+package com.bailian.car.controller.check;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.domain.carcheck.BackCheck;
+import com.bailian.car.domain.carcheck.CarCheckName;
+import com.bailian.car.domain.carcheck.CarCheckParentItem;
+import com.bailian.car.domain.carcheck.ClacyLindersss;
+import com.bailian.car.domain.carcheck.PickUpCheck;
+import com.bailian.car.service.check.CarCheckService;
+
+@Controller
+@RequestMapping("/car")
+public class CarCheckController {
+	@Autowired
+	private CarCheckService carCheckService;
+
+	@RequestMapping("/upcheck.action")
+	@ResponseBody
+	public JsonData upcheck(PickUpCheck pickUpCheck, String carid) {
+
+		return carCheckService.create(pickUpCheck, carid);
+
+	}
+
+	@RequestMapping("/findUpcheck.action")
+	@ResponseBody
+	public PickUpCheck findUpcheck(String carid) {
+		return carCheckService.findUpCheck(carid);
+	}
+
+	@RequestMapping("/backCheck.action")
+	@ResponseBody
+	public JsonData backCheck(BackCheck backCheck, String carid) {
+		return carCheckService.create(backCheck, carid);
+
+	}
+
+	@RequestMapping("/findBackcheck.action")
+	@ResponseBody
+	public BackCheck findBackcheck(String carid) {
+		return carCheckService.findBackcheck(carid);
+	}
+
+	@RequestMapping("/findAllCheckName.action")
+	@ResponseBody
+	public List<CarCheckName> findAllCheckName() {
+		return carCheckService.findAllCheckName();
+	}
+
+	@RequestMapping("/findAllParentItem.action")
+	@ResponseBody
+	public List<CarCheckParentItem> findAllParentItem() {
+		return carCheckService.findAlllParentItem();
+	}
+
+	@RequestMapping("/addClacyLindersss")
+	@ResponseBody
+	
+	public JsonData addClacyLindersss(ClacyLindersss clacyLindersss, Integer carid) {
+		return carCheckService.save(clacyLindersss, carid);
+	}
+}

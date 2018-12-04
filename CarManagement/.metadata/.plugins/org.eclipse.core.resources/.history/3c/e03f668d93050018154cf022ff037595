@@ -1,0 +1,178 @@
+package com.bailian.car.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.bailian.car.common.exception.CustomException;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.common.utils.VerifyCodeUtils;
+
+import com.bailian.car.domain.system.Role;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.domain.vo.EditUserVo;
+import com.bailian.car.service.UserService;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
+@Controller
+@Scope("prototype")
+@RequestMapping("/user")
+public class UserController {
+
+	@Autowired
+	private UserService userService;
+
+	/**
+	 * 
+	 * @Title: genarateCode
+	 * @Description: 验证码
+	 * @param @param
+	 *            request
+	 * @param @param
+	 *            response
+	 * @param @throws
+	 *            IOException 参数
+	 * @return void 返回类型 @throws
+	 */
+	@RequestMapping(value = "/code.action")
+	public void genarateCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		// 响应头信息
+		response.setHeader("Pragma", "No-Cache");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setDateHeader("Expries", 0);
+
+		VerifyCodeUtils.outPutImagCode(request, response);
+
+	}
+
+	@RequestMapping(value = "/login.action")
+	@ResponseBody
+	// jsondata
+	public Object login(String username, String password, String verifyCode, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String parameter = request.getParameter("jsonpCallback");
+		JsonData login = userService.login(username, password, verifyCode, request);
+		if (StringUtils.isBlank(parameter)) {
+			return login;
+		}
+
+		return new JSONPObject(parameter, login);
+
+	}
+
+	@RequestMapping(value = "/loginOut.action")
+	@ResponseBody
+	public String loginOut() {
+		// 基于Shiro的退出
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
+		return "login";
+
+	}
+
+	@RequestMapping(value = "/changeUserPassWord.action")
+	@ResponseBody
+	public JsonData changeUserPassWord(HttpServletRequest request, HttpServletResponse response) {
+		String usrname = request.getParameter("usrname");
+		String oldpassword = request.getParameter("oldpassword");
+		String newpassword = request.getParameter("newpassword");
+		return userService.changeUserPassWord(usrname, oldpassword, newpassword);
+
+	}
+
+	@RequestMapping(value = "/UserInfo.action")
+	@ResponseBody
+	public String userInfo() {
+		Subject subject = SecurityUtils.getSubject();
+		User user = (User) subject.getPrincipal();
+		Set<Role> roles = user.getRoles();
+		return null;
+
+	}
+
+	@RequestMapping("/userList.action")
+	@ResponseBody
+	// List<User>
+	public Object userList(HttpServletRequest request) {
+		String parameter = request.getParameter("jsonpCallback");
+		List<User> users = userService.findALL();
+
+		if (users == null) {
+			throw new CustomException("用户列表为空");
+
+		}
+
+		if (StringUtils.isBlank(parameter)) {
+			return users;
+		}
+		// 跨域
+		return new JSONPObject(parameter, users);
+
+	}
+
+	@RequestMapping(value = "/addUser.action")
+	@ResponseBody
+	public JsonData addUser(User user, @RequestParam(value = "ids[]", required = false) String[] roleIds) {
+		return userService.save(user, roleIds);
+
+	}
+
+	@RequestMapping("/check/{param}/{type}")
+	@ResponseBody
+	public JsonData checkData(@PathVariable String param, @PathVariable Integer type) {
+		return userService.checkData(param, type);
+	}
+
+	@RequestMapping("/delete.action")
+	public String deleteUser(@RequestParam(value = "ids[]") String[] userIds, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		userService.deleteUserByID(userIds);
+
+		return "userList";
+
+	}
+
+	@RequestMapping("/editUser.action")
+
+	public String editUser(Model model, HttpServletRequest request, @RequestParam(value = "id") Integer userId) {
+
+		User user = userService.findUserById(userId);
+
+		if (user == null) {
+			throw new CustomException("查无此用户，请联系管理员");
+		}
+		model.addAttribute("user", user);
+
+		return "editUser";
+	}
+
+	@RequestMapping("/updateUser1")
+	public String updateUser(User user) {
+		userService.updateUser(user);
+
+		return "userList";
+	}
+
+	@RequestMapping("/updateUser.action")
+	public String updateUser(EditUserVo user, Integer id) {
+		userService.updateUser(user, id);
+		return "userList";
+	}
+}

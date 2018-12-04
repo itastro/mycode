@@ -1,0 +1,10 @@
+package com.bailian.car.dao.CarMaintain;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.bailian.car.domain.carmaintain.CarMaintainApply;
+
+public interface CarMaintainApplyRepository extends JpaRepository<CarMaintainApply, Integer> {
+
+	CarMaintainApply findByvSn(String vSn);
+}

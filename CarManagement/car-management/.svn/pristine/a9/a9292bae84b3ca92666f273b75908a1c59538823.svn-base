@@ -1,0 +1,181 @@
+package com.bailian.car.controller.iccard;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.IccardResult;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.common.LedResult;
+import com.bailian.car.domain.iccard.Iccard;
+import com.bailian.car.domain.iccard.IccardUseHistory;
+import com.bailian.car.exception.ParamException;
+import com.bailian.car.param.IccardSearch;
+import com.bailian.car.param.WriteCarCard;
+import com.bailian.car.service.iccard.IccardService;
+import com.bailian.car.utils.BeanValidator;
+import com.bailian.car.utils.JsonMapper;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/iccard")
+public class IccardController {
+	
+	@Autowired
+	private HttpServletRequest request;
+
+	@Autowired
+	private IccardService iccardService;
+
+	@RequestMapping(value = "/insert.action")
+	@ResponseBody
+	public JsonData insert(/* @RequestBody */ IccardUseHistory iccardUseHistory) {
+		log.info("iccardUseHistory:{}", JsonMapper.obj2String(iccardUseHistory));
+		try {
+
+			// url编码
+			String error = URLDecoder.decode(iccardUseHistory.getError(), "UTF-8");
+			iccardUseHistory.setError(error);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			
+		}
+		iccardUseHistory.setUpdateTime(new Date());
+		return iccardService.insert(iccardUseHistory);
+
+	}
+    @RequestMapping("/searchAuth.action")
+    @ResponseBody
+	public LedResult searchAuth() {
+    	String codeOne="";
+    	String codeTwo="";
+    	String io="";
+    	
+    	/*if (StringUtils.isBlank(request.getParameter("codeOne"))) {
+    		throw new ParamException("车卡不能为空");
+		}
+    	
+    	if (StringUtils.isBlank(request.getParameter("codeTwo"))) {
+    		throw new ParamException("人卡不能为空");
+		}*/
+    	
+    	if (StringUtils.isBlank(request.getParameter("io"))) {
+    		throw new ParamException("进入状态不能为空");
+		}
+    	
+    	try {
+    		codeOne = URLDecoder.decode(request.getParameter("codeOne"), "UTF-8");
+    		 codeTwo =URLDecoder.decode(request.getParameter("codeTwo"), "UTF-8");
+    		 io =URLDecoder.decode(request.getParameter("io"), "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+		return iccardService.searchAuth(codeOne,codeTwo,io);
+	}
+	
+    
+    @RequestMapping("/carIn.action")
+    @ResponseBody
+	public IccardResult carIn() {
+    	String carSn="";
+    	String personSn="";
+    	
+    	if (StringUtils.isBlank(request.getParameter("codeOne"))) {
+    		throw new ParamException("车卡不能为空");
+		}
+    	
+    	if (StringUtils.isBlank(request.getParameter("codeTwo"))) {
+    		throw new ParamException("人卡不能为空");
+		}
+    	
+    	try {
+    		 carSn = URLDecoder.decode(request.getParameter("codeOne"), "UTF-8");
+    	    personSn =URLDecoder.decode(request.getParameter("codeTwo"), "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+		return iccardService.carIn(carSn,personSn);
+	}
+	
+	@RequestMapping("/saveiccard.action")
+	@ResponseBody
+	// 添加卡
+	public JsonData save(Iccard iccard) {
+		log.info("iccardUseHistory:{}", JsonMapper.obj2String(iccard));
+		BeanValidator.check(iccard);
+		return iccardService.save(iccard);
+	}
+
+	@RequestMapping("/delete.action")
+	@ResponseBody
+	// 添加卡
+	public JsonData delete(Integer id) {
+		return iccardService.delete(id);
+	}
+
+	@RequestMapping("/upadte.action")
+	@ResponseBody
+	public JsonData upadte(Iccard iccard) {
+		BeanValidator.check(iccard);
+		return iccardService.update(iccard);
+	}
+
+	@RequestMapping("/findSuppercarid.action")
+	@ResponseBody
+	// 查找超级卡
+	public List<Iccard> findSuppercarid() {
+		return iccardService.findSuppercarid();
+	}
+
+	@RequestMapping("/findBackcarid.action")
+	@ResponseBody
+	// 查找车辆尾卡
+	public List<Iccard> findBackcarid() {
+		return iccardService.findBackcarid();
+	}
+
+	@RequestMapping("/findDrivercarid.action")
+	@ResponseBody
+	// 查找驾驶员卡
+	public List<Iccard> findDrivercarid() {
+		return iccardService.findDrivercarid();
+	}
+
+	@RequestMapping("/findcarid.action")
+	@ResponseBody
+	// 查找车身卡
+	public List<Iccard> findcarid() {
+		return iccardService.findcarid();
+	}
+
+	// 查找所有的卡片
+	@RequestMapping("/findAll.action")
+	@ResponseBody
+	// 添加卡
+	public PageBean<Iccard> findAll(PageQuery pQuery, IccardSearch search) {
+		return iccardService.findAll(pQuery, search);
+	}
+
+	// 车辆绑定卡
+	@RequestMapping("/vehicleBindingcard.action")
+	@ResponseBody
+	public IccardResult vehicleBindingcard(WriteCarCard writeCarCard) {
+		BeanValidator.check(writeCarCard);
+		log.info("writeCarCard:{}", JsonMapper.obj2String(writeCarCard));
+		return iccardService.vehicleBindingcard(writeCarCard);
+	}
+
+}

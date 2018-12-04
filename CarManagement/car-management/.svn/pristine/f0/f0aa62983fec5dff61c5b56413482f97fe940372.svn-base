@@ -1,0 +1,717 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+  <title>全国主要城市车辆数量</title>
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+  <script src="http://webapi.amap.com/maps?v=1.4.6&key=ffc8503b4c8647c3753679c5e95278a5&plugin=AMap.MarkerClusterer"></script>
+  <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+  <script type="text/javascript" src="http://webapi.amap.com/demos/js/liteToolbar.js"></script>
+  <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+  <style type="text/css">
+    body,
+    html {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      font-family: "微软雅黑";
+      overflow: hidden;
+    }
+
+    #container {
+      bottom: 0px;
+      height: auto;
+      /* min-height: 800px; */
+    }
+
+    p {
+      font-size: 14px;
+      margin: 5px;
+    }
+
+    /*标题*/
+
+    .map_title {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    /*搜索*/
+
+    .search-map {
+      position: absolute;
+      top: 60px;
+      left: 100px;
+      height: 35px;
+    }
+
+    #suggestId {
+      box-sizing: border-box;
+      width: 280px;
+      background: white;
+      border: 0;
+      /*border-left: 10px solid transparent;*/
+      /*border-right: 27px solid transparent;*/
+      line-height: 20px;
+      font-size: 16px;
+      height: 100%;
+      color: #333;
+      outline: none;
+      border-radius: 2px 0 0 2px;
+      border: 1px solid #4b6ba1;
+      text-indent: 10px;
+    }
+
+    .search-btn {
+      box-sizing: border-box;
+      border: 0;
+      width: 55px;
+      height: 100%;
+      font-size: 23px;
+      cursor: pointer;
+      text-align: center;
+      color: white;
+      display: inline-block;
+      background: #4b6ba1;
+      margin-left: -3px;
+      position: absolute;
+      top: 0px;
+      left: 282px;
+    }
+
+    .search-btn img {
+      width: 22px;
+      height: 22px;
+      margin-top: 7px;
+    }
+
+    /*车辆信息框*/
+
+    .mapinfo {
+      width: 320px;
+      position: absolute;
+      top: 20px;
+      right: -319px;
+      min-height: 40px;
+      background: white;
+      transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1)
+    }
+
+    .mapinfo.show {
+      right: 10px;
+    }
+
+    .mapinfo p {
+      margin-top: 9px;
+      margin-right: 13px;
+      display: inline-block;
+    }
+
+    .mapinfo_title {
+      height: 35px;
+      text-align: center;
+      color: white;
+      background: #4b6ba1;
+    }
+
+    .mapinfo ul li {
+      /* padding-top: 7px; */
+      line-height: 30px;
+      height: 30px;
+    }
+
+    .mapinfo ul li span {
+      font-size: 12px;
+      height: 100%;
+      display: inline-block;
+      margin: 0;
+    }
+
+    .mapinfo ul li .vSn {
+      color: red;
+    }
+
+    .mapinfo .label {
+      width: 60px;
+    }
+
+    .mapinfo_title img {
+      cursor: pointer;
+    }
+
+    /*自定义信息窗口样式*/
+
+    .info {
+      border: solid 1px silver;
+    }
+
+    div.info-top {
+      position: relative;
+      background: none repeat scroll 0 0 #F9F9F9;
+      border-bottom: 1px solid #CCC;
+      border-radius: 5px 5px 0 0;
+    }
+
+    div.info-top div {
+      display: inline-block;
+      color: #333333;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 31px;
+      padding: 0 10px;
+    }
+
+    div.info-top img {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transition-duration: 0.25s;
+    }
+
+    div.info-top img:hover {
+      box-shadow: 0px 0px 5px #000;
+    }
+
+    div.info-middle {
+      font-size: 12px;
+      padding: 6px;
+      line-height: 20px;
+    }
+
+    div.info-bottom {
+      height: 0px;
+      width: 100%;
+      clear: both;
+      text-align: center;
+    }
+
+    div.info-bottom img {
+      position: relative;
+      z-index: 104;
+    }
+
+    span {
+      margin-left: 5px;
+      font-size: 11px;
+    }
+
+    .info-middle img {
+      float: left;
+      margin-right: 6px;
+    }
+
+    .amap-info-contentContainer {
+      background: #F9F9F9;
+      padding: 5px 15px;
+      border-radius: 10px;
+    }
+
+    ul.main {
+      list-style: none;
+      text-align: left;
+      width: 134px;
+      margin: 0 auto;
+    }
+
+    button.close_info {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+      border-radius: 5px;
+      position: absolute;
+      top: 6px;
+      line-height: 16px;
+      right: 6px;
+      font-size: 16px;
+      background: transparent;
+      border: none;
+    }
+
+    .car-info {
+      height: 366.4px;
+      width: 40%;
+      background-color: #fff;
+      position: absolute;
+      right: 0;
+      bottom: -326.4px;
+      z-index: 999999;
+      transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+      border-top: 1px solid #e1e9ef
+    }
+
+    .car-info.show {
+      bottom: -0px;
+    }
+
+    .car-info-title {
+      height: 40px;
+      width: 100%;
+      line-height: 40px;
+      text-align: center;
+      background-color: #edf2f6;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .car-info table {
+      width: 100%;
+      text-align: center
+    }
+
+    .car-info table th {
+      background-color: #edf2f6;
+    }
+
+    .car-info table th,
+    .car-info table td {
+      border: 1px solid #e1e9ef;
+    }
+    .table-main {
+      height: 326.4px;
+      font-size: 14px;
+    }
+    .table-main * {
+      font-size: 14px
+    }
+
+    .table-body {
+      height: 308px;
+      overflow-y: scroll;
+    }
+
+    .table-head {
+      padding-right: 16px;
+
+    }
+    .table-noInfo {
+      height: 358px;
+      line-height: 358px;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 地图框 -->
+  <div id="container"></div>
+  <!-- 标题 -->
+  <div class="map_title">
+    全国主要城市车辆数量
+  </div>
+  <!-- 搜索 -->
+  <div id="r-result" class="search-map">
+    <input type="text" id="suggestId" placeholder="请输入搜索车辆编号" />
+    <div class="search-btn" id="search-btn">
+      <img src="../img/map/search.png" alt="">
+    </div>
+    <!--<div class="refresh">刷新</div>-->
+  </div>
+  <!-- 车辆信息 -->
+  <div class="mapinfo" id="map_info">
+    <div class="mapinfo_title">
+      <p>测试车辆详情</p>
+      <!-- <img src="../img/map/uparrow.png" alt=""> -->
+    </div>
+    <ul>
+      <li>
+        <span class="label">车辆编号</span>：
+        <span class="vSn"></span>
+      </li>
+      <li>
+        <span class="label">车牌号</span>：
+        <span class="licenseNo"></span>
+      </li>
+      <li>
+        <span class="label">ic卡卡号</span>：
+        <span class="iccard"></span>
+      </li>
+      <li>
+        <span class="label">gps编号</span>：
+        <span class="gpsSN"></span>
+      </li>
+      <li>
+        <span class="label">车型</span>：
+        <span class="vCarType"></span>
+      </li>
+      <li>
+        <span class="label">行驶速度</span>：
+        <span class="speed"></span>
+      </li>
+      <li>
+        <span class="label">驾驶员</span>：
+        <span class="driverName"></span>
+      </li>
+    </ul>
+  </div>
+  <!-- 底部表格 -->
+  <div class="car-info">
+    <div class="car-info-title" id="show">车辆上线统计</div>
+    <div class="table-main">
+      <div class="table-head">
+        <table cellpadding="10" cellspacing="0">
+          <thead>
+            <tr>
+              <th>车辆编号</th>
+              <th>车牌号</th>
+              <th>驾驶员</th>
+              <th>GPS状态</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-body">
+        <table cellpadding="10" cellspacing="0">
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="table-noInfo">
+        <p>没有数据</p>
+      </div>
+    </div>
+
+
+  </div>
+  <script src="http://a.amap.com/jsapi_demos/static/china.js"></script>
+  <script src="../js/zoom.js"></script>
+  <script>
+    var allurl = window.allurl = "";
+    var map = new AMap.Map("container", {
+      resizeEnable: true,
+      center: [105, 34],
+      zoom: 5
+    });
+    // 创建一个 Icon
+    var icon = new AMap.Icon({
+      // 图标尺寸
+      size: new AMap.Size(30, 30),
+      // 图标的取图地址
+      image: '../img/gaodeimg/yellowcar.png',
+      // 图标所用图片大小
+      imageSize: new AMap.Size(30, 30),
+      // 图标取图偏移量
+      imageOffset: new AMap.Pixel(-0, -0)
+    });
+
+    /* ================批量添加标记点================== */
+
+    var cluster = [] // 聚合点
+    var markers = [] // 预添加标记点
+    var mapMarkers = [] // 添加到地图上的标记点
+    var infoWindow = null // 自定义窗体
+    var timer = null // 定时刷新
+    // 获取标记点位置
+    function getMarkers(res) {
+      markers = []
+      for (let i = 0; i < res.length; i++) {
+        var lot = res[i].longitude
+        var lat = res[i].latitude
+        markers.push({
+          position: [lot, lat],
+          icon: icon,
+          angle: res[i].towards,
+          data: res[i]
+        })
+      }
+      if (mapMarkers.length === 0 || mapMarkers.length != markers.length) {
+        addMarkers()
+      } else {
+        resetMarkers()
+      }
+    }
+
+    // 添加标记点
+    function addMarkers() {
+
+      if (markers.length === 0) {
+        return
+      }
+      mapMarkers = []
+      markers.forEach(function (marker) {
+        var mapMarker = new AMap.Marker({
+          map: map,
+          icon: marker.icon,
+          position: [marker.position[0], marker.position[1]],
+          offset: new AMap.Pixel(-15, -15),
+          angle: marker.angle,
+          autoRotation: true
+        });
+        // 添加标记点信息
+        mapMarker.data = marker.data
+
+        // 添加点击事件
+        mapMarker.on('click', function (e) {
+          var data = e.target.data
+          // "<button class='close_info' onClick = 'javascript:infoWindow.close()'>×</button>" +
+          var html =
+            "<div class='main'>" +
+            "<p> 车辆编号： <span style='color:blue'>" + data.vSn + "</span></p>" +
+            // "<p> 车牌号：<span style='color:blue'>" + data.licenseNo + "</span></p>" +
+            // "<p> 车型: <span style='color:blue'>" + data.vCarType + "</span></p>" +
+            // "<p> 驾驶员: <span style='color:blue'>" + data.driverName + "</span></p>" +
+            // "<p> gps编号: <span style='color:blue'>" + data.gpsSN + "</span></p>" +
+            "<p style='color:#aaa;font-size:11px;text-decoration: underline;'>更多信息请查看右侧面板</p>" +
+            "</div>"
+          infoWindow.setContent(html);
+          // infoWindow.open(map, e.lnglat);
+          if (!$('#map_info').data('show')) {
+            $('#map_info').addClass('show').data('show', true)
+          }
+          mapInfo(data)
+        })
+
+        mapMarkers.push(mapMarker)
+
+        infoWindow = new AMap.InfoWindow({
+          isCustom: true, //使用自定义窗体
+          draggable: false, //是否可拖动  
+          offset: new AMap.Pixel(0, -11),
+          content: ""
+        });
+      })
+
+      map.setFitView()
+      addCluster()
+    }
+
+    // 更新标记点位置
+    function resetMarkers() {
+      mapMarkers.forEach((mapMarker, i) => {
+        mapMarker.data = markers[i].data
+        mapMarker.setPosition(markers[i].position)
+        mapMarker.setAngle(markers[i].angle)
+      });
+    }
+
+    // 删除标记点
+    function clearMarkers() {
+      map.clearMap()
+      map.remove(mapMarkers)
+      mapMarkers.forEach(function (mapMarker) {
+        cluster.removeMarker(mapMarker)
+      });
+      mapMarkers = []
+      markers = []
+    }
+
+    // 添加聚合
+    function addCluster() {
+      cluster = new AMap.MarkerClusterer(map, mapMarkers, {
+        gridSize: 30,
+        maxZoom: 16
+      });
+    }
+    // 获取数据
+    function getAllCar() {
+      $.ajax({
+        url: allurl + "/car-management/car/allcar.action",
+        type: "get",
+        dataType: "json",
+        success: function (res) {
+          // console.log(res)
+          if (res.ret == false) {
+            alert(res.msg);
+            return;
+          }
+          getMarkers(carFilter(res))
+          // getMarkers(res)
+        }
+      })
+    }
+
+    getAllCar()
+    timer = setInterval(function () {
+      getAllCar()
+    }, 10000)
+
+    // 搜索
+    function searchCar() {
+      if ($("#suggestId").val() == null || $("#suggestId").val() == "") {
+        alert("车辆编号不能为空");
+        return
+      }
+      $.ajax({
+        "url": allurl + "/car-management/car/carDataByvSn.action?vSn=" + $("#suggestId").val(),
+        "type": "post",
+        "success": function (res) {
+          console.log(res);
+          // 清除聚合标记
+          clearMarkers()
+          // 清除定时器
+          clearInterval(timer)
+          // 添加标记点
+          getMarkers([res])
+          if (!$('#map_info').data('show')) {
+            $('#map_info').addClass('show').data('show', true)
+          }
+
+          mapInfo(res)
+        },
+        "error": function (data) {
+          alert("发生错误");
+        }
+      })
+    }
+    $("#search-btn").click(searchCar);
+
+    function mapInfo(info) {
+      for (const key in info) {
+        if (info.hasOwnProperty(key)) {
+          const item = info[key];
+          $('#map_info').find('.' + key).html(item ? item : '-')
+        }
+      }
+    }
+
+    // 底部数据显示隐藏
+    $('#show').on("click", function () {
+      if ($(this).data('show')) {
+        $(this).parent().removeClass('show');
+        $(this).data('show', false)
+      } else {
+        getListData()
+        $(this).parent().addClass('show');
+        $(this).data('show', true)
+
+      }
+    })
+
+
+    // 地图点击事件
+    var listener = AMap.event.addListener(map, "click", eventHandler);
+
+    function eventHandler(e) {
+      console.log(e)
+      $('#show').parent().removeClass('show');
+      $('#show').data('show', false)
+      $('#map_info').removeClass('show').data('show', false)
+      // infoWindow.close()
+      clearInterval(timer)
+      getAllCar()
+      timer = setInterval(function () {
+        getAllCar()
+      }, 5000)
+    }
+
+
+    // 底部列表数据获取
+    getListData()
+
+    function getListData() {
+      $.ajax({
+        url: allurl + "/car-management/gpscar/gpsOnline.action",
+        type: "get",
+        dataType: "json",
+        success: function (res) {
+          console.log(res)
+          if(res == null || (res != null && res.rows != null && res.rows.length == 0)) {
+            $('.table-noInfo').show().prev().hide()
+            return
+          }
+          $('.table-noInfo').hide().prev().show()
+          updateListView(carFilter(res.rows))
+          // updateListView(res.rows)
+        }
+      })
+    }
+
+    function updateListView(data) {
+      var html = ''
+      data.forEach(item => {
+        html += '<tr>' +
+          '<td>' + item.vSn + '</td>' +
+          '<td>' + item.vPlate + '</td>' +
+          '<td>' + (item.driverName ? item.driverName : '-') + '</td>' +
+          '<td>' + setStatus(item.lastTime) + '</td>' +
+          '</tr>'
+      });
+      $('.table-body table tbody').html('').append(html)
+
+      // 宽度调整
+      var $tbtd = $('.table-body table tbody tr').eq(0).find('td')
+      var $th = $('.table-head table thead tr th')
+      $tbtd.each(function (i) {
+        // console.log($(this).width(), i)
+        $th.eq(i).attr('width', $(this).width())
+      })
+
+    }
+
+    function setStatus(timer) {
+      var date = new Date()
+      var lastTime = new Date(timer).getTime();
+      var nowTime =date.getTime()
+      var nowTimeStart = new Date(date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDay() + ' 00:00:00').getTime()
+      var d = nowTime - nowTimeStart // 
+      var dif = nowTime - lastTime
+      var str = ''
+
+      if (dif< 1000 * 60) {
+        str = '在线'
+      } else if(dif > 1000 * 60 * 60  && dif < d ) {
+        str = '当天在线'
+      } else {
+        var x = parseInt((dif-d)/(1000 * 60 * 60 * 24))
+        if (x < 7) {
+          str = x + '天前在线'
+        } else if (x < 30) {
+          var w = parseInt(x/7)
+          str = w + '周前在线'
+        } else if (x < 365) {
+          var m = new Date().getMonth() - new Date(timer).getMonth()
+          str = m + '月前在线'
+        }
+      }
+      return str
+    }
+
+    // 获取当天上线车辆
+    // getCurOnline()
+    function getCurOnline() {
+      $.ajax({
+        url: allurl + "/car-management/gpscar/currentDayGps.action",
+        type: "get",
+        dataType: "json",
+        success: function (res) {
+          console.log(res)
+        }
+      })
+    }
+
+    // 车辆过滤
+    function carFilter (data) {
+      var roles = JSON.parse(window.localStorage.successUser).data.roles;
+      var isRat = false
+      roles.forEach(item => {
+        if(item.keyWord == 'rat') {
+          isRat = true
+        }
+      });
+
+      var arr = [];
+      if(isRat) {
+        data.forEach(item => {
+          var rgx = new RegExp('京');
+          if(rgx.test(item.vPlate) || rgx.test(item.licenseNo)) {
+            arr.push(item)
+          }
+        });
+      } else {
+        arr = data
+      }
+      return arr
+    }
+  </script>
+</body>
+
+</html>

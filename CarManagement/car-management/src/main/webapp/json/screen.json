@@ -1,0 +1,137 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 204,
+    "complete": 14,
+    "completepercentage": 10,
+    "queuepercentage": 20,
+    "currentpercentage": 70,
+    "current": 11,
+    "queue": 411,
+    "pageBean": {
+        "count": 100,
+        "page": 1,
+        "size": 10,
+        "rows": [{
+                "vSn": "9883-999",
+                "operator": "车辆 0",
+                "applyTime": "2018-01-10",
+                "status": "排队中",
+                "applyPeople": "合法",
+                "approveapplyTime": "雨刮器不动作，检修。",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-809"
+            },
+            {
+                "vSn": "2018-222",
+                "operator": "车辆 10",
+                "applyTime": "2018-01-10",
+                "status": "已完成",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-109"
+            },
+            {
+                "vSn": "2018-224",
+                "operator": "车辆 8",
+                "applyTime": "2018-01-10",
+                "status": "排队中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2016-119"
+            },
+            {
+                "vSn": "2018-465",
+                "operator": "车辆 8",
+                "applyTime": "2018-01-10",
+                "status": "已完成",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-459"
+            },
+            {
+                "vSn": "2018-669",
+                "operator": "车辆 8",
+                "applyTime": "2018-01-10",
+                "status": "排队中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-888"
+            },
+            {
+                "vSn": "2091-222",
+                "operator": "车辆 8",
+                "applyTime": "2018-01-10",
+                "status": "维修中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-555"
+            }, {
+                "vSn": "2091-922",
+                "operator": "车辆 8",
+                "applyTime": "2018-01-10",
+                "status": "维修中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-555"
+            }, {
+                "vSn": 6,
+                "operator": "车辆 6",
+              
+                "applyTime": "2018-01-10",
+                "status": "排队中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-819"
+            },
+            {
+                "vSn": 7,
+                "operator": "车辆 7",
+                "applyTime": "2018-01-10",
+                "status": "排队中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-811"
+            },
+            {
+                "vSn": 8,
+                "operator": "车辆 8",
+                "applyTime": "2018-01-10",
+                "status": "维修中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-855"
+            },
+            {
+                "vSn": "2019-228",
+                "operator": "车辆 9",
+                "applyTime": "2018-01-10",
+                "status": "排队中",
+                "applyPeople": "合法",
+                "approveapplyTime": "2天",
+                "brand": "别克",
+                "fin_park": "维修间",
+                "vsn": "2015-889"
+            }
+        ]
+    }
+}

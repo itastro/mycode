@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/jpa 
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd ">
+	<!-- 自定义filter -->
+	<!-- <bean id="anyRolesAuthorizationFilter" class="com.bailian.car.filter.AnyRolesAuthorizationFilter"></bean> -->
+	<!-- <bean id="anyPermissionsAuthorizationFilter" class="com.bailian.car.filter.AnyPermissionsAuthorizationFilter"></bean> -->
+	<!-- 配置shiro 核心Filter -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- shiro核心安全管理<(‵^′)>接口 -->
+		<property name="securityManager" ref="securityManager"></property>
+		<!-- 要求登录时的连接 未登录时跳转的页面 -->
+		<property name="loginUrl" value="/login.html"></property>
+		<!-- 登录成功时跳转的页面 -->
+		<property name="successUrl" value="/index.htnl"></property>
+		<!-- 认证后没有权限跳转的页面 -->
+		<property name="unauthorizedUrl" value="/unauthorized.html" />
+		<!-- 自定义filter -->
+		<!-- <property name="filters"> <map> <entry key="anyRoles" value-ref="anyRolesAuthorizationFilter" 
+			/> <entry key="anyPerms" value-ref="anyPermissionsAuthorizationFilter" /> 
+			</map> </property> -->
+		<!-- shiro Url控制过滤规则 -->
+		<property name="filterChainDefinitions">
+			<value>
+				<!-- 静态资源允许访问 -->
+				/swagger-ui.*=anon
+				/css/**=anon
+				/js/**=anon
+				/img/**=anon
+				/assets/**=anon
+				/html/**=anon
+				/login.html*=anon
+				/iccard/insert.action=anon
+				/iccard/vehicleBindingcard.action=anon
+				/*/*search*.action=anon
+				/*/*Query*.action*=anon
+				/*/*get*.action*=anon
+				/*/find*.action*=anon
+				/*/query.action*=anon
+				/*/*List.action*=anon
+				/*/screen.action*=anon
+				/*/showMenu.action*=anon
+				/*/all.action*=anon
+				/user/login.action*=anon
+				/user/loginOut.*=logout
+				/**=user
+				<!-- /**=authc -->
+			</value>
+		</property>
+	</bean>
+	<!-- Shiro生命周期处理器 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<!-- 安全管理配置 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="carRealm"></property>
+		<property name="cacheManager" ref="shiroCacheManager" />
+		<property name="rememberMeManager" ref="rememberMeManager" />
+	</bean>
+
+	<!-- 配置 realm -->
+	<bean id="carRealm" class="com.bailian.car.realm.CarRealm">
+		<!-- 缓存区的名字 就是 ehcache.xml 自定义 cache的name -->
+		<property name="authorizationCacheName" value="car" />
+	</bean>
+	<!-- 手动制定cookie -->
+	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg value="rememberMe" />
+		<property name="httpOnly" value="true" />
+		<property name="maxAge" value="604800" /><!-- 7天 -->
+	</bean>
+	<!-- remember管理器 -->
+	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<!--注入自定义cookie(主要是设置寿命, 默认的一年太长) -->
+		<property name="cookie" ref="rememberMeCookie" />
+	</bean>
+	<!-- 开启shiro注解模式 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true"></property>
+	</bean>
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
+</beans>

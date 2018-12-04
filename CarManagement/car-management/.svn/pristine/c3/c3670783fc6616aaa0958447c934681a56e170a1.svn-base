@@ -1,0 +1,775 @@
+package com.bailian.car.service.cars.check.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.cars.car.CarBaseRepository;
+import com.bailian.car.dao.cars.car.CarRepository;
+import com.bailian.car.dao.cars.check.BackCheckRepository;
+import com.bailian.car.dao.cars.check.BomCheckRepository;
+import com.bailian.car.dao.cars.check.ClacyLindersssRepository;
+import com.bailian.car.dao.cars.check.EmsAndBomCheckResultRepository;
+import com.bailian.car.dao.cars.check.HIResultReposity;
+import com.bailian.car.dao.cars.check.PickUpCheckRepository;
+import com.bailian.car.dao.cars.check.ReviewerRepository;
+import com.bailian.car.dao.cars.check.SafeCheckRepository;
+import com.bailian.car.dao.cars.check.SafeCheckResultRepository;
+import com.bailian.car.dao.cars.check.SystemCheckRepository;
+import com.bailian.car.dao.cars.develop.DevelopToolsRecordRepository;
+import com.bailian.car.domain.carcheck.BackCheck;
+import com.bailian.car.domain.carcheck.BomCheck;
+import com.bailian.car.domain.carcheck.ClacyLindersss;
+import com.bailian.car.domain.carcheck.PickUpCheck;
+import com.bailian.car.domain.carcheck.Reviewer;
+import com.bailian.car.domain.carcheck.SafeCheck;
+import com.bailian.car.domain.carcheck.SystemCheck;
+import com.bailian.car.domain.carcheckresult.EmsAndBomCheckResult;
+import com.bailian.car.domain.carcheckresult.HIResult;
+import com.bailian.car.domain.carcheckresult.SafeCheckResult;
+import com.bailian.car.domain.cars.car.Car;
+import com.bailian.car.domain.cars.car.CarBase;
+import com.bailian.car.domain.cars.develop.DevelopToolsRecord;
+import com.bailian.car.exception.ParamException;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.CheckResult;
+import com.bailian.car.param.ReviewerInfo;
+import com.bailian.car.service.cars.check.CarCheckService;
+import com.bailian.car.utils.CarUtils;
+import com.bailian.car.utils.CheckBeanUtils;
+import com.bailian.car.utils.JsonMapper;
+import com.bailian.car.utils.TokenManagerUtils;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@Transactional
+public class CarCheckServiceImpl implements CarCheckService {
+
+	@Autowired
+	private CarBaseRepository carBaseRepository;
+
+	@Autowired
+	private CarRepository carRepository;
+	@Autowired
+	private PickUpCheckRepository pickUpCheckRepository;
+
+	@Autowired
+	private BackCheckRepository backCheckRepository;
+
+	@Autowired
+	private ClacyLindersssRepository clacyLinersssRepository;
+
+	@Autowired
+	private SafeCheckResultRepository safeCheckResultRepository;
+
+	@Autowired
+	private SafeCheckRepository safeCheckRepository;
+
+	@Autowired
+	private ReviewerRepository reviewerRepository;
+	@Autowired
+	private HIResultReposity hIResultReposity;
+	@Autowired
+	private SystemCheckRepository systemCheckRepository;
+	@Autowired
+	private BomCheckRepository bomCheckRepository;
+	@Autowired
+	private EmsAndBomCheckResultRepository emsAndBomCheckResultRepository;
+	@Autowired
+	private DevelopToolsRecordRepository developToolsRecordRepository;
+
+	@RequiresRoles(value = { "admin", "engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData save(PickUpCheck pickUpCheck) {
+		log.info("pickUpCheck:{}", JsonMapper.obj2String(pickUpCheck));
+		if (pickUpCheck == null) {
+			return JsonData.fail("请正确填写点检信息");
+		}
+
+		PickUpCheck check = pickUpCheckRepository.findByvSn(pickUpCheck.getvSn());
+		// check = getPicCheck(pickUpCheck, check);
+
+		if (check != null) {
+			return JsonData.fail("此车已经进行接车点检");
+		}
+
+		pickUpCheck.setPickone(TokenManagerUtils.getNickname());
+		pickUpCheck.setTime(new Date());
+
+		pickUpCheckRepository.save(pickUpCheck);
+		Car car = Car.builder().vSn(pickUpCheck.getvSn()).vin(pickUpCheck.getVin())
+				.engineNumber(pickUpCheck.getEngineNumber()).brandModelone(pickUpCheck.getBrandModelone()).build();
+		car.setCar_status("进行中");
+		car.setUpcheckTime(new Date()); // 设置车辆接车时间
+		car.setUpcheckSubmitTime(new Date());
+
+		CarBase base = carBaseRepository.findByvSn(pickUpCheck.getvSn());
+		if (base == null) {
+			CarBase carBase = new CarBase();
+			carBase.setvSn(pickUpCheck.getvSn());
+			carBaseRepository.save(carBase);
+		}
+
+		carRepository.save(car);
+		return JsonData.success("接车点检成功");
+
+	}
+
+	private PickUpCheck getPicCheck(PickUpCheck pickUpCheck, PickUpCheck check) {
+		if (check != null) {
+			String vSn = this.getvSn(pickUpCheck.getvSn());
+			check = pickUpCheckRepository.findByvSn(vSn);
+			check = getPicCheck(pickUpCheck, check);
+		}
+		return check;
+	}
+
+	@Override
+	public PickUpCheck findByvSn(String vSn) {
+		PickUpCheck pickUpCheck = pickUpCheckRepository.findByvSn(vSn);
+		log.info("pickUpCheck:{}", JsonMapper.obj2String(pickUpCheck));
+		return pickUpCheck;
+	}
+
+	@Override
+	public JsonData update(PickUpCheck pickUpCheck) {
+		log.info("pickUpCheck:{}", JsonMapper.obj2String(pickUpCheck));
+		Integer id = pickUpCheck.getId();
+		if (id == null) {
+			return JsonData.fail("id不能为空");
+		}
+		carRepository.updatePiccheck(pickUpCheck.getvSn(), pickUpCheck.getVin(), pickUpCheck.getEngineNumber(),
+				pickUpCheck.getBrandModelone());
+		pickUpCheckRepository.save(pickUpCheck);
+		return JsonData.success("修改成功");
+	}
+
+
+	
+	
+	@RequiresRoles(value = { "admin", "maintain", "engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData developBackCheck(BackCheck backCheck) {
+		try {
+			String vSn = backCheck.getvSn();
+		   Car car=	carRepository.findByVSn(vSn);
+			log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+			if ("已申请".equals(car.getBackStatus())) {
+				backCheck.setOperate_time(new Date());
+				backCheck.setOperator(TokenManagerUtils.getNickname());
+				car.setBackStatus("已回收");
+				backCheckRepository.save(backCheck);
+				return JsonData.success("研发工具回收成功");
+			}else {
+				return JsonData.success("请进行还车申请");
+			}
+		
+		} catch (Exception e) {
+			throw new PermissionException("研发工具回收失败");
+		}
+	}
+
+	@Override
+	public JsonData applyBack(String[] ids) {
+		try {
+			for (String id : ids) {
+				Car car=	carRepository.findOne(Integer.parseInt(id));
+				car.setBackStatus("已申请");
+				}
+				return JsonData.success("还车申请成功");
+		} catch (Exception e) {
+			return JsonData.fail("还车申请失败");
+		}
+	}
+	
+	
+	@Override
+	public JsonData backCar(String vSn) {
+		if (StringUtils.isBlank(vSn)) {
+			carRepository.updateBackcheck(vSn);
+			return JsonData.fail("车辆编号不能为空");
+		}
+		carRepository.updateBackcheck(vSn);
+		return JsonData.success("还车点检成功");
+	}
+
+	// @RequiresRoles(value = { "admin", "maintain" }, logical = Logical.OR)
+	@Override
+	public BackCheck findBackByvSn(String vSn) {
+		BackCheck backCheck = backCheckRepository.findByvSn(vSn);
+		return backCheck;
+	}
+
+	@RequiresRoles(value = { "admin", "maintain" }, logical = Logical.OR)
+	@Override
+	public JsonData updateBackCheck(BackCheck backCheck) {
+		log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+		Integer id = backCheck.getId();
+		if (id == null) {
+			return JsonData.fail("id不能为空");
+		}
+		backCheck.setBackPerson(TokenManagerUtils.getNickname());
+		carRepository.updateBackchecktime(backCheck.getvSn());
+		
+		backCheckRepository.save(backCheck);
+		
+		boolean b = CheckBeanUtils.isAllFieldNull(backCheck);
+		if (b) {
+			JsonData data = this.backCar(backCheck.getvSn());
+			return data;
+		} else {
+			return JsonData.success("还车点检信息填写成功");
+		}
+	}
+
+	@Override
+	public String getvSn(String vSn) {
+		
+		
+
+		if (StringUtils.isBlank(vSn)) {
+			vSn = CarUtils.getVsn(vSn, true);
+		}
+
+		Car car = carRepository.findByvSn(vSn);
+
+		if (car != null) {
+			vSn = CarUtils.getVsn(vSn, true);
+			vSn = getvSn(vSn);
+		}
+		return vSn;
+	}
+
+	/*
+	 * public String check(String vSn) {
+	 * 
+	 * return getvSn(vSn);
+	 * 
+	 * }
+	 */
+
+	@RequiresRoles(value = { "admin", "maintain","engineer" }, logical = Logical.OR)
+	// 保存车辆缸压
+	@Override
+	public JsonData save(ClacyLindersss clacyLindersss) {
+
+		log.info("clacyLindersss:{}", JsonMapper.obj2String(clacyLindersss));
+		String sn = clacyLindersss.getvSn();
+		Car car = carRepository.findByvSn(sn);
+		if (car == null) {
+			return JsonData.fail("此车不存在");
+		}
+		ClacyLindersss clacyLindersss1 = clacyLinersssRepository.findByvSn(sn);
+		if (clacyLindersss1 != null) {
+			return JsonData.fail("此车已经缸压检查");
+		}
+		clacyLinersssRepository.save(clacyLindersss);
+		return JsonData.success("缸压检查成功");
+	}
+
+	@RequiresRoles(value = { "admin", "maintain","engineer" }, logical = Logical.OR)
+	// 修改车辆缸压
+	@Override
+	public JsonData updateCld(ClacyLindersss clacyLindersss) {
+		log.info("clacyLindersss:{}", JsonMapper.obj2String(clacyLindersss));
+		Integer id = clacyLindersss.getId();
+
+		if (id == null) {
+			return JsonData.fail("ID不能为空");
+		}
+		clacyLinersssRepository.save(clacyLindersss);
+		return JsonData.success("缸压检修改成功");
+	}
+
+	// 车辆缸压查看
+	@Override
+	public ClacyLindersss findCld(String vSn) {
+		// TODO Auto-generated method stub
+		return clacyLinersssRepository.findByvSn(vSn);
+	}
+
+	@RequiresRoles(value = { "admin", "maintenanceManager","safe","maintain","engineer" }, logical = Logical.OR)
+	// 车辆安全检查
+	@Override
+	public JsonData saveSafeCheck(List<SafeCheckResult> safeCheckResult, String vSn) {
+		// String nickname = TokenManagerUtils.getNickname();
+		log.info("safeCheckResult:{}", JsonMapper.obj2String(safeCheckResult));
+		ArrayList<String> exlist = new ArrayList<String>();
+
+		for (SafeCheckResult safeCheckResult2 : safeCheckResult) {
+			if (StringUtils.isNoneBlank(safeCheckResult2.getCheckExplanation())) {
+				exlist.add(safeCheckResult2.getCheckExplanation());
+
+			}
+			if (safeCheckResult2.getUuid() == null) {
+				SafeCheckResult safe = safeCheckResultRepository.findByItemAndVSn(safeCheckResult2.getItem(), vSn);
+				if (safe != null) {
+					continue;
+				}
+				safeCheckResultRepository.save(safeCheckResult2);
+			} else {
+				safeCheckResultRepository.save(safeCheckResult2);
+			}
+
+		}
+		Date date = new Date();
+		SafeCheck safeCheck = safeCheckRepository.findByvSn(vSn); // 查询是否已经安全检查
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn); // 查询审核是否为空
+		if (safeCheck != null) { // 如果检查不为空
+			safeCheck.setCheckPerson(TokenManagerUtils.getNickname()); // 设置检查人
+			safeCheck.setCheckTime(date); // 设置检查时间
+			safeCheckRepository.save(safeCheck); // 保存
+		} else { // 为空 进行创建
+			SafeCheck build = SafeCheck.builder().checkTime(date).checkPerson(TokenManagerUtils.getNickname()).vSn(vSn)
+					.build();
+			log.info("build:{}", JsonMapper.obj2String(build));
+			safeCheckRepository.save(build);
+		}
+
+		if (reviewer != null) { // 查询审核中的安全检查项是否为空
+			reviewer.setSafeCheckPerson(TokenManagerUtils.getNickname());
+		} else { // 如果为空进行创建
+			Reviewer build = Reviewer.builder().safeCheckPerson(TokenManagerUtils.getNickname()).vSn(vSn).build();
+			log.info("build:{}", JsonMapper.obj2String(build));
+			reviewerRepository.save(build);
+		}
+
+		Car car = carRepository.findByVSn(vSn);
+		if (car != null) {
+			car.setSafeCheck("待核对");
+		}
+		return JsonData.success("车辆安全检查/更新成功");
+	}
+
+	@Override
+	public CheckResult findSafeResult(String vSn) {
+		CheckResult safeResult = new CheckResult();
+		List<SafeCheckResult> safeCheckResults = safeCheckResultRepository.findByvSn(vSn);
+		safeResult.setCheckResults(safeCheckResults);
+		SafeCheck safeCheck = safeCheckRepository.findByvSn(vSn);
+		safeResult.setCheck(safeCheck);
+		return safeResult;
+	}
+
+	@RequiresRoles(value = { "admin", "maintenanceManager","safe","maintain","engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData update(List<SafeCheckResult> safeCheckResult, String vSn) {
+		log.info("safeCheckResult:{}", JsonMapper.obj2String(safeCheckResult));
+		// String nickname = TokenManagerUtils.getNickname();
+		safeCheckResultRepository.save(safeCheckResult);
+		SafeCheck safeCheck = safeCheckRepository.findByvSn(vSn);
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn);
+		if (safeCheck == null) {
+			return JsonData.fail("请先进行安全检查");
+		}
+		
+		for (SafeCheckResult sCheckResult : safeCheckResult) {
+			if (StringUtils.isNotBlank(sCheckResult.getCheckExplanation())) {
+				if (StringUtils.isBlank(sCheckResult.getCheckingExplanation())) {
+					return JsonData.fail("有核对项未核对");
+				}
+			}
+		}
+		Date date = new Date(); // 获取当前的时间
+		safeCheck.setCheckingPerson(TokenManagerUtils.getNickname());
+		safeCheck.setCheckingTime(date);
+		safeCheckRepository.save(safeCheck);
+
+		if (reviewer != null) { // 查询审核中的安全检查项是否为空
+			if (reviewer.getSafeCheckPerson() == null) {
+				return JsonData.fail("请先进行安全审核");
+			}
+			reviewer.setSafeCheckingPerson(TokenManagerUtils.getNickname());
+		} else { // 如果为空进行创建
+			Reviewer build = Reviewer.builder().safeCheckingPerson(TokenManagerUtils.getNickname()).vSn(vSn).build();
+			log.info("build:{}", JsonMapper.obj2String(build));
+			reviewerRepository.save(build);
+		}
+
+		Car car = carRepository.findByVSn(vSn);
+		if (car != null) { // 核对后设置安全检查通过
+			car.setSafeCheck("待确认");
+		}
+		return JsonData.success("车辆安全检查核对成功");
+	}
+
+	
+	@Override
+	public JsonData confirmSafe(List<SafeCheckResult> safeCheckResult, String vSn) {
+		log.info("safeCheckResult:{}", JsonMapper.obj2String(safeCheckResult));
+		// String nickname = TokenManagerUtils.getNickname();
+		safeCheckResultRepository.save(safeCheckResult);
+		SafeCheck safeCheck = safeCheckRepository.findByvSn(vSn);
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn);
+		if (safeCheck == null) {
+			return JsonData.fail("请先进行安全检查");
+		}
+		
+		for (SafeCheckResult sCheckResult : safeCheckResult) {
+			if (StringUtils.isNotBlank(sCheckResult.getCheckExplanation())) {
+				if (StringUtils.isBlank(sCheckResult.getConfirmExplanation())) {
+					return JsonData.fail("有确认项未确认");
+				}
+			}
+		}
+		Date date = new Date(); // 获取当前的时间
+		safeCheck.setConfirmPerson(TokenManagerUtils.getNickname());
+		safeCheck.setConfirmTime(date);
+		safeCheckRepository.save(safeCheck);
+
+		if (reviewer != null) { // 查询审核中的安全检查项是否为空
+			if (reviewer.getSafeCheckPerson() == null) {
+				return JsonData.fail("请先进行安全审核");
+			}
+			reviewer.setConfirmPerson(TokenManagerUtils.getNickname());
+		} else { // 如果为空进行创建
+			Reviewer build = Reviewer.builder().confirmPerson(TokenManagerUtils.getNickname()).vSn(vSn).build();
+			log.info("build:{}", JsonMapper.obj2String(build));
+			reviewerRepository.save(build);
+		}
+
+		Car car = carRepository.findByVSn(vSn);
+		if (car != null) { // 安全确认后设置通过
+			car.setSafeCheck("通过");
+			if(StringUtils.isNotBlank(reviewer.getHiCheckingPerson())&&StringUtils.isNotBlank(reviewer.getBomCheckingPerson())) {
+				car.setChecks_status("待审核");
+			}
+			
+		}
+		return JsonData.success("车辆安全检查核对成功");
+	}
+
+	@RequiresRoles(value = { "admin", "maintain","engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData save(List<HIResult> hIResults, String vSn) {
+		log.info("hIResults:{},vSn:{}", JsonMapper.obj2String(hIResults), vSn);
+		try {
+
+			List<HIResult> hIs = hIResultReposity.findByvSn(vSn);
+			if (hIs.size() == 0) {
+				hIResultReposity.save(hIResults);
+			} else {
+				for (HIResult hiResult : hIResults) {
+					if (hiResult.getUuid() == null) {
+						HIResult hi = hIResultReposity.findByvSnAndPitemAndItem(vSn, hiResult.getPitem(),
+								hiResult.getItem());
+						if (hi != null) {
+							continue;
+						}
+						hIResultReposity.save(hiResult);
+					} else {
+						hIResultReposity.save(hiResult);
+					}
+
+				}
+			}
+			// String nickname = TokenManagerUtils.getNickname();
+			Date date = new Date();
+			SystemCheck syscheck = systemCheckRepository.findByvSn(vSn); // 查询是否已经线束检查
+			Reviewer reviewer = reviewerRepository.findByvSn(vSn); // 查询审核是否为空
+			if (syscheck != null) { // 如果检查不为空
+				syscheck.setCheckPerson(TokenManagerUtils.getNickname()); // TODO
+				syscheck.setCheckTime(date);
+				systemCheckRepository.save(syscheck);
+			} else { // 为空 进行创建
+				SystemCheck build = SystemCheck.builder().checkTime(date).checkPerson(TokenManagerUtils.getNickname())
+						.vSn(vSn).build();
+				log.info("build:{}", JsonMapper.obj2String(build));
+				systemCheckRepository.save(build);
+			}
+			if (reviewer != null) { // 查询审核中的线束检查项是否为空
+				reviewer.setHiCheckPerson(TokenManagerUtils.getNickname());
+			} else { // 如果为空进行创建
+				Reviewer build = Reviewer.builder().hiCheckPerson(TokenManagerUtils.getNickname()).vSn(vSn).build();
+				log.info("build:{}", JsonMapper.obj2String(build));
+				reviewerRepository.save(build);
+			}
+
+			Car car = carRepository.findByvSn(vSn);
+			if(car!=null) {
+				car.setHiCheck("待核对");
+			}
+			return JsonData.success("线束检查/更新成功");
+		} catch (Exception e) {
+			throw new PermissionException("线束检查失败");
+		}
+	}
+
+	@RequiresRoles(value = { "admin", "maintain","engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData hiupdate(List<HIResult> hIResult, String vSn) {
+		log.info("hIResult:{},vSn:{}", JsonMapper.obj2String(hIResult), vSn);
+		hIResultReposity.save(hIResult);
+		SystemCheck sysCheck = systemCheckRepository.findByvSn(vSn);
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn);
+		if (sysCheck == null) {
+			return JsonData.fail("请先进行线束检查");
+		}
+		
+		for (HIResult hiResult2 : hIResult) {
+			if (StringUtils.isNotBlank(hiResult2.getCheckExplanation())) {
+				if (StringUtils.isBlank(hiResult2.getCheckingExplanation())) {
+					return JsonData.fail("有核对项未核对");
+				}
+			}
+		}
+		Date date = new Date(); // 获取当前的时间
+		sysCheck.setCheckingPerson(TokenManagerUtils.getNickname());
+		sysCheck.setCheckingTime(date);
+		systemCheckRepository.save(sysCheck);
+
+		if (reviewer != null) { // 查询审核中的安全检查项是否为空
+			if (StringUtils.isBlank(reviewer.getHiCheckPerson())) {
+				return JsonData.fail("请先进行线束审核");
+			}
+			reviewer.setHiCheckingPerson(TokenManagerUtils.getNickname());
+		} else { // 如果为空进行创建
+			Reviewer build = Reviewer.builder().hiCheckingPerson(TokenManagerUtils.getNickname()).vSn(vSn).build();
+			log.info("build:{}", JsonMapper.obj2String(build));
+			reviewerRepository.save(build);
+		}
+		Car car = carRepository.findByvSn(vSn);
+		if(car!=null) {
+			car.setHiCheck("通过");
+
+			if(StringUtils.isNotBlank(reviewer.getHiCheckingPerson())&&StringUtils.isNotBlank(reviewer.getBomCheckingPerson())) {
+				car.setChecks_status("待审核");
+			}
+		}
+		return JsonData.success("线束检查核对成功");
+	}
+
+	@Override
+	public CheckResult findHiResult(String vSn) {
+		CheckResult hiesult = new CheckResult();
+		List<HIResult> hiCheckResults = hIResultReposity.findByvSn(vSn);
+		hiesult.setCheckResults(hiCheckResults);
+		SystemCheck systemCheck = systemCheckRepository.findByvSn(vSn);
+		hiesult.setCheck(systemCheck);
+		return hiesult;
+	}
+
+	@Override
+	public CheckResult findBomResult(String vSn) {
+
+		CheckResult bom = new CheckResult();
+		List<EmsAndBomCheckResult> bomCheckResults = emsAndBomCheckResultRepository.findByvSn(vSn);
+		bom.setCheckResults(bomCheckResults);
+		BomCheck bomCheck = bomCheckRepository.findByvSn(vSn);
+		bom.setCheck(bomCheck);
+		return bom;
+	}
+
+	@RequiresRoles(value = { "admin", "maintain","engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData saveBom(List<EmsAndBomCheckResult> emsAndBomCheckResults, String vSn) {
+		log.info("emsAndBomCheckResults:{},vSn:{}", JsonMapper.obj2String(emsAndBomCheckResults), vSn);
+		try {
+			emsAndBomCheckResultRepository.save(emsAndBomCheckResults);
+			// String nickname = TokenManagerUtils.getNickname();
+			Date date = new Date();
+			BomCheck bomCheck = bomCheckRepository.findByvSn(vSn); // 查询是否已经线束
+			Reviewer reviewer = reviewerRepository.findByvSn(vSn); // 查询审核是否为空
+			if (bomCheck != null) { // 如果检查不为空
+				bomCheck.setCheckPerson(TokenManagerUtils.getNickname()); // TODO
+				bomCheck.setCheckTime(date);
+				bomCheckRepository.save(bomCheck);
+			} else { // 为空 进行创建
+				BomCheck build = BomCheck.builder().checkTime(date).checkPerson(TokenManagerUtils.getNickname())
+						.vSn(vSn).build();
+				log.info("{}:build", build);
+				bomCheckRepository.save(build);
+			}
+			if (reviewer != null) {
+				reviewer.setBomCheckPerson(TokenManagerUtils.getNickname());
+			} else { // 如果为空进行创建
+				Reviewer build = Reviewer.builder().bomCheckPerson(TokenManagerUtils.getNickname()).vSn(vSn).build();
+				log.info("{}:build", build);
+				reviewerRepository.save(build);
+			}
+			return JsonData.success("BOM零部件检查成功");
+		} catch (Exception e) {
+			throw new PermissionException("BOM零部件检查失败");
+		}
+	}
+
+	@RequiresRoles(value = { "admin", "maintain","engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData updateEmsAndBom(List<EmsAndBomCheckResult> emsAndBomCheckResults, String vSn) {
+		log.info("emsAndBomCheckResults:{},vSn:{}", JsonMapper.obj2String(emsAndBomCheckResults), vSn);
+		// String nickname = TokenManagerUtils.getNickname();
+		emsAndBomCheckResultRepository.save(emsAndBomCheckResults);
+		BomCheck bom = bomCheckRepository.findByvSn(vSn);
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn);
+		if (bom == null) {
+			return JsonData.fail("请先进行bom审核");
+		}
+
+		for (EmsAndBomCheckResult bomCheckResult : emsAndBomCheckResults) {
+			if (StringUtils.isNotBlank(bomCheckResult.getCheckExplanation())) {
+				if (StringUtils.isBlank(bomCheckResult.getCheckingExplanation())) {
+					return JsonData.fail("有核对项未核对");
+				}
+			}
+		}
+		Date date = new Date(); // 获取当前的时间
+		bom.setCheckingPerson(TokenManagerUtils.getNickname());
+		bom.setCheckingTime(date);
+		bomCheckRepository.save(bom);
+
+		if (reviewer != null) {
+			// 获取到检查人
+			if (StringUtils.isBlank(reviewer.getBomCheckPerson())) {
+				return JsonData.fail("请先进行bom审核");
+			}
+			reviewer.setBomCheckingPerson(TokenManagerUtils.getNickname());
+		} else { // 如果为空进行创建
+			Reviewer build = Reviewer.builder().bomCheckingPerson(TokenManagerUtils.getNickname()).vSn(vSn).build();
+			log.info("{}:build", build);
+			reviewerRepository.save(build);
+		}
+		
+		Car car = carRepository.findByvSn(vSn);
+		if(car!=null) {
+			if(StringUtils.isNotBlank(reviewer.getHiCheckingPerson())&&StringUtils.isNotBlank(reviewer.getSafeCheckingPerson())) {
+				car.setChecks_status("待审核");
+			}
+		}
+		return JsonData.success("bom核对/核对修改成功");
+	}
+
+	@Override
+	public Reviewer findReview(String vSn) {
+
+		log.info("vSn:{}", vSn);
+		if (StringUtils.isBlank(vSn)) {
+			throw new ParamException("请传入车辆编号");
+		}
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn);
+		return reviewer;
+	}
+
+	@Override
+	public ReviewerInfo getReviewInfo(String vSn) {
+		if (StringUtils.isBlank(vSn)) {
+			throw new ParamException("请选择车辆");
+		}
+		List<DevelopToolsRecord> tools = developToolsRecordRepository.findByvSn(vSn);
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn);
+		BomCheck bomCheck = bomCheckRepository.findByvSn(vSn);
+		SystemCheck systemCheck = systemCheckRepository.findByvSn(vSn);
+		SafeCheck safeCheck = safeCheckRepository.findByvSn(vSn);
+		ReviewerInfo reviewerInfo = new ReviewerInfo();
+		reviewerInfo.setDevelopToolsRecords(tools);
+		// reviewerInfo.setReviewer(reviewer);
+		reviewerInfo.setbCheck(bomCheck);
+		reviewerInfo.setSafeCheck(safeCheck);
+		reviewerInfo.setHiCheck(systemCheck);
+		return reviewerInfo;
+	}
+
+	@RequiresRoles(value = { "admin" })
+	@Override
+	public JsonData doReview(String vSn, String status, String explanation) {
+		if (StringUtils.isBlank(vSn)) {
+			return JsonData.fail("请选择车辆");
+		}
+
+		if (StringUtils.isBlank(status)) {
+			return JsonData.fail("请选择是否通过");
+		}
+		// 查询审核
+		Reviewer reviewer = reviewerRepository.findByvSn(vSn);
+		if (status.equals("是")) {
+			if (reviewer==null) {
+				reviewer =new Reviewer();
+			}
+			reviewer.setReviewerPerson(TokenManagerUtils.getNickname());
+			reviewer.setReviewerTime(new Date());
+			reviewer.setStatus(status);
+			reviewer.setExplanation(explanation);
+			reviewerRepository.save(reviewer);
+			carRepository.updateCheck_s(vSn);
+			carRepository.uodatePassRstatus(vSn);
+			return JsonData.success("审核通过操作成功");
+		} else {
+			reviewer.setReviewerPerson(TokenManagerUtils.getNickname());
+			reviewer.setReviewerTime(new Date());
+			reviewer.setStatus(status);
+			reviewer.setExplanation(explanation);
+			carRepository.updateCheck_s1(vSn);
+			reviewerRepository.save(reviewer);
+			carRepository.uodateNoPassRstatus(vSn);
+			return JsonData.success("不通过审核操作成功");
+		}
+
+	}
+
+	@Override
+	public PageBean<Car> checking(PageQuery pageQuery) {
+		String s="检查中";
+		return page(pageQuery, s);
+	}
+
+	private PageBean<Car> page(PageQuery pageQuery, String s) {
+		
+		Sort sort = new Sort(Direction.DESC, "id");
+		PageBean<Car> pageBean = new PageBean<>();
+		Pageable pageable = new PageRequest(pageQuery.getPage(), pageQuery.getSize(),sort);
+		
+		List<Predicate> ps = new ArrayList<Predicate>();
+
+		
+		Specification<Car> spec = new Specification<Car>() {
+			@Override
+			public Predicate toPredicate(Root<Car> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+						Predicate p1 = cb.equal(root.get("checks_status").as(String.class),
+								s);
+						ps.add(p1);
+				return cb.and(ps.toArray(new Predicate[ps.size()]));
+			}
+		};
+		Page<Car> pagedata = carRepository.findAll(spec, pageable);
+		pageBean.setTotal(pagedata.getTotalElements());
+		pageBean.setRows(pagedata.getContent());
+		return pageBean;
+	}
+
+	@Override
+	public PageBean<Car> waitchecking(PageQuery pageQuery) {
+		String s="待审核";
+		return page(pageQuery, s);
+	}
+
+	@Override
+	public PageBean<Car> completeCheck(PageQuery pageQuery) {
+		String s="已审核";
+		return page(pageQuery, s);
+	}
+
+	
+
+	
+}

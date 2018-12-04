@@ -1,0 +1,86 @@
+package com.bailian.car.domain.carmaintain;
+
+import java.util.Date;  
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+/**
+ * 
+    * @ClassName: Maintenancecoordination
+    * @Description: 维修协调
+    * @author itastro
+    * @date 2018年4月3日
+    *
+ */
+@Entity
+@Table(name = "t_mc")
+public class Maintenancecoordination {
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getWork() {
+		return work;
+	}
+
+	public void setWork(String work) {
+		this.work = work;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Date getFinish_time() {
+		return finish_time;
+	}
+
+	public void setFinish_time(Date finish_time) {
+		this.finish_time = finish_time;
+	}
+
+	public String getFinish_park() {
+		return finish_park;
+	}
+
+	public void setFinish_park(String finish_park) {
+		this.finish_park = finish_park;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+
+	private String work; // 工作内容
+
+	private String operator; // 操作人
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date finish_time; // 完成时间
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String finish_park; // 停放地点
+	@Column(columnDefinition = "varchar(255) default ''")
+	private String remark; // 维修协调员备注
+
+}

@@ -1,0 +1,11 @@
+package com.bailian.car.domain.cars.car;
+
+public class Project {
+	
+	private Integer id;
+	
+	private String projectName;
+	
+	private String project_sn;
+
+}

@@ -1,0 +1,30 @@
+package com.bailian.dao;
+
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import com.bailian.data.domain.Vehicle;
+
+public interface VehicleRepository extends JpaRepository<Vehicle, Integer>, JpaSpecificationExecutor<Vehicle> {
+	int countByvSn(String vSn);
+
+	@Query(value = "SELECT * FROM vehicle", nativeQuery = true)
+	List<Vehicle> allVehicle();
+
+	Vehicle findByvSn(String vSn);
+
+	@Modifying
+	@Query(value = "UPDATE vehicle v SET v.barcode=NULL,v.num=NULL,v.vin=NULL WHERE v.num=?1", nativeQuery = true)
+	void updateVehicle(String num);
+
+	@Query(value = "SELECT * FROM vehicle v WHERE v.vin IS NULL OR v.vin=''", nativeQuery = true)
+	List<Vehicle> findByTerminalIsNull();
+
+	@Query(value = "SELECT * FROM vehicle v WHERE v.vin IS NOT NULL AND  v.vin!=''", nativeQuery = true)
+	List<Vehicle> findByterminalIsNotNull();
+
+	Vehicle findByVin(String vin);
+
+}

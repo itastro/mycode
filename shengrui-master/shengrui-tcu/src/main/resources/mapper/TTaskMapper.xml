@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.shengrui.management.mapper.TTaskMapper">
+    <resultMap id="BaseResultMap" type="cn.shengrui.management.entity.TTask">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="project_id" property="projectId" jdbcType="INTEGER"/>
+        <result column="produced_time" property="producedTime" jdbcType="TIMESTAMP"/>
+        <result column="batch_no" property="batchNo" jdbcType="VARCHAR"/>
+        <result column="batch_number" property="batchNumber" jdbcType="INTEGER"/>
+        <result column="finish_number" property="finishNumber" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="serial_number" property="serialNumber" jdbcType="VARCHAR"/>
+        <result column="cateate_time" property="cateateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="operate_ip" property="operateIp" jdbcType="VARCHAR"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="tcu_software_no" property="tcuSoftwareNo" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, project_id, produced_time, batch_no, batch_number, finish_number, status, serial_number,
+        cateate_time, update_time, operate_ip, operator, name, tcu_software_no
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.shengrui.management.entity.TTaskExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_task
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_task
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_task
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cn.shengrui.management.entity.TTaskExample">
+        delete from t_task
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cn.shengrui.management.entity.TTask">
+        insert into t_task (id, project_id, produced_time,
+        batch_no, batch_number, finish_number,
+        status, serial_number, cateate_time,
+        update_time, operate_ip, operator,
+        name, tcu_software_no)
+        values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{producedTime,jdbcType=TIMESTAMP},
+        #{batchNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=INTEGER}, #{finishNumber,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER}, #{serialNumber,jdbcType=VARCHAR}, #{cateateTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP}, #{operateIp,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR}, #{tcuSoftwareNo,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.shengrui.management.entity.TTask">
+        insert into t_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="projectId != null">
+                project_id,
+            </if>
+            <if test="producedTime != null">
+                produced_time,
+            </if>
+            <if test="batchNo != null">
+                batch_no,
+            </if>
+            <if test="batchNumber != null">
+                batch_number,
+            </if>
+            <if test="finishNumber != null">
+                finish_number,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="serialNumber != null">
+                serial_number,
+            </if>
+            <if test="cateateTime != null">
+                cateate_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="operateIp != null">
+                operate_ip,
+            </if>
+            <if test="operator != null">
+                operator,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="tcuSoftwareNo != null">
+                tcu_software_no,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="producedTime != null">
+                #{producedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batchNo != null">
+                #{batchNo,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                #{batchNumber,jdbcType=INTEGER},
+            </if>
+            <if test="finishNumber != null">
+                #{finishNumber,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="serialNumber != null">
+                #{serialNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cateateTime != null">
+                #{cateateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operateIp != null">
+                #{operateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="tcuSoftwareNo != null">
+                #{tcuSoftwareNo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cn.shengrui.management.entity.TTaskExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_task
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_task
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.projectId != null">
+                project_id = #{record.projectId,jdbcType=INTEGER},
+            </if>
+            <if test="record.producedTime != null">
+                produced_time = #{record.producedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.batchNo != null">
+                batch_no = #{record.batchNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.batchNumber != null">
+                batch_number = #{record.batchNumber,jdbcType=INTEGER},
+            </if>
+            <if test="record.finishNumber != null">
+                finish_number = #{record.finishNumber,jdbcType=INTEGER},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.serialNumber != null">
+                serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cateateTime != null">
+                cateate_time = #{record.cateateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.operateIp != null">
+                operate_ip = #{record.operateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operator != null">
+                operator = #{record.operator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.tcuSoftwareNo != null">
+                tcu_software_no = #{record.tcuSoftwareNo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_task
+        set id = #{record.id,jdbcType=INTEGER},
+        project_id = #{record.projectId,jdbcType=INTEGER},
+        produced_time = #{record.producedTime,jdbcType=TIMESTAMP},
+        batch_no = #{record.batchNo,jdbcType=VARCHAR},
+        batch_number = #{record.batchNumber,jdbcType=INTEGER},
+        finish_number = #{record.finishNumber,jdbcType=INTEGER},
+        status = #{record.status,jdbcType=INTEGER},
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+        cateate_time = #{record.cateateTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        operate_ip = #{record.operateIp,jdbcType=VARCHAR},
+        operator = #{record.operator,jdbcType=VARCHAR},
+        name = #{record.name,jdbcType=VARCHAR},
+        tcu_software_no = #{record.tcuSoftwareNo,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.shengrui.management.entity.TTask">
+        update t_task
+        <set>
+            <if test="projectId != null">
+                project_id = #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="producedTime != null">
+                produced_time = #{producedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batchNo != null">
+                batch_no = #{batchNo,jdbcType=VARCHAR},
+            </if>
+            <if test="batchNumber != null">
+                batch_number = #{batchNumber,jdbcType=INTEGER},
+            </if>
+            <if test="finishNumber != null">
+                finish_number = #{finishNumber,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="serialNumber != null">
+                serial_number = #{serialNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="cateateTime != null">
+                cateate_time = #{cateateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operateIp != null">
+                operate_ip = #{operateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="tcuSoftwareNo != null">
+                tcu_software_no = #{tcuSoftwareNo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.shengrui.management.entity.TTask">
+        update t_task
+        set project_id = #{projectId,jdbcType=INTEGER},
+        produced_time = #{producedTime,jdbcType=TIMESTAMP},
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+        batch_number = #{batchNumber,jdbcType=INTEGER},
+        finish_number = #{finishNumber,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER},
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+        cateate_time = #{cateateTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+        operator = #{operator,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
+        tcu_software_no = #{tcuSoftwareNo,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="pageQuery" resultType="map" parameterType="map">
+        SELECT DISTINCT
+        task.id AS taskId,
+        task.cateate_time createTime,
+        task.produced_time AS producedTime,
+        task.operator AS operator,
+        task.batch_no AS batchNo,
+        task.batch_number AS batchNumber,
+        task.finish_number AS completeNumber,
+        task. status AS status,
+        task.serial_number AS serialNumber,
+        task.tcu_software_no AS tcuSoftwareNo,
+        project.id AS projectId,
+        project. name AS projectName,
+        project.write_parts_no AS writePartsNo,
+        project.label_parts_no AS labelPartsNo,
+        project.customer_barcode_count AS customerBarcodeCount,
+        project.customer_barcode_type AS customerBarcodeType,
+        project.shengrui_script AS shengruiScriptName,
+        project.customer_script AS customerScriptName,
+        tcu.tcu_code AS tcuCode,
+        tcu.boot_version AS bootCode,
+        tcu.supplier AS supplier,
+        tcu.sup_code AS supCode,
+        tcu.type AS tcuType,
+        file. name AS fileName,
+        file.url AS url
+        FROM
+        t_tcu tcu,
+        t_task task,
+        t_project project,
+        t_project_tcu_file tptf,
+        t_file file
+        WHERE
+        task.project_id = project.id
+        AND project.tcu_id = tcu.id
+        AND tptf.tcu_id = project.tcu_id
+        AND tptf.project_id = project.id
+        AND tptf.file_id = file.id
+        AND task. status != 0
+        AND tptf. status!= 0
+        <include refid="queryConditions"></include>
+        ORDER BY
+        createTime DESC
+    </select>
+
+
+    <select id="getCurrentTaskOne" resultType="java.lang.Integer">
+        SELECT
+        task.id AS taskId
+        FROM
+        t_tcu tcu,
+        t_task task,
+        t_project project,
+        t_project_tcu_file tptf,
+        t_file file
+        WHERE
+        task.project_id = project.id
+        AND project.tcu_id = tcu.id
+        AND tptf.tcu_id = project.tcu_id
+        AND tptf.project_id = project.id
+        AND tptf.file_id = file.id
+        AND tptf. status!= 0
+        AND task. status != 0
+        AND task. status != 2
+        AND task. status != 3
+        AND task. finish_number &lt; batch_number
+        ORDER BY
+        task.produced_time ASC LIMIT 1
+    </select>
+
+    <select id="getCurrentTask" resultType="cn.shengrui.param.TaskInfo">
+  SELECT
+	   task.id AS taskId,
+	task.cateate_time createTime,
+	task.produced_time AS producedTime,
+	task.operator AS operator,
+	task.batch_no AS batchNo,
+	task.batch_number AS batchNumber,
+	task.finish_number AS completeNumber,
+	task. status AS status,
+	task.serial_number AS serialNumber,
+	task.tcu_software_no AS  tcuSoftwareNo,
+	project.id AS projectId,
+	project. name AS projectName,
+    project.write_parts_no AS writePartsNo,
+    project.label_parts_no AS labelPartsNo,
+    project.customer_barcode_count AS customerBarcodeCount,
+    project.customer_barcode_type AS customerBarcodeType,
+    project.shengrui_script AS shengruiScriptName,
+    project.customer_script AS customerScriptName,
+	tcu.tcu_code AS tcuCode,
+	tcu.boot_version AS bootCode,
+	tcu.supplier AS supplier,
+	tcu.sup_code AS supCode,
+	tcu.type AS tcuType,
+	tcu.id AS  tcuId,
+	file. name AS fileName,
+	file.url AS url
+FROM
+	t_tcu tcu,
+	t_task task,
+	t_project project,
+	t_project_tcu_file tptf,
+	t_file file
+WHERE
+	task.project_id = project.id
+AND project.tcu_id = tcu.id
+AND tptf.tcu_id = project.tcu_id
+AND tptf.project_id = project.id
+AND tptf.file_id = file.id
+AND tptf. status!= 0
+AND task. status != 0
+AND task. status != 2
+AND task. status != 3
+AND task. finish_number &lt; batch_number
+ORDER BY
+	producedTime ASC LIMIT 1
+
+    </select>
+
+    <select id="selectCurrentDayTask" resultType="map">
+        SELECT id from t_task t WHERE DATE(t.cateate_time)=CURDATE()
+    </select>
+
+    <update id="updateStatusIng" parameterType="java.lang.Integer">
+        UPDATE  t_task SET  status=1 WHERE id=#{taskId}
+    </update>
+
+
+    <update id="updateAllStatusIngToWait">
+        UPDATE  t_task SET  status=4 WHERE status=1
+    </update>
+
+    <sql id="queryConditions">
+
+        <if test="search.tcuCode!=null">
+            AND tcu.tcu_code LIKE "%"#{search.tcuCode}"%"
+        </if>
+
+        <if test="search.option!= null and search.option!='' and search.option=='currentDay'.toString()">
+            AND TO_DAYS(task.cateate_time) =TO_DAYS(NOW())
+        </if>
+
+        <if test="search.option!= null and search.option!='' and search.option =='currentWeek'.toString()">
+            AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt; DATE(task.cateate_time)
+        </if>
+
+        <if test="search.option!= null and search.option!='' and search.option =='currentMonth'.toString()">
+            AND DATE_FORMAT(task.cateate_time, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+        </if>
+
+        <if test="search.option!= null and search.option!='' and search.option =='currentYear'.toString()">
+            AND YEAR(task.cateate_time)=YEAR(NOW())
+        </if>
+
+        <if test="search.pName !=null">
+            AND project.name LIKE "%"#{search.pName}"%"
+        </if>
+
+    </sql>
+</mapper>

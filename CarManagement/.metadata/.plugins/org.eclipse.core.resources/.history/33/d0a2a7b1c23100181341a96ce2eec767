@@ -1,0 +1,138 @@
+package com.bailian.car.service.CarMaintainService.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.dao.CarMaintain.CarMaintainRepository;
+import com.bailian.car.dao.data.CarRepository;
+import com.bailian.car.domain.car.Car;
+import com.bailian.car.domain.car.CarMaintain;
+import com.bailian.car.service.CarMaintainService.CarMaintainService;
+
+@Service
+@Transactional
+public class CarMaintainServiceImpl implements CarMaintainService {
+
+	private static Logger log = LoggerFactory.getLogger(CarMaintainServiceImpl.class);
+	@Autowired
+	private CarMaintainRepository carMaintainRepository;
+	@Autowired
+	private CarRepository carRepository;
+
+	@Override
+	public JsonData create(CarMaintain carMaintain) {
+		if (carMaintain != null) {
+			String sn = carMaintain.getvSn();
+			Car car = carRepository.findByvSn(sn);
+			if (car != null) {
+				car.setCarMaintain(carMaintain);
+				carMaintainRepository.save(carMaintain);
+				carRepository.save(car);
+				return JsonData.success("申请成功");
+			}
+			return JsonData.fail("查无此车");
+		}
+		return JsonData.fail("申请失败");
+	}
+
+	@Override
+	public List<CarMaintain> findAll() {
+		List<CarMaintain> list = carMaintainRepository.findAll();
+		return list;
+	}
+
+	@Override
+	public JsonData edit(CarMaintain carMaintain) {
+		// TODO Auto-generated method stub
+		try {
+			carMaintainRepository.save(carMaintain);
+			return JsonData.success("修改成功");
+		} catch (Exception e) {
+			// throw new CustomException("修改失败");
+			return JsonData.fail("失败");
+		}
+	}
+
+	@Override
+	public CarMaintain findvsn(String vSn) {
+		// TODO Auto-generated method stub
+
+		return carMaintainRepository.findByvSn(vSn);
+	}
+
+	@Override
+	public JsonData update(Integer id, String status) {
+
+		CarMaintain carMaintain = null;
+		if (id != null & StringUtils.isNotEmpty(status)) {
+			carMaintain = carMaintainRepository.findOne(id);
+			if (status.equals("维修申请")) {
+				carMaintain.setStatus("1");
+			} else if (status.equals("正在维修")) {
+				carMaintain.setStatus("2");
+			} else if (status.equals("维修审核")) {
+				carMaintain.setStatus("3");
+			} else if (status.equals("维修完成")) {
+				carMaintain.setStatus("4");
+			}
+			carMaintainRepository.save(carMaintain);
+			return JsonData.success("修改成功");
+		}
+		return JsonData.fail("修改失败 ");
+	}
+
+	@Override
+	public HashMap<String, Object> pegeQuery(Integer page, Integer size, String vSn, String status) {
+		//Sort sort = new Sort(Direction.DESC, "send_time");
+		HashMap<String, Object> result = new HashMap<>();
+		Pageable pageable = new PageRequest(page - 1, size, sort);
+		final List<Predicate> list = new ArrayList<>();
+		
+		Specification<CarMaintain> specification = new Specification<CarMaintain>() {
+			@Override
+			public Predicate toPredicate(Root<CarMaintain> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+				// 根据维修状态
+				if (StringUtils.isNotBlank(status)) {
+					// 维修状态查询
+					Predicate p1 = cb.equal(root.get("status").as(String.class), status);
+					list.add(p1);
+				}
+				// 根据车辆编号
+				if (StringUtils.isNotBlank(vSn)) {
+					Predicate p2 = cb.equal(root.get("vSn").as(String.class), vSn);
+
+					log.info(root.get("vSn").toString());
+					list.add(p2);
+				}
+				return cb.and(list.toArray(new Predicate[list.size()]));
+			}
+		};
+
+		Page<CarMaintain> pageData = carMaintainRepository.findAll(specification, pageable);
+		result.put("total", pageData.getTotalElements());
+		result.put("rows", pageData.getContent());
+
+		return result;
+	}
+}

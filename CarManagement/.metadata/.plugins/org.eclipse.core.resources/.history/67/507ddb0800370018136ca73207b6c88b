@@ -1,0 +1,166 @@
+package com.bailian.car.service.CarMaintainService.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.dao.CarMaintain.CarMaintainApplyRepository;
+import com.bailian.car.dao.CarMaintain.CarMaintainInfoRepository;
+import com.bailian.car.dao.CarMaintain.MaintenancecoordinationRepository;
+import com.bailian.car.dao.data.CarRepository;
+import com.bailian.car.domain.car.Car;
+import com.bailian.car.domain.carmaintain.CarMaintainApply;
+import com.bailian.car.domain.carmaintain.CarMaintainInfo;
+import com.bailian.car.domain.carmaintain.Maintenancecoordination;
+import com.bailian.car.service.CarMaintainService.CarMaintainService;
+
+@Service
+@Transactional
+public class CarMaintainServiceImpl implements CarMaintainService {
+
+	private static Logger log = LoggerFactory.getLogger(CarMaintainServiceImpl.class);
+	@Autowired
+	private CarMaintainApplyRepository carMaintainApplyRepository;
+	@Autowired(required=true)
+	private CarRepository carRepository;
+	@Autowired
+	private MaintenancecoordinationRepository maintenancecoordinationRepository;
+	@Autowired
+	private CarMaintainInfoRepository carMaintainInfoRepository;
+
+	@Override
+	public JsonData create(CarMaintainApply carMaintain) {
+		if (carMaintain != null) {
+			String sn = carMaintain.getvSn();
+			Car car = carRepository.findByvSn(sn);
+			if (car != null) {
+				// String nickname = TokenManagerUtils.getNickname();
+				CarMaintainInfo carMaintainInfo = new CarMaintainInfo();
+				carMaintain.setSendPeople("admin"); // TDDO
+				carMaintainApplyRepository.save(carMaintain);
+				carMaintainInfo.setvSn(carMaintain.getvSn());
+				carMaintainInfo.setCarMaintainApply(carMaintain);
+				carMaintainInfo.setCar(car);
+				carMaintainInfoRepository.save(carMaintainInfo);
+				return JsonData.success("申请成功");
+			}
+			return JsonData.fail("查无此车");
+		}
+		return JsonData.fail("申请失败");
+	}
+
+	@Override
+	public List<CarMaintainApply> findAll() {
+		List<CarMaintainApply> list = carMaintainApplyRepository.findAll();
+		return list;
+	}
+
+	@Override
+	public CarMaintainApply findvsn(String vSn) {
+		// TODO Auto-generated method stub
+
+		return carMaintainApplyRepository.findByvSn(vSn);
+	}
+
+	@Override
+	public HashMap<String, Object> pegeQuery(Integer page, Integer size, String vSn, String status) {
+		// Sort sort = new Sort(Direction.DESC, "send_time");
+		HashMap<String, Object> result = new HashMap<>();
+		Pageable pageable = new PageRequest(page - 1, size);
+		final List<Predicate> list = new ArrayList<>();
+
+		Specification<CarMaintainInfo> specification = new Specification<CarMaintainInfo>() {
+			@Override
+			public Predicate toPredicate(Root<CarMaintainInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+				// 根据维修状态
+				if (StringUtils.isNotBlank(status)) {
+					// 维修状态查询
+					Predicate p1 = cb.equal(root.get("status").as(String.class), status);
+					list.add(p1);
+				}
+				// 根据车辆编号
+				if (StringUtils.isNotBlank(vSn)) {
+					Predicate p2 = cb.equal(root.get("vSn").as(String.class), vSn);
+
+					log.info(root.get("vSn").toString());
+					list.add(p2);
+				}
+				return cb.and(list.toArray(new Predicate[list.size()]));
+			}
+		};
+
+		Page<CarMaintainInfo> pageData = carMaintainInfoRepository.findAll(specification, pageable);
+		result.put("total", pageData.getTotalElements());
+		result.put("rows", pageData.getContent());
+
+		return result;
+	}
+
+	@Override
+	public JsonData save(Integer infoid, Maintenancecoordination maintenancecoordination) {
+		// String nickname = TokenManagerUtils.getNickname();
+		if (infoid != null & maintenancecoordination != null) {
+			maintenancecoordination.setOperator("admin");
+			maintenancecoordinationRepository.save(maintenancecoordination);
+			CarMaintainInfo carMaintainInfo = carMaintainInfoRepository.findOne(infoid);
+			carMaintainInfo.setStatus("2"); // 维修成功
+			carMaintainInfo.setMaintenancecoordination(maintenancecoordination);
+			carMaintainInfoRepository.save(carMaintainInfo);
+			return JsonData.success("填写成功");
+		}
+
+		return JsonData.fail("失败");
+	}
+
+	@Override
+	public JsonData delete(Integer id) {
+		if (id != null) {
+			CarMaintainInfo maintainInfo = carMaintainInfoRepository.findOne(id);
+			maintainInfo.setCar(null);
+			carMaintainInfoRepository.save(maintainInfo);
+			carMaintainInfoRepository.delete(maintainInfo);
+			return JsonData.success("删除成功");
+		}
+
+		return JsonData.fail("删除失败");
+	}
+
+	@Override
+	public CarMaintainInfo edit(Integer id) {
+		CarMaintainInfo findOne = carMaintainInfoRepository.findOne(id);
+		return findOne;
+
+	}
+
+	@Override
+	public JsonData update(Integer id, CarMaintainApply carMaintainApply,
+			Maintenancecoordination maintenancecoordination) {
+		if (id != null) {
+			CarMaintainInfo findOne = carMaintainInfoRepository.findOne(id);
+			carMaintainApplyRepository.save(carMaintainApply);
+			maintenancecoordinationRepository.save(maintenancecoordination);
+
+			findOne.setCarMaintainApply(carMaintainApply);
+			findOne.setMaintenancecoordination(maintenancecoordination);
+			carMaintainInfoRepository.save(findOne);
+			return JsonData.success("更新成功");
+		}
+		return JsonData.fail("更新失败");
+	}
+
+}

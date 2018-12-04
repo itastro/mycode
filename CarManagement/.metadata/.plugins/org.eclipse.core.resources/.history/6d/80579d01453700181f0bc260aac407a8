@@ -1,0 +1,11 @@
+package com.bailian.car.dao.CarMaintain;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import com.bailian.car.domain.carmaintain.CarMaintainInfo;
+
+public interface CarMaintainInfoRepository
+		extends JpaRepository<CarMaintainInfo, Integer>, JpaSpecificationExecutor<CarMaintainInfo> {
+
+}

@@ -1,0 +1,166 @@
+package com.bailian.car.domain.system;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+/**
+ * 
+ * @ClassName: User
+ * @Description: TODO(用户实体)
+ * @author itastro
+ * @date 2018年1月15日
+ *
+ */
+
+@Entity
+@Table(name = "T_USER")
+public class User implements Serializable {
+	private static final long serialVersionUID = -863466514638657592L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false)
+	private Integer id; // 主键
+	@Column(name = "C_USERNAME", nullable = false)
+	private String username; // 用户名
+	@Column(name = "C_PASSWORD", nullable = false)
+	private String password; // 密码
+	@Column(name = "C_TELEPHONE", nullable = false)
+	private String telephone; // 电话
+	@Column(name = "C_EMAIL", nullable = false)
+	private String email; // 邮箱
+
+	@Column(name = "C_STATUS", nullable = false)
+	private int status; // 状态
+
+	@Column(name = "C_REMARK", nullable = false)
+	private String remark; // 备注
+
+	@Column(name = "C_NICKNAME", nullable = false)
+	private String nickname; // 真实姓名
+
+	@Column(name = "C_CREATETIME", nullable = false)
+	private Date createTime; // 创建时间
+
+	@Column(name = "C_OPERATOR", nullable = false)
+	private String operator; // 操作者
+
+	@Column(name = "C_OPERATE_ID", nullable = false)
+	private String operate_id; // 操作者ID
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "T_USER_ROLE", joinColumns = {
+			@JoinColumn(name = "C_USER_ID", referencedColumnName = "C_ID") }, inverseJoinColumns = {
+					@JoinColumn(name = "C_ROLE_ID", referencedColumnName = "C_ID") })
+	private Set<Role> roles = new HashSet<Role>(0); // 角色
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public String getOperate_id() {
+		return operate_id;
+	}
+
+	public void setOperate_id(String operate_id) {
+		this.operate_id = operate_id;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	
+
+}

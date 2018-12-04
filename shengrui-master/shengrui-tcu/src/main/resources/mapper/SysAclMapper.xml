@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.shengrui.system.mapper.SysAclMapper">
+    <resultMap id="BaseResultMap" type="cn.shengrui.system.entity.SysAcl">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="keyword" property="keyword" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="seq" property="seq" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="operate_ip" property="operateIp" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, name, keyword, url, type, status, seq, remark, operator, operate_time, operate_ip
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.shengrui.system.entity.SysAclExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_acl
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_acl
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_acl
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="cn.shengrui.system.entity.SysAclExample">
+        delete from sys_acl
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cn.shengrui.system.entity.SysAcl">
+    insert into sys_acl (id, name, keyword, 
+      url, type, status, 
+      seq, remark, operator, 
+      operate_time, operate_ip)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{keyword,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{seq,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{operateTime,jdbcType=TIMESTAMP}, #{operateIp,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.shengrui.system.entity.SysAcl">
+        insert into sys_acl
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="keyword != null">
+                keyword,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="seq != null">
+                seq,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="operator != null">
+                operator,
+            </if>
+            <if test="operateTime != null">
+                operate_time,
+            </if>
+            <if test="operateIp != null">
+                operate_ip,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="keyword != null">
+                #{keyword,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="seq != null">
+                #{seq,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="operateTime != null">
+                #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operateIp != null">
+                #{operateIp,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cn.shengrui.system.entity.SysAclExample" resultType="java.lang.Integer">
+        select count(*) from sys_acl
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update sys_acl
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.keyword != null">
+                keyword = #{record.keyword,jdbcType=VARCHAR},
+            </if>
+            <if test="record.url != null">
+                url = #{record.url,jdbcType=VARCHAR},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type,jdbcType=INTEGER},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.seq != null">
+                seq = #{record.seq,jdbcType=INTEGER},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operator != null">
+                operator = #{record.operator,jdbcType=VARCHAR},
+            </if>
+            <if test="record.operateTime != null">
+                operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.operateIp != null">
+                operate_ip = #{record.operateIp,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update sys_acl
+        set id = #{record.id,jdbcType=INTEGER},
+        name = #{record.name,jdbcType=VARCHAR},
+        keyword = #{record.keyword,jdbcType=VARCHAR},
+        url = #{record.url,jdbcType=VARCHAR},
+        type = #{record.type,jdbcType=INTEGER},
+        status = #{record.status,jdbcType=INTEGER},
+        seq = #{record.seq,jdbcType=INTEGER},
+        remark = #{record.remark,jdbcType=VARCHAR},
+        operator = #{record.operator,jdbcType=VARCHAR},
+        operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+        operate_ip = #{record.operateIp,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.shengrui.system.entity.SysAcl">
+        update sys_acl
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="seq != null">
+                seq = #{seq,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                operator = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="operateTime != null">
+                operate_time = #{operateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operateIp != null">
+                operate_ip = #{operateIp,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.shengrui.system.entity.SysAcl">
+    update sys_acl
+    set name = #{name,jdbcType=VARCHAR},
+      keyword = #{keyword,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      seq = #{seq,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      operate_ip = #{operateIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="pageQuery" resultMap="BaseResultMap" parameterType="map">
+        SELECT *
+        from
+        sys_acl
+        WHERE
+
+        status!=0
+        <include refid="queryConditions"></include>
+
+        ORDER BY operate_time DESC
+
+    </select>
+
+    <sql id="queryConditions">
+
+        <if test="search.name !=null">
+            AND name LIKE "%"#{search.name}"%"
+        </if>
+
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+       SELECT  * FROM  sys_acl WHERE status!=0
+    </select>
+
+    <select id="findAllId" resultType="int">
+        SELECT id FROM  sys_acl WHERE status!=0
+    </select>
+
+    <select id="countByAclIdAndKeywordAndName" resultType="int" parameterType="map">
+
+        SELECT COUNT(*) from sys_acl
+        WHERE
+        name=#{name}
+        AND
+        keyword=#{keyword}
+        <if test="aclId !=null">
+            AND id=#{aclId}
+        </if>
+    </select>
+
+    <update id="updateDelete" parameterType="int">
+       UPDATE sys_acl SET status=0 WHERE id=#{id}
+   </update>
+
+</mapper>

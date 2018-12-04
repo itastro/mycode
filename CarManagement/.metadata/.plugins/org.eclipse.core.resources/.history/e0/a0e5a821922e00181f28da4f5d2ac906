@@ -1,0 +1,78 @@
+package com.bailian.car.domain.carcheck;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "T_CAR_CHECK_ITEM")
+public class CarCheckItem implements Serializable{
+	    
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+	@Column(name = "ITEM_NAME")
+	private String name; // 检查项目名称
+
+	@ManyToOne
+	@JoinColumn(name = "P_ID")
+	private CarCheckParentItem carCheckParentItem;
+
+	@OneToOne
+	@JoinColumn(name = "RQ_ID") // 检查要求
+	private CarCheckRequest carCheckRequest;
+	@OneToOne
+	@JoinColumn(name = "RE_ID") // 检查结果
+	private CarCheckResult carCheckResult;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public CarCheckParentItem getCarCheckParentItem() {
+		return carCheckParentItem;
+	}
+
+	public void setCarCheckParentItem(CarCheckParentItem carCheckParentItem) {
+		this.carCheckParentItem = carCheckParentItem;
+	}
+
+	public CarCheckRequest getCarCheckRequest() {
+		return carCheckRequest;
+	}
+
+	public void setCarCheckRequest(CarCheckRequest carCheckRequest) {
+		this.carCheckRequest = carCheckRequest;
+	}
+
+	public CarCheckResult getCarCheckResult() {
+		return carCheckResult;
+	}
+
+	public void setCarCheckResult(CarCheckResult carCheckResult) {
+		this.carCheckResult = carCheckResult;
+	}
+
+}

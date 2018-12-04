@@ -1,0 +1,5 @@
+package com.bailian.car.domain.carmaintain;
+
+public class CarMaintain {
+
+}

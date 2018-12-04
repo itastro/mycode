@@ -1,0 +1,229 @@
+package com.bailian.car.aop;
+
+import java.lang.reflect.Method;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.bailian.car.annotation.SystemLog;
+import com.bailian.car.domain.Log.SysLog;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.emnu.OperationType;
+import com.bailian.car.service.log.LogService;
+import com.bailian.car.utils.JsonUtils;
+import com.bailian.car.utils.TokenManagerUtils;
+
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 
+    * @ClassName: LogAspect
+    * @Description: 日志记录
+    * @author itastro
+    * @date 2018年2月2日
+    *
+ */
+@Slf4j
+@Aspect
+public class LogAspect {
+
+	// 获取开始时间
+	private long BEGIN_TIME;
+	// 获取结束时间
+	private long END_TIME;
+	// 定义本次Log实体
+	private SysLog slog = new SysLog();
+	@Autowired
+	private LogService systemLogService; // 用来将日志信息保存到数据库
+
+	@Autowired(required = false)
+	private HttpServletRequest request;
+
+	private static Logger log = LoggerFactory.getLogger(LogAspect.class);
+
+	@Pointcut(("execution(* com.bailian.car.controller..*..*(..))"))
+	private void ControllerAspect() {
+
+	}
+
+	@Around("ControllerAspect()")
+	public Object around(ProceedingJoinPoint pjp) throws Throwable {
+		Object obj = null;
+		Method method = this.getMethod(pjp);
+
+		if (method != null) {
+
+			if (method.isAnnotationPresent(SystemLog.class)) {
+				BEGIN_TIME = System.currentTimeMillis();
+				User user = TokenManagerUtils.getToken();
+				try {
+					obj = pjp.proceed();
+					END_TIME = System.currentTimeMillis();
+					SysLog sysLog = new SysLog();
+					sysLog.setCreateTime(new Date());
+					sysLog.setDescription("执行成功");
+					sysLog.setException("");
+					sysLog.setParams(this.getServiceMthodParams(pjp));
+					log.info(this.getServiceMthodParams(pjp));
+					sysLog.setMethod(this.getControllerMethod(pjp));
+					log.info(this.getControllerMethod(pjp));
+					sysLog.setModule(this.getControllerMoudle(pjp));
+					log.info(this.getControllerMoudle(pjp));
+					sysLog.setOperate_ip(request.getRemoteAddr());
+					log.info(request.getRemoteAddr());
+					if (user != null) {
+						sysLog.setOperator(user.getNickname());
+					}
+					sysLog.setMethodType(this.getControllerType(pjp).toString());
+					sysLog.setRequestMethod(request.getMethod());
+					log.info(request.getMethod());
+					sysLog.setRequestUrl(request.getRequestURI());
+					log.info(request.getRequestURI());
+					sysLog.setRsponse_date("时间" + (BEGIN_TIME - END_TIME));
+					systemLogService.saveLog(sysLog);
+				} catch (Exception e) {
+					// TODO: handle exception
+					obj = pjp.proceed();
+					END_TIME = System.currentTimeMillis();
+					SysLog sysLog = new SysLog();
+					sysLog.setCreateTime(new Date());
+					sysLog.setDescription("执行成功");
+					sysLog.setException(e.getMessage());
+					sysLog.setParams(this.getServiceMthodParams(pjp));
+					sysLog.setMethod(this.getControllerMethod(pjp));
+					sysLog.setModule(this.getControllerMoudle(pjp));
+					sysLog.setOperate_ip(request.getRemoteAddr());
+					if (user != null) {
+						sysLog.setOperator(user.getNickname());
+					}
+					sysLog.setRequestMethod(request.getMethod());
+					sysLog.setRequestUrl(request.getRequestURI());
+					sysLog.setRsponse_date("时间" + (BEGIN_TIME - END_TIME));
+					systemLogService.saveLog(sysLog);
+				} finally {
+					obj = pjp.proceed();
+				}
+			} else {
+				obj = pjp.proceed();
+			}
+		} else {
+			obj = pjp.proceed();
+		}
+		return obj;
+	}
+
+	// 获取方法的参数
+	private String getServiceMthodParams(JoinPoint joinPoint) {
+		String params = "";
+		Object[] arguments = joinPoint.getArgs();
+		if (arguments.length == 0) {
+			return params;
+		}
+		params = JsonUtils.objectToJson(arguments);
+		return params;
+	}
+
+	// 获取模块名称
+	private String getControllerMoudle(JoinPoint joinPoint) throws Exception {
+		String targetName = joinPoint.getTarget().getClass().getName();
+		String methodName = joinPoint.getSignature().getName();
+		Object[] arguments = joinPoint.getArgs();
+		Class targetClass = Class.forName(targetName);
+		Method[] methods = targetClass.getMethods();
+		String moudle = "";
+		for (Method method : methods) {
+			if (method.getName().equals(methodName)) {
+				Class[] clazzs = method.getParameterTypes();
+				if (clazzs.length == arguments.length) {
+					moudle = method.getAnnotation(SystemLog.class).medoule();
+					break;
+				}
+			}
+		}
+		return moudle;
+	}
+
+	// 获取方法名称
+	private String getControllerMethod(JoinPoint joinPoint) throws Exception {
+		String targetName = joinPoint.getTarget().getClass().getName();
+		String methodName = joinPoint.getSignature().getName();
+		Object[] arguments = joinPoint.getArgs();
+		Class targetClass = Class.forName(targetName);
+		Method[] methods = targetClass.getMethods();
+		String meth = "";
+		for (Method method : methods) {
+			if (method.getName().equals(methodName)) {
+				Class[] clazzs = method.getParameterTypes();
+				if (clazzs.length == arguments.length) {
+					meth = method.getAnnotation(SystemLog.class).methods();
+					break;
+				}
+			}
+		}
+		return meth;
+	}
+
+	// 获取操作类型
+	private OperationType getControllerType(JoinPoint joinPoint) throws Exception {
+		String targetName = joinPoint.getTarget().getClass().getName();
+		String methodName = joinPoint.getSignature().getName();
+		Object[] arguments = joinPoint.getArgs();
+		Class targetClass = Class.forName(targetName);
+		Method[] methods = targetClass.getMethods();
+		OperationType type = null;
+		for (Method method : methods) {
+			if (method.getName().equals(methodName)) {
+				Class[] clazzs = method.getParameterTypes();
+				if (clazzs.length == arguments.length) {
+					type = method.getAnnotation(SystemLog.class).type();
+					
+					type.g
+					break;
+				}
+			}
+		}
+		return type;
+	}
+
+	// 获取拦截到的方法
+	public Method getMethod(JoinPoint joinPoint) {
+		// 拦截实体类，就是当前正在执行Controller
+		Object target = joinPoint.getTarget();
+		// 拦截方法的名称 ，当前正在执行的方法
+		String methodName = joinPoint.getSignature().getName();
+		// 拦截方法的参数类型
+		Signature sig = joinPoint.getSignature();
+
+		MethodSignature msig = null;
+
+		if (!(sig instanceof MethodSignature)) {
+			throw new IllegalArgumentException("该注解只能用于方法");
+		}
+		msig = (MethodSignature) sig;
+		Class[] parameterTypes = msig.getMethod().getParameterTypes(); // 获取方法的参数类型
+		// 获得被拦截的方法
+		Method method = null;
+		try {
+			method = target.getClass().getMethod(methodName, parameterTypes);
+			return method;
+		} catch (NoSuchMethodException e1) {
+			// TODO: handle exception
+			e1.printStackTrace();
+		} catch (SecurityException e1) {
+			// TODO: handle exception
+			e1.printStackTrace();
+		}
+		return method;
+	}
+}

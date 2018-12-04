@@ -1,0 +1,11 @@
+package com.bailian.car.dao.cars.check;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.bailian.car.domain.carcheck.Reviewer;
+
+public interface ReviewerRepository extends JpaRepository<Reviewer, Integer>{
+
+	Reviewer findByvSn(String vSn);
+
+}

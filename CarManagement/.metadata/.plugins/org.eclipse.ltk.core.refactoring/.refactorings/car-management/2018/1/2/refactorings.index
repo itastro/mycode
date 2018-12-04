@@ -1,0 +1,7 @@
+1515640568461	Rename resource 'WEB-APP'
+1515645356171	Move 'db.properties' to 'properties'
+1515649035584	Rename resource 'springmvc.xml'
+1515726118100	Rename type 'JsonMapper'
+1515726448525	Extract local variable 't'
+1515726589603	Infer generic type arguments
+1515727572837	Rename type 'TaotaoResult'

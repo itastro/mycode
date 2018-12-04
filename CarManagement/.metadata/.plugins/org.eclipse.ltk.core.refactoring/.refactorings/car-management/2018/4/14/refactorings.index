@@ -1,0 +1,11 @@
+1522560054147	Extract method 'S'
+1522649004562	Extract method 'Copy'
+1522668022349	Rename package 'com.bailian.car.dao.data'
+1522720484574	Rename type 'CarMaintainRepository'
+1522731024339	Rename package 'com.bailian.car.dao.cardata'
+1522738678665	Copy file
+1522806826043	Rename package 'com.bailian.car.service.CarMaintainService'
+1522806840019	Rename package 'com.bailian.car.service.CarMaintainService.impl'
+1522995501606	Delete element
+1522996088524	Delete element
+1523106167311	Copy file

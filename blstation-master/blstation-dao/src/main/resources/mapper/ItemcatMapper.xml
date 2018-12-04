@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bl.station.mapper.ItemcatMapper">
+    <resultMap id="BaseResultMap" type="com.bl.station.entity.Itemcat">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="level" property="level" jdbcType="VARCHAR"/>
+        <result column="seq" property="seq" jdbcType="INTEGER"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="iconurl" property="iconurl" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, name, remark, parent_id, level, seq, createtime, iconurl
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bl.station.entity.ItemcatExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from itemcat
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from itemcat
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from itemcat
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.bl.station.entity.ItemcatExample">
+        delete from itemcat
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.bl.station.entity.Itemcat">
+    insert into itemcat (id, name, remark, 
+      parent_id, level, seq, 
+      createtime, iconurl)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=INTEGER}, #{level,jdbcType=VARCHAR}, #{seq,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{iconurl,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.bl.station.entity.Itemcat">
+        insert into itemcat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="seq != null">
+                seq,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+            <if test="iconurl != null">
+                iconurl,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="seq != null">
+                #{seq,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="iconurl != null">
+                #{iconurl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.bl.station.entity.ItemcatExample" resultType="java.lang.Integer">
+        select count(*) from itemcat
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update itemcat
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.parentId != null">
+                parent_id = #{record.parentId,jdbcType=INTEGER},
+            </if>
+            <if test="record.level != null">
+                level = #{record.level,jdbcType=VARCHAR},
+            </if>
+            <if test="record.seq != null">
+                seq = #{record.seq,jdbcType=INTEGER},
+            </if>
+            <if test="record.createtime != null">
+                createtime = #{record.createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.iconurl != null">
+                iconurl = #{record.iconurl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update itemcat
+        set id = #{record.id,jdbcType=INTEGER},
+        name = #{record.name,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR},
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+        level = #{record.level,jdbcType=VARCHAR},
+        seq = #{record.seq,jdbcType=INTEGER},
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+        iconurl = #{record.iconurl,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bl.station.entity.Itemcat">
+        update itemcat
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="seq != null">
+                seq = #{seq,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="iconurl != null">
+                iconurl = #{iconurl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bl.station.entity.Itemcat">
+    update itemcat
+    set name = #{name,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      level = #{level,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      iconurl = #{iconurl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <!-- 查询当前分类是否存在-->
+
+
+    <select id="countByNameAndParentId" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM itemcat WHERE name=#{name}
+
+        AND parent_id=#{parentId}
+
+
+        <if test="id !=null ">
+            AND id !=#{id}
+        </if>
+    </select>
+
+
+    <select id="getAllItemCat" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from itemcat
+    </select>
+
+    <!-- 批量更新 -->
+    <update id="batchUpdateLevel" parameterType="map">
+        <foreach collection="itemcatListList" item="itemcat" separator=";">
+            UPDATE itemcat SET level=#{itemcat.level} WHERE id=#{itemcat.id}
+        </foreach>
+
+    </update>
+
+    <select id="getChildItemCatListByLevel" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from itemcat
+        WHERE level like #{level} || '.%'
+    </select>
+
+    <select id="findItemCatById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+     id, name
+    from itemcat where id = #{id,jdbcType=INTEGER}
+
+  </select>
+</mapper>

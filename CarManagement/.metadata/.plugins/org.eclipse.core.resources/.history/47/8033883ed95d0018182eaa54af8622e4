@@ -1,0 +1,282 @@
+package com.bailian.car.controller.cars.check;
+
+import java.io.IOException;
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import com.bailian.car.annotation.SystemLog;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.cars.car.CarRepository;
+import com.bailian.car.domain.carcheck.*;
+import com.bailian.car.domain.carcheckresult.EmsAndBomCheckResult;
+import com.bailian.car.domain.carcheckresult.HIResult;
+import com.bailian.car.domain.carcheckresult.SafeCheckResult;
+import com.bailian.car.domain.cars.car.Car;
+import com.bailian.car.emnu.OperationType;
+import com.bailian.car.service.cars.check.CarCheckService;
+import com.bailian.car.utils.BeanValidator;
+import com.bailian.car.utils.CarUtils;
+import com.bailian.car.utils.JsonMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/car")
+@Scope("prototype")
+public class CarCheckController {
+	@Autowired
+	private CarCheckService carCheckService;
+	@Autowired
+	private CarRepository carRepository;
+
+	// 生成车辆编号
+	@RequestMapping("/getvSn.action")
+	@ResponseBody
+	public String getvSn() {
+
+		String vSn = carRepository.getvSn();
+
+		Car car = carRepository.findByvSn(vSn);
+		if (car != null) {
+			vSn = CarUtils.getVsn(vSn, true);
+
+		}
+		return vSn;
+
+	}
+
+	// 递归
+	/*
+	 * private String checkvSn(String vSn) {
+	 * 
+	 * 
+	 * }
+	 */
+
+	// 接车点检
+	@RequestMapping("/upcheck.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "添加接车点检")
+	@ResponseBody
+	public JsonData upcheck(PickUpCheck pickUpCheck) {
+		BeanValidator.check(pickUpCheck);
+
+		return carCheckService.save(pickUpCheck);
+	}
+
+	// 查询接车点检
+	@RequestMapping("/findUpcheck.action")
+	@ResponseBody
+	public PickUpCheck findUpcheck(String vSn) {
+		log.info("vSn:{}", vSn);
+		return carCheckService.findByvSn(vSn);
+
+	}
+
+	// 修改接车点检信息
+	@RequestMapping("/updateUpcheck.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "修改接车点检")
+	@ResponseBody
+	public JsonData updateUpcheck(PickUpCheck pickUpCheck) {
+
+		log.info("pickUpCheck:{}", JsonMapper.obj2String(pickUpCheck));
+		BeanValidator.check(pickUpCheck);
+
+		return carCheckService.update(pickUpCheck);
+
+	}
+
+	// 还车点检
+	@RequestMapping("/backCheck.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "添加还车点检")
+	@ResponseBody
+	public JsonData backCheck(BackCheck backCheck) {
+		log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+		BeanValidator.check(backCheck);
+		return carCheckService.backCheck(backCheck);
+
+	}
+
+	// 查询还车点检
+	@RequestMapping("/findBackcheck.action")
+	@ResponseBody
+	public BackCheck findBackcheck(String vSn) {
+
+		log.info("vSn:{}", vSn);
+
+		BackCheck backCheck = carCheckService.findBackByvSn(vSn);
+
+		log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+		return backCheck;
+	}
+
+	// 修改还车点检
+	@RequestMapping("/updateBackcheck.action")
+	@ResponseBody
+
+	public JsonData updateBackCheck(BackCheck backCheck) {
+		log.info("backCheck:{}", JsonMapper.obj2String(backCheck));
+		BeanValidator.check(backCheck);
+
+		return carCheckService.updateBackCheck(backCheck);
+
+	}
+
+	// 车辆缸压 的添加
+	@RequestMapping("/saveClacyLindersss.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "车辆缸压添加")
+	@ResponseBody
+	public JsonData addClacyLindersss(ClacyLindersss clacyLindersss, String vSn) {
+		return null;
+	}
+
+	// 车辆缸压检查查看ClacyLindersss
+
+	@RequestMapping("/findCldCheckByCar/{vSn}.action")
+	@ResponseBody
+	public ClacyLindersss findCldCheckByCar(@PathVariable String vSn) {
+		return null;
+	}
+
+	// 车辆缸压检查修改
+	@RequestMapping("/updateCldCheckByCar/{vSn}.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "车辆缸压修改")
+	@ResponseBody
+	public JsonData updateCldCheckByCar(@PathVariable String vSn, ClacyLindersss clacyLindersss) {
+		return null;
+	}
+
+	// 车辆安全检查
+	@RequestMapping("/addSafeCheck/{vSn}.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "添加车辆安全检查")
+	@ResponseBody
+	public JsonData addSafeCheck(@PathVariable String vSn, @RequestBody List<SafeCheckResult> safeCheckResult)
+			throws JsonProcessingException, JsonMappingException, IOException {
+
+		return null;
+
+	}
+
+	// 车辆安全检查查看
+	@RequestMapping("/findSafeCheckByCar/{vSn}.action")
+	@ResponseBody
+	public List<SafeCheckResult> findSafeCheckByCar(@PathVariable String vSn) {
+		return null;
+	}
+
+	// 车辆安全检查修改
+
+	@RequestMapping("/updateSafeCheckByCar/{vSn}.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "车辆安全检查修改")
+	@ResponseBody
+	public JsonData updateSafeCheckByCar(@PathVariable String vSn, @RequestBody List<SafeCheckResult> safeCheckResult) {
+		return null;
+	}
+
+	// 线束检查
+	@RequestMapping("/addHiCheck/{vSn}.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "添加线束检查")
+	@ResponseBody
+	public JsonData addHiCheck(@PathVariable String vSn, @RequestBody List<HIResult> HIResults) {
+
+		return null;
+
+	}
+
+	// 线束检查修改
+	@RequestMapping("/updateHiCheckByCar/{vSn}.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "修改线束检查")
+	@ResponseBody
+	public JsonData updateHiCheckByCar(@PathVariable String vSn, @RequestBody List<HIResult> HIResult) {
+		return null;
+	}
+
+	// 车辆线束检查查看
+	@RequestMapping("/findHiCheckByCar/{vSn}.action")
+	@ResponseBody
+	public List<HIResult> findHiCheckByCar(@PathVariable String vSn) {
+		return null;
+	}
+
+	// bom零部件检查
+	@RequestMapping("/addEmsAndBomCheck/{vSn}.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "添加bom零部件")
+	@ResponseBody
+	public JsonData addEmsAndBomCheck(@PathVariable String vSn,
+			@RequestBody List<EmsAndBomCheckResult> emsAndBomCheckResults) {
+		return null;
+	}
+
+	// 查看车辆Bom零部件检查
+	@RequestMapping("/findEmsAndBomCheckByCar/{vSn}.action")
+
+	@ResponseBody
+	public List<EmsAndBomCheckResult> findEmsAndBomCheckByCar(@PathVariable String vSn) {
+
+		return null;
+
+	}
+
+	@RequestMapping("/updateEmsAndBomCheckByCar/{vSn}.action")
+	@SystemLog(type = OperationType.ADD, medoule = "车辆管理", methods = "修改bom零部件")
+	@ResponseBody
+	public JsonData updateEmsAndBomCheckByCar(@PathVariable String vSn,
+			@RequestBody List<EmsAndBomCheckResult> emsAndBomCheckResults) {
+
+		return null;
+
+	}
+
+	// 查询未通过审核车辆
+	@RequestMapping("/findNotPassReview.action")
+	@ResponseBody
+	public List<CarCheckResultInfo> findNotPassReview() {
+
+		return null;
+
+	}
+
+	@RequestMapping("/findWaitReviewCar.action")
+	@ResponseBody
+	// 查询待审核车辆
+	public List<CarCheckResultInfo> waitReviewCar() {
+
+		return null;
+	}
+	// 查询审核通过车辆
+
+	@RequestMapping("/findPassReview.action")
+	@ResponseBody
+	public List<CarCheckResultInfo> findPassReview() {
+		return null;
+
+	}
+
+	// 审核通过
+	@RequestMapping("/passReview.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "通过审核")
+	@ResponseBody
+	public JsonData PassReview(@RequestBody CarCheckResultInfo carCheckResultInfo) {
+		return null;
+	}
+
+	// 不通过审核
+	@RequestMapping("/notPassReview.action")
+	@SystemLog(type = OperationType.UPDATE, medoule = "车辆管理", methods = "不通过审核")
+	@ResponseBody
+	public JsonData notPassReview(@RequestBody CarCheckResultInfo carCheckResultInfo) {
+		return null;
+	}
+
+	// 删除审核列表
+	@RequestMapping("/deleteReview.action")
+	@SystemLog(type = OperationType.DELETE, medoule = "车辆管理", methods = "删除审核")
+	@ResponseBody
+	public JsonData deleteReview(String[] ids) {
+		return null;
+	}
+}

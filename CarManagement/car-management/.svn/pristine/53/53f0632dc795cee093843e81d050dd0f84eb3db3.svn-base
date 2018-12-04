@@ -1,0 +1,432 @@
+package com.bailian.car.service.CarMaintain.impl;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.CarMaintain.CarMaintainRepository;
+import com.bailian.car.dao.CarMaintain.EmployeeRepository;
+import com.bailian.car.dao.CarMaintain.ScreenRepository;
+import com.bailian.car.dao.system.UserRepository;
+import com.bailian.car.domain.carmaintain.CarMaintain;
+import com.bailian.car.domain.carmaintain.Employee;
+import com.bailian.car.domain.carmaintain.Screen;
+import com.bailian.car.domain.system.Role;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.param.CarmaintainApply;
+import com.bailian.car.param.CarmaintainAssign;
+import com.bailian.car.param.CarmaintainComplete;
+import com.bailian.car.param.MaintainQueryParam;
+import com.bailian.car.param.ScreenResult;
+import com.bailian.car.service.CarMaintain.CarMaintainService;
+import com.bailian.car.utils.DateUtils;
+import com.bailian.car.utils.JsonMapper;
+import com.bailian.car.utils.TokenManagerUtils;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Transactional
+@Slf4j
+public class CarMaintainServiceImpl implements CarMaintainService {
+	@Autowired
+	private CarMaintainRepository carMaintainRepository;
+
+	@Autowired
+	private ScreenRepository screenRepository;
+
+	@Autowired
+	private EmployeeRepository employeeRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@RequiresRoles(value = { "admin", "engineer" }, logical = Logical.OR)
+	@Override
+	public JsonData apply(CarmaintainApply carmaintainApply) {
+
+		// String nickname = TokenManagerUtils.getNickname();
+		log.info("carmaintainApply:{}", JsonMapper.obj2String(carmaintainApply));
+
+		CarMaintain carMaintain = CarMaintain.builder().vSn(carmaintainApply.getVSn())
+				.send_park(carmaintainApply.getSend_park()).workContent(carmaintainApply.getItem())
+				.applyRemark(carmaintainApply.getApplyRemark()).applyTEL(carmaintainApply.getApplyTEL())
+				.item(carmaintainApply.getItem()).build();
+
+		carMaintain.setApplyPeople(TokenManagerUtils.getNickname());
+		carMaintain.setApplytime(new Date());
+		carMaintain.setStatus("排队中");
+		carMaintainRepository.save(carMaintain);
+
+		Screen screen = Screen.builder().vSn(carmaintainApply.getVSn()).applyPeople(TokenManagerUtils.getNickname())
+				.mid(carMaintain.getId()).build();
+		screen.setStatus("排队中");
+		screenRepository.save(screen);
+
+		screen.setApplyPeople(TokenManagerUtils.getNickname());
+		screen.setvSn(carmaintainApply.getVSn());
+		screen.setApplyTime(new Date());
+		screen.setWorkContent(carmaintainApply.getItem());
+		screen.setStatus("排队中");
+		screen.setMid(carMaintain.getId());
+		screenRepository.save(screen);
+		return JsonData.success("维修申请成功");
+	}
+
+	@RequiresRoles(value = { "admin", "maintenanceManager" }, logical = Logical.OR)
+	@Override
+	public JsonData assign(CarmaintainAssign carmaintainAssign) {
+		log.info("carmaintainAssign:{}", JsonMapper.obj2String(carmaintainAssign));
+		Screen screen = screenRepository.findByvSn(carmaintainAssign.getvSn(), carmaintainAssign.getId());
+		if (screen == null) {
+			return JsonData.fail("请进行维修申请");
+		}
+		CarMaintain carMaintain = carMaintainRepository.findByvSn(carmaintainAssign.getvSn(),
+				carmaintainAssign.getId());
+
+		if (carMaintain == null) {
+			return JsonData.fail("请进行维修申请");
+		}
+
+		carMaintain.setForecastTime(DateUtils.String2date(carmaintainAssign.getForecastTime()));
+		carMaintain.setWorkContent(carmaintainAssign.getWorkContent());
+		carMaintain.setOperator(carmaintainAssign.getOperator());
+		carMaintain.setOperatorTEL(carmaintainAssign.getOperatorTEL());
+		carMaintain.setStatus("维修中");
+		carMaintainRepository.save(carMaintain);
+
+		screen.setForecastTime(DateUtils.String2date(carmaintainAssign.getForecastTime()));
+		screen.setOperator(carmaintainAssign.getOperator());
+		screen.setWorkContent(carmaintainAssign.getWorkContent());
+		screen.setStatus("维修中");
+		screenRepository.save(screen);
+		return JsonData.success("任务分配成功");
+	}
+
+	@RequiresRoles(value = { "admin", "maintenanceManager", "maintain" }, logical = Logical.OR)
+	@Override
+	public JsonData complete(CarmaintainComplete carmaintainComplete) {
+
+		log.info("carmaintainComplete:{}", JsonMapper.obj2String(carmaintainComplete));
+
+		Screen screen = screenRepository.findByvSn(carmaintainComplete.getVSn(), carmaintainComplete.getId());
+
+		if (screen == null) {
+			return JsonData.fail("请进行维修申请或者任务分配");
+		}
+
+		CarMaintain carMaintain = carMaintainRepository.findByvSn(carmaintainComplete.getVSn(),
+				carmaintainComplete.getId());
+
+		if (carMaintain == null) {
+			return JsonData.fail("请进行维修申请或者任务分配");
+		}
+
+		carMaintain.setFin_park(carmaintainComplete.getFin_park());
+		carMaintain.setRemark(carmaintainComplete.getRemark());
+		carMaintain.setStatus("已完成");
+		carMaintainRepository.save(carMaintain);
+
+		screen.setFin_park(carmaintainComplete.getFin_park());
+		screen.setStatus("已完成");
+		screenRepository.save(screen);
+		return JsonData.success("维修完成");
+	}
+
+	@RequiresRoles(value = { "admin", "maintenanceManager" }, logical = Logical.OR)
+	@Override
+	public JsonData top(Integer id) {
+		CarMaintain maintain = carMaintainRepository.findOne(id);
+
+		List<CarMaintain> maintainMinIds = carMaintainRepository.findByMinId();
+
+		Date applytime = maintainMinIds.get(0).getApplytime();
+		Date date = DateUtils.lessOneSecond(applytime);
+		carMaintainRepository.updateMakeTime(id, date);
+		if (id == null) {
+			return JsonData.fail("id不能为空");
+		}
+		if (maintain != null) {
+			screenRepository.updateApplyTime(maintain.getvSn(), date);
+		}
+
+		return JsonData.success("优先成功");
+	}
+
+	@SuppressWarnings("finally")
+	@Override
+	public PageBean<CarMaintain> pageQuery(PageQuery pageQuery, MaintainQueryParam maintainQueryParam) {
+
+		PageBean<CarMaintain> result = new PageBean<>();
+		Sort sort = new Sort(Direction.DESC, "applytime");
+
+		Pageable pageable = null;
+
+		pageable = new PageRequest(pageQuery.getPage(), pageQuery.getSize(), sort);
+		User token = TokenManagerUtils.getToken();
+		try {
+			Set<Role> roles = token.getRoles();
+			for (Role role : roles) {
+				if (role.getName().contains("维修管理员") || role.getName().contains("超级管理员")) {
+					sort = new Sort(Direction.ASC, "applytime");
+					pageable = new PageRequest(pageQuery.getPage(), pageQuery.getSize(), sort);
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+
+		} finally {
+			// 按照命令进行排序
+			if (pageQuery.getSortOder() != null) {
+				if ("DESC".equals(pageQuery.getSortOder())) {
+					pageable = new PageRequest(pageQuery.getPage(), pageQuery.getSize(), Direction.DESC,
+							pageQuery.getSort());
+
+					sort = new Sort(Direction.DESC, pageQuery.getSort());
+				}
+			}
+			if (pageQuery.getSort() != null) {
+				if ("ASC".equals(pageQuery.getSortOder())) {
+					pageable = new PageRequest(pageQuery.getPage(), pageQuery.getSize(), Direction.ASC,
+							pageQuery.getSort());
+					sort = new Sort(Direction.ASC, pageQuery.getSort());
+				}
+			}
+
+			final List<Predicate> list = new ArrayList<>();
+
+			Specification<CarMaintain> specification = new Specification<CarMaintain>() {
+
+				@Override
+				public Predicate toPredicate(Root<CarMaintain> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+					if (maintainQueryParam != null) {
+
+						if (StringUtils.isNotBlank(maintainQueryParam.getVSn())) {
+							Predicate p1 = cb.like(root.get("vSn").as(String.class),
+									"%" + maintainQueryParam.getVSn() + "%");
+							list.add(p1);
+						}
+
+						if (StringUtils.isNotBlank(maintainQueryParam.getStatus())) {
+							Predicate p2 = cb.equal(root.get("status").as(String.class),
+									maintainQueryParam.getStatus());
+							list.add(p2);
+						}
+
+						if (StringUtils.isNotBlank(maintainQueryParam.getApplyTime())) {
+							Predicate p9 = cb.between(root.get("applytime").as(Date.class),
+									DateUtils.String2date(maintainQueryParam.getApplyTime()),
+									DateUtils.addOneDay(DateUtils.String2date(maintainQueryParam.getApplyTime())));
+							list.add(p9);
+						}
+						if (StringUtils.isNotBlank(maintainQueryParam.getApplyPeople())) {
+							Predicate p4 = cb.like(root.get("applyPeople").as(String.class),
+									"%" + maintainQueryParam.getApplyPeople() + "%");
+							list.add(p4);
+						}
+
+						/*
+						 * if (maintainQueryParam.getStatus().equals("已完成")) { Predicate p4 =
+						 * cb.equal(root.get("status").as(String.class), "已完成"); list.add(p4); } else {
+						 * Predicate p6 = cb.like(root.get("status").as(String.class), "%" + "中" + "%");
+						 * list.add(p6);
+						 * 
+						 * }
+						 */
+					}
+					return cb.and(list.toArray(new Predicate[list.size()]));
+				}
+			};
+
+			Page<CarMaintain> pageData = carMaintainRepository.findAll(specification, pageable);
+			result.setTotal(pageData.getTotalElements());
+			result.setRows(pageData.getContent());
+			return result;
+		}
+	}
+
+	@Override
+	public ScreenResult findScreen(PageQuery pQuery) {
+		// 穿件维修大屏结果集
+		ScreenResult screenResult = new ScreenResult();
+		// 创建分页结果
+		PageBean<Screen> result = new PageBean<>();
+		// 创建排序规则
+		Sort sort = new Sort(Direction.ASC, "applyTime");
+		// 分页查询
+		// Pageable pageable = new PageRequest(pQuery.getPage(), pQuery.getSize(),
+		// sort);
+		String status = "已注销";
+		// Page<Screen> pageData = screenRepository.findAll(status, pageable);
+		List<Screen> pageData = screenRepository.findAll(status);
+		result.setTotal((long) pageData.size());
+		result.setRows(pageData);
+
+		screenResult.setPageBean(result);
+
+		// long count = pageData.getTotalElements();
+		long count = pageData.size();
+		// 查询维修总数
+		screenResult.setCount(count);
+		// 查询已完成数量
+		float complete = screenRepository.findCompleteCountByStatus();
+		screenResult.setComplete(complete);
+		Float completepercentage = (complete / count) * 100;
+		if (completepercentage == 0 || completepercentage.isNaN()) {
+			screenResult.setCompletepercentage("0");
+		} else {
+			String b = "" + completepercentage;
+			screenResult.setCompletepercentage(b.substring(0, 4));
+		}
+		// 查询排队数量
+		float queue = screenRepository.findQueueStatus();
+		screenResult.setQueue(queue);
+
+		Float queueepercentage = (queue / count) * 100;
+		if (queueepercentage == 0 || queueepercentage.isNaN()) {
+			screenResult.setQueuepercentage("0");
+		} else {
+			String c = "" + queueepercentage;
+			screenResult.setQueuepercentage(c.substring(0, 4));
+		}
+		// 查询正在维修数量
+		float current = screenRepository.findCurrentCountByStatus();
+		screenResult.setCurrent(current);
+		Float currentpercentage1 = (current / count) * 100;
+
+		if (currentpercentage1 == 0 || currentpercentage1.isNaN()) {
+			screenResult.setCurrentpercentage("0");
+		} else {
+			String a = "" + currentpercentage1;
+			screenResult.setCurrentpercentage(a.substring(0, 4));
+		}
+		return screenResult;
+	}
+
+	@Override
+	public List<Employee> getAllEmployee() {
+		// TODO Auto-generated method stub
+		return employeeRepository.findAll();
+	}
+
+	@Override
+	public JsonData addEmployee(Employee employee) {
+		Employee employee2 = employeeRepository.findByName(employee.getName());
+		if (employee2 != null) {
+			return JsonData.fail("此维修工已经存在");
+		}
+		employeeRepository.save(employee);
+		return JsonData.success("添加成功");
+	}
+
+	@Override
+	public JsonData delEmployee(String[] ids) {
+		// TODO Auto-generated method stub
+		if (ids.length > 0) {
+			for (String id : ids) {
+				employeeRepository.delete(Integer.parseInt(id));
+			}
+			return JsonData.success("删除成功");
+		}
+		return JsonData.fail("删除失败");
+	}
+
+	@Override
+	public void updtaStatus() {
+		screenRepository.updataStatus();
+	}
+
+	@Override
+	public JsonData updateEmployee(Employee employee) {
+		employeeRepository.save(employee);
+		return JsonData.success("修改成功");
+	}
+
+	@Override
+	public List<User> findEmployee() {
+		return userRepository.findEmployee();
+
+	}
+
+	@Override
+	public JsonData supplement(CarMaintain carMaintain) {
+		carMaintain.setApplytime(new Date());
+		carMaintain.setStatus("已完成");
+		carMaintainRepository.save(carMaintain);
+
+		return JsonData.success("补录成功");
+
+	}
+
+	@Override
+	public JsonData delete(Integer id) {
+		String nickname = TokenManagerUtils.getToken().getNickname();
+		CarMaintain maintain = carMaintainRepository.findOne(id);
+		if (maintain.getApplyPeople().equals(nickname)) {
+			carMaintainRepository.delete(maintain);
+			screenRepository.deleteByMid(id);
+			return JsonData.success("删除成功");
+		} else {
+			if (isAdmin()) {
+				carMaintainRepository.delete(maintain);
+				screenRepository.deleteByMid(id);
+				return JsonData.success("删除成功");
+			}
+		}
+		return JsonData.fail("请联系提交人/或管理员删除");
+	}
+
+	private boolean isAdmin() {
+		Set<Role> roles = TokenManagerUtils.getToken().getRoles();
+		for (Role role : roles) {
+			if (role.getName().equals("维修管理员") || role.getName().equals("超级管理员")) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public JsonData edit(Integer id, CarmaintainApply carmaintainApply) {
+		CarMaintain findOne = carMaintainRepository.findOne(id);
+		if (findOne.getApplyPeople().equals(TokenManagerUtils.getNickname())) {
+			editApply(id, carmaintainApply, findOne);
+			return JsonData.success("修改成功");
+		} else {
+			if (isAdmin()) {
+				editApply(id, carmaintainApply, findOne);
+				return JsonData.success("修改成功");
+			}
+		}
+		return JsonData.fail("请联系提交人/或管理员进行修改");
+	}
+
+	private void editApply(Integer id, CarmaintainApply carmaintainApply, CarMaintain findOne) {
+		findOne.setItem(carmaintainApply.getItem());
+		findOne.setWorkContent(carmaintainApply.getItem());
+		Screen screen = screenRepository.findByMid(id);
+		screen.setWorkContent(carmaintainApply.getItem());
+	}
+
+}

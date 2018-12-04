@@ -1,0 +1,32 @@
+1529221224119	Extract method 'CheckParam'
+1529231041358	Extract method 'checkParam'
+1529312155238	Extract method 'creatInsHistory'
+1529312223624	Extract method 'createLicHistory'
+1529512386095	Delete element
+1529549448947	Extract method 'userSetRole'
+1529559424571	Delete element
+1529559428398	Delete element
+1529559432341	Delete element
+1529559437645	Delete element
+1529559444620	Delete element
+1529559484253	Copy file
+1529559488861	Delete element
+1529566037201	Delete element
+1529566043790	Delete element
+1529566078707	Delete element
+1529566912152	Delete element
+1529589560468	Extract method 'getUser'
+1529592635967	Delete element
+1529596108280	Delete element
+1529596121434	Delete element
+1529596137766	Delete element
+1529596150514	Delete element
+1529596175131	Delete element
+1529596308046	Delete element
+1529597928375	Delete element
+1529597931347	Copy file
+1529606242301	Delete element
+1529720036589	Extract method 'pageResult'
+1529746392552	Extract method 'roleRelateMenu'
+1529746637638	Extract method 'roleRelatePer'
+1529746902078	Extract method 'roleRelatePer'

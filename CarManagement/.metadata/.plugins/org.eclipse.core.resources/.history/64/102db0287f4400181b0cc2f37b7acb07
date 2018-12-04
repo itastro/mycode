@@ -1,0 +1,73 @@
+package com.bailian.car.controller.cars.maintenance;
+
+import java.text.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.domain.cars.carmaintenance.MaintenanceItem;
+import com.bailian.car.domain.cars.carmaintenance.VehicleMaintenanceRecords;
+import com.bailian.car.service.cars.maintenance.MaintenanceService;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@RequestMapping(value = "/car/maintenance")
+@Slf4j
+public class MaintenanceController {
+
+	@Autowired
+	private MaintenanceService maintenanceService;
+
+	/**
+	 * 
+	    * @Title: SaveMaintenance
+	    * @Description: 车辆保养记录保存
+	    * @param @param MaintenanceItem
+	    * @param @param vehicleMaintenanceRecords
+	    * @param @param id  //车辆id
+	    * @param @return    参数
+	    * @return JsonData    返回类型
+	    * @throws
+	 */
+	@RequestMapping(value = "save/{vSn}/{mm}/{nt}.action")
+	@ResponseBody
+	public JsonData SaveMaintenance(@PathVariable(required = true) String vSn, @PathVariable String mm,
+			@PathVariable String nt, @RequestBody List<MaintenanceItem> maintenanceItems) {
+
+		JsonData result = null;
+		try {
+			result = maintenanceService.save(mm, nt, maintenanceItems, vSn);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	@RequestMapping(value = "save1/{vSn}.action")
+	@ResponseBody
+
+	public JsonData SaveMaintenance(VehicleMaintenanceRecords vehicleMaintenanceRecords,
+			@PathVariable(required = true) String vSn) {
+
+		// JsonData result = maintenanceService.save(maintenanceItems,
+		// vehicleMaintenanceRecords, vSn);
+		System.out.println(vehicleMaintenanceRecords);
+		return null;
+	}
+
+	@RequestMapping(value = "find.action")
+	@ResponseBody
+	public List<VehicleMaintenanceRecords> findByvSn(String vSn) {
+
+		return maintenanceService.findVehicleMaintenanceRecordsByvSn(vSn);
+
+	}
+
+}

@@ -1,0 +1,94 @@
+package com.bailian.car.domain.basedata;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "T_CARDRIVER")
+public class CarDriver implements Serializable {
+	private static final long serialVersionUID = 6220482565743443027L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+
+	private String name; // 驾驶员名称
+
+	private String iccard; // ic卡卡号
+
+	private Date allowStratTime;
+
+	private Date allowEndTime;
+
+	private int isallow; // 授权码 1：授权 2：未授权
+
+	private String remark; // 备注
+
+	private Set<Car> cars = new HashSet < Car > (0);
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getIccard() {
+		return iccard;
+	}
+
+	public void setIccard(String iccard) {
+		this.iccard = iccard;
+	}
+
+	public Date getAllowStratTime() {
+		return allowStratTime;
+	}
+
+	public void setAllowStratTime(Date allowStratTime) {
+		this.allowStratTime = allowStratTime;
+	}
+
+	public Date getAllowEndTime() {
+		return allowEndTime;
+	}
+
+	public void setAllowEndTime(Date allowEndTime) {
+		this.allowEndTime = allowEndTime;
+	}
+
+	public int getIsallow() {
+		return isallow;
+	}
+
+	public void setIsallow(int isallow) {
+		this.isallow = isallow;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+}

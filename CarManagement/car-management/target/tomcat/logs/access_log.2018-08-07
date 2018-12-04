@@ -1,0 +1,12 @@
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:00:27 +0800] "GET /car-management/index.html HTTP/1.1" 302 - http-bio-8081-exec-1 14100
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:00:27 +0800] "GET /car-management/login.html HTTP/1.1" 200 3593 http-bio-8081-exec-2 82
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:02 +0800] "POST /car-management/user/login.action?jsonpCallback=jQuery172059780771121971_1533571227858 HTTP/1.1" 200 536 http-bio-8081-exec-4 659
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:02 +0800] "GET /car-management/index.html HTTP/1.1" 200 90309 http-bio-8081-exec-5 52
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:03 +0800] "GET /car-management/driver/group/getGroup.action HTTP/1.1" 200 62 http-bio-8081-exec-7 306
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:03 +0800] "GET /car-management/group/getGroup.action HTTP/1.1" 200 402 http-bio-8081-exec-6 460
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:04 +0800] "GET /car-management/inAndOut/all.action?size=10&page=1&sort=name&sortOrder=asc HTTP/1.1" 200 2360 http-bio-8081-exec-9 539
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:05 +0800] "GET /car-management/menu/showMenu.action HTTP/1.1" 200 5231 http-bio-8081-exec-8 1671
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:32 +0800] "GET /car-management/project/pageQuery.action?size=13&page=1&sortOrder=asc HTTP/1.1" 200 1789 http-bio-8081-exec-8 201
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:00:02:32 +0800] "GET /car-management/car/pageQuery.action?size=10&page=1&sort=vSn&sortOrder=asc&vSn=&customer=&project_sn=&adminName=&vin=&engineNumber=&projectEngineer=&brandModeltwo=&NO=&bstart=&bend=&pstart=&pend=&ustart=&uend=&backstart=&backend=&ing=&all=&beforup=&haveLi=&HaveIn=&thismonthback=&thismonnew=&beforBack=&stop= HTTP/1.1" 200 17184 http-bio-8081-exec-1 348
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:14:26:49 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8081-exec-1 0
+0:0:0:0:0:0:0:1 - - [07/Aug/2018:15:45:21 +0800] "GET / HTTP/1.1" 404 - http-bio-8081-exec-3 0

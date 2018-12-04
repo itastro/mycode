@@ -1,0 +1,335 @@
+package com.bailian.car.param;
+
+import java.io.Serializable;
+import java.util.Date;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+/**
+ * 
+    * @ClassName: CarParam
+    * @Description: 车辆录入传入参数
+    * @author itastro
+    * @date 2018年6月21日
+    *
+ */
+public class CarParam implements Serializable {
+
+	public String getIccard() {
+		return iccard;
+	}
+
+	public void setIccard(String iccard) {
+		this.iccard = iccard;
+	}
+
+	public String getBackCard() {
+		return backCard;
+	}
+
+	public void setBackCard(String backCard) {
+		this.backCard = backCard;
+	}
+
+	public String getGbts() {
+		return gbts;
+	}
+
+	public void setGbts(String gbts) {
+		this.gbts = gbts;
+	}
+
+	public String getFrontTireP() {
+		return frontTireP;
+	}
+
+	public void setFrontTireP(String frontTireP) {
+		this.frontTireP = frontTireP;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	private static final long serialVersionUID = 1L;
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
+	public Integer getSeats() {
+		return seats;
+	}
+
+	public void setSeats(Integer seats) {
+		this.seats = seats;
+	}
+
+	public String getPicurl() {
+		return picurl;
+	}
+
+	public void setPicurl(String picurl) {
+		this.picurl = picurl;
+	}
+
+	public String getProjectEngineer() {
+		return projectEngineer;
+	}
+
+	public void setProjectEngineer(String projectEngineer) {
+		this.projectEngineer = projectEngineer;
+	}
+
+	public String getOilspecification() {
+		return oilspecification;
+	}
+
+	public void setOilspecification(String oilspecification) {
+		this.oilspecification = oilspecification;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public String getProject_sn() {
+		return project_sn;
+	}
+
+	public void setProject_sn(String project_sn) {
+		this.project_sn = project_sn;
+	}
+
+	public String getProject_name() {
+		return project_name;
+	}
+
+	public void setProject_name(String project_name) {
+		this.project_name = project_name;
+	}
+
+	public String getEngineType() {
+		return engineType;
+	}
+
+	public void setEngineType(String engineType) {
+		this.engineType = engineType;
+	}
+
+	public String getCarName() {
+		return carName;
+	}
+
+	public void setCarName(String carName) {
+		this.carName = carName;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public String getvCarType() {
+		return vCarType;
+	}
+
+	public void setvCarType(String vCarType) {
+		this.vCarType = vCarType;
+	}
+
+	public String getEngineCapacity() {
+		return engineCapacity;
+	}
+
+	public void setEngineCapacity(String engineCapacity) {
+		this.engineCapacity = engineCapacity;
+	}
+
+	public String getPictureUrl() {
+		return pictureUrl;
+	}
+
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
+	}
+
+	public String getFuelType() {
+		return FuelType;
+	}
+
+	public void setFuelType(String fuelType) {
+		FuelType = fuelType;
+	}
+
+	public String getTyresize() {
+		return tyresize;
+	}
+
+	public void setTyresize(String tyresize) {
+		this.tyresize = tyresize;
+	}
+
+	public String getReaTireP() {
+		return reaTireP;
+	}
+
+	public void setReaTireP(String reaTireP) {
+		this.reaTireP = reaTireP;
+	}
+
+	public String getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Date getMakeTime() {
+		return makeTime;
+	}
+
+	public void setMakeTime(Date makeTime) {
+		this.makeTime = makeTime;
+	}
+
+	public String getVehicleQuality() {
+		return vehicleQuality;
+	}
+
+	public void setVehicleQuality(String vehicleQuality) {
+		this.vehicleQuality = vehicleQuality;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@NotBlank(message = "车辆编号不能为空")
+	private String vSn; // 车辆编号
+
+	@NotBlank(message = "项目号不能为空")
+	private String project_sn; // 项目号
+
+	//@NotBlank(message = "项目名称不能为空")
+	private String project_name; // 项目名称
+
+	@NotBlank(message = "项目工程师不能为空")
+	private String projectEngineer; // 項目工程師
+
+	private String engineType; // 发动机型号
+
+	@NotBlank(message = "车辆名称不能为空")
+	private String carName; // 车辆名称
+
+	private String groupName; // 项目分组
+
+	@NotBlank(message = "车辆类型不能为空")
+	private String vCarType; // 车辆类型
+
+	private String engineCapacity; // 发动机排量
+
+	private String pictureUrl; // 照片 TDDO
+
+	private String gbts; // 变速箱邮箱规格
+
+	private String FuelType; // 燃油规格
+
+	private String oilspecification; // 机油规格
+
+	private String tyresize; // 轮胎规格
+
+	private String reaTireP;// 后轮胎压力
+
+	@NotBlank(message = "客户不能不能为空")
+	private String customer; // 客戶
+
+	private String operator; // 填写人
+
+	private Date makeTime; // 制作日期
+
+	@NotBlank(message = "吨位不能为空")
+	private String vehicleQuality; // 车辆整备质量
+
+	@NotBlank(message = "车辆颜色不能为空")
+	private String color; // 车辆颜色
+
+	@NotNull(message = "座位数不可以为空")
+	private Integer seats; // 座位数
+
+	@NotBlank(message = "车管不能为空")
+	private String adminName; // 车管
+
+	@NotBlank(message = "价值不能为空")
+	private String price; // 价值
+
+	private String picurl; // 车辆照片路径
+
+	private String remark; // 备注
+
+	@NotBlank(message = "联系电话不能为空")
+	private String contactNumber; // 联系电话
+
+	private String frontTireP; // 前轮胎压力
+
+	private String iccard;  
+
+	private String backCard;
+
+}

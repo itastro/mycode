@@ -1,0 +1,82 @@
+package com.bailian.car.service.oil.impl;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.oil.OilCardRepository;
+import com.bailian.car.domain.cars.car.OilCard;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.OilSearch;
+import com.bailian.car.service.oil.OilService;
+import com.bailian.car.utils.DateUtils;
+import com.bailian.car.utils.ExcelUtils;
+import com.bailian.car.utils.JsonMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@Transactional
+public class OilServiceImpl implements OilService {
+
+	@Autowired
+	private LocalContainerEntityManagerFactoryBean entityManagerFactory;
+
+	@Autowired
+	private OilCardRepository oilCardRepository;
+
+	@Override
+	public JsonData oil_batchimport(MultipartFile file) throws Exception {
+		int count = 0;
+
+		List<String[]> readExcel = ExcelUtils.readExcel(file);
+		if (readExcel != null && readExcel.size() > 0) {
+			for (int i = 1; i < readExcel.size(); i++) {
+
+				log.info("readExcel.get(i):{}", JsonMapper.obj2String(readExcel.get(i)));
+				String[] strings = readExcel.get(i);
+				String time = strings[0]; // 时间
+				String GAS = strings[1]; // 加油站
+				String L = strings[2]; // 数量
+				String type = strings[3]; // 型号
+				String price = strings[4]; // 价格
+				String projectSn = strings[5]; // 项目号
+				String vSn = strings[6]; // 车辆编号
+				String mm = strings[7]; // 里程表
+				String oilCardNum = strings[8];// 加油卡卡号
+				String operator = strings[9]; // 加油人
+				String remark = strings[10]; // 说明
+				// String expense = strings[11]; // 消费金额
+				// if (StringUtils.isBlank(expense)) {
+				// expense = "0.00";
+				// }
+				OilCard oil = OilCard.builder().time(DateUtils.String2date(time)).GAS(GAS).L(L).type(type)
+						.price(Double.parseDouble(price)).projectSn(projectSn).vSn(vSn).mm(mm).oilCardNum(oilCardNum)
+						.operator(operator).remark(remark).importTime(new Date()).build();
+				oilCardRepository.save(oil);
+				count++;
+			}
+		}
+		return JsonData.success("你导入了" + count + "条数据");
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public PageBean<OilCard> query(PageQuery pQuery, OilSearch OilSearch) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

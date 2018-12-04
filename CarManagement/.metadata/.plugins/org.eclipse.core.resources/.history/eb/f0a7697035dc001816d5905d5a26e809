@@ -1,0 +1,14 @@
+package com.bailian.car.domain.cargps;
+
+import javax.persistence.Table;
+
+@Table
+public class CarGps {
+	
+	private Integer id;
+	
+	private String vSn;
+	
+	private String gpsSn;
+
+}

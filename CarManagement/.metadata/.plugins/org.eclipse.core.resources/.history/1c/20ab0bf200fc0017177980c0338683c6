@@ -1,0 +1,67 @@
+package com.bailian.car.user;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.common.utils.JsonUtils;
+import com.bailian.car.dao.UserRepository;
+import com.bailian.car.domain.system.Role;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.service.UserService;
+
+@RunWith(value = SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:spring/applicationContext.xml")
+public class UserRepositoryTest {
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private UserService userService;
+
+	@Test
+	public void UserTest() {
+		int i = userRepository.updatePassWord("wangchunsen", "1234567");
+		System.out.println(i);
+	}
+
+	@Test
+	public void UserList() {
+
+		List<User> all = userRepository.findAll();
+
+		JsonData success = JsonData.success(all);
+		System.out.println(success.getData());
+		String json = JsonUtils.objectToJson(all);
+		System.out.println(json);
+		System.err.println(all);
+
+	}
+
+	@Test
+
+	public void addUser() {
+
+		User user = new User();
+		Role role = new Role();
+		HashSet<Role> hashSet = new HashSet<Role>();
+		user.setCreateTime(new Date());
+		user.setUsername("www.baidu.com");
+		user.setNickname("王");
+		user.setPassword("WWWWWWW");
+		user.setEmail("834929883qq.com");
+		user.setRemark("nihao");
+		user.setStatus(1);
+		user.setOperator("王春森");
+		user.setOperate_id("127.0.0.1");
+		user.setRoles(null);
+		user.setTelephone("11111111111");
+		userService.save(user);
+	}
+}

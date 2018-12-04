@@ -1,0 +1,63 @@
+package com.bailian.car.domain.basedata;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+@Table(name = "T_CarGroup")
+public class CarGroup {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private int id;
+
+	private String name;
+
+	private String remark;
+	@OneToMany(mappedBy = "cGroup", fetch = FetchType.LAZY)
+	private Set<Car> car = new HashSet<Car>();
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	@JsonIgnore
+	public Set<Car> getCar() {
+		return car;
+	}
+
+	
+	public void setCar(Set<Car> car) {
+		this.car = car;
+	}
+}

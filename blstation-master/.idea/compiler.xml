@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="blstation-common" />
+        <module name="blstation-dao" />
+        <module name="blstation-entity" />
+        <module name="blstation-interface" />
+        <module name="blstation-service" />
+        <module name="blstation-web" />
+        <module name="demo" />
+        <module name="generator" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="blstation-common" target="1.8" />
+      <module name="blstation-dao" target="1.8" />
+      <module name="blstation-entity" target="1.8" />
+      <module name="blstation-interface" target="1.8" />
+      <module name="blstation-master" target="1.8" />
+      <module name="blstation-service" target="1.8" />
+      <module name="blstation-web" target="1.8" />
+      <module name="demo" target="1.8" />
+      <module name="generator" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

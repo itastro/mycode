@@ -1,0 +1,22 @@
+package com.bailian.car.domain.cargps;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Table(name="t_cargps")
+public class CarGps {
+	
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", unique = true, nullable = false, length = 11)
+	private Integer id;
+	
+	private String vSn;
+	
+	private String gpsSn;
+
+}

@@ -1,0 +1,18 @@
+package com.bailian.car.domain.cardriver;
+
+import java.util.Date;
+
+public class InAndOut {
+	
+	private Integer id;
+	
+	private String vSn;
+	
+	private String driverName;  //驾驶员名称
+	
+	private Date endTime;  //牌照有效期
+	
+	private Date time;  //进出时间
+	
+
+}

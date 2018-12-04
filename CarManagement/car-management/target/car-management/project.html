@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" content="text/html" http-equiv="Content-Type">
+<title>文件上传</title>
+</head>
+<body>
+	<form name="excelImportForm"
+		action="/car-management/project/project_bacthImport.action"
+		method="post" onsubmit="return checkImportPath();"
+		enctype="multipart/form-data" id="excelImportForm">
+		<input type="hidden" name="ids" id="ids">
+		<div class="modal-body">
+			<div class="row gap">
+				<label class="col-sm-7 control-label"><input
+					class="btn btn-default" id="excel_file" type="file" name="file"
+					accept="xls" /></label>
+				<div class="col-sm-3">
+					<input class="btn btn-primary" id="excel_button" type="submit"
+						value="导入Excel" />
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal"
+				onClick="uncheckBoxes();">取消</button>
+		</div>
+	</form>
+</body>
+</html>

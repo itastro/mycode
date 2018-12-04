@@ -1,0 +1,232 @@
+package com.bailian.car.domain.carcheck;
+
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+/**
+ * 
+ * @ClassName: BackCheck
+ * @Description: 还车点检   
+ * @author itastro
+ * @date 2018年3月19日
+ *
+ */
+@Entity
+@Table(name = "t_backcheck")
+public class BackCheck implements Serializable {
+
+	public String getOdometer() {
+		return odometer;
+	}
+
+	public void setOdometer(String odometer) {
+		this.odometer = odometer;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getvSn() {
+		return vSn;
+	}
+
+	public void setvSn(String vSn) {
+		this.vSn = vSn;
+	}
+
+	public Integer getKeyy() {
+		return keyy;
+	}
+
+	public void setKeyy(Integer keyy) {
+		this.keyy = keyy;
+	}
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", unique = true, nullable = false, length = 11)
+	private Integer id;
+
+	@NotBlank(message = "车辆编号不能为空")
+	private String vSn; // 车辆编号
+	private String toolisrecycled; // 研发工具是否回收 1：回收 2：未回收
+
+	private Integer sparetyre; // 备用轮胎
+
+	private Integer tools; // 随车工具
+
+	private Integer jack; // 千斤顶
+
+	private Integer warningboard; // 紧急停车指示牌
+
+	private Integer fire; // 车用灭火器
+
+	private Integer keyy; // 钥匙数量
+
+	private String odometer; // 里程表
+
+	private String operator; // 操作人
+
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date operate_time; // 操作日期
+
+	private String proposer; // 还车申请人
+
+	private String forpeople;// 交车人
+
+	private String pickone; // 接车人
+
+	private String pick_tel; // 接车人电话
+
+	private String pick_card; // 接车人身份证
+
+	private String trans_sn; // 运输车号
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date time; // 日期
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getSparetyre() {
+		return sparetyre;
+	}
+
+	public void setSparetype(Integer sparetyre) {
+		this.sparetyre = sparetyre;
+	}
+
+	public Integer getTools() {
+		return tools;
+	}
+
+	public void setTools(Integer tools) {
+		this.tools = tools;
+	}
+
+	public Integer getJack() {
+		return jack;
+	}
+
+	public void setJack(Integer jack) {
+		this.jack = jack;
+	}
+
+	public Integer getWarningboard() {
+		return warningboard;
+	}
+
+	public void setWarningboard(Integer warningboard) {
+		this.warningboard = warningboard;
+	}
+
+	public Integer getFire() {
+		return fire;
+	}
+
+	public void setFire(Integer fire) {
+		this.fire = fire;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Date getOperate_time() {
+		return operate_time;
+	}
+
+	public void setOperate_time(Date operate_time) {
+		this.operate_time = operate_time;
+	}
+
+	public String getProposer() {
+		return proposer;
+	}
+
+	public void setProposer(String proposer) {
+		this.proposer = proposer;
+	}
+
+	public String getForpeople() {
+		return forpeople;
+	}
+
+	public void setForpeople(String forpeople) {
+		this.forpeople = forpeople;
+	}
+
+	public String getPickone() {
+		return pickone;
+	}
+
+	public void setPickone(String pickone) {
+		this.pickone = pickone;
+	}
+
+	public String getPick_tel() {
+		return pick_tel;
+	}
+
+	public void setPick_tel(String pick_tel) {
+		this.pick_tel = pick_tel;
+	}
+
+	public String getPick_card() {
+		return pick_card;
+	}
+
+	public void setPick_card(String pick_card) {
+		this.pick_card = pick_card;
+	}
+
+	public String getTrans_sn() {
+		return trans_sn;
+	}
+
+	public void setTrans_sn(String trans_sn) {
+		this.trans_sn = trans_sn;
+	}
+
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	public String getToolisrecycled() {
+		return toolisrecycled;
+	}
+
+	public void setToolisrecycled(String toolisrecycled) {
+		this.toolisrecycled = toolisrecycled;
+	}
+
+	public void setSparetyre(Integer sparetyre) {
+		this.sparetyre = sparetyre;
+	}
+
+}

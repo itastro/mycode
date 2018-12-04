@@ -1,0 +1,341 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bailian</groupId>
+	<artifactId>common-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>common-parent</name>
+	<!-- 集中管理依赖版本 -->
+
+	<properties>
+		<!-- spring版本号 -->
+		<springframework.version>4.3.10.RELEASE</springframework.version>
+		<!-- hibernate -->
+		<hibernate.version>5.2.10.Final</hibernate.version>
+
+		<hibernate.common>5.0.1.Final</hibernate.common>
+		<!-- logback -->
+		<logback.version>1.1.7</logback.version>
+		<!-- slf4j -->
+		<slf4j.version>1.7.21</slf4j.version>
+		<!-- lombok -->
+		<lombok>1.16.16</lombok>
+		<!-- druid -->
+		<druid>1.1.6</druid>
+		<!-- mysql -->
+		<mysql>6.0.6</mysql>
+		<!-- junit -->
+		<junit.version>4.12</junit.version>
+		<!-- jstl -->
+		<jstl>1.2</jstl>
+		<!-- jackson.version -->
+		<jackson.version>2.8.1</jackson.version>
+		<!--fileupload -->
+		<commons-fileupload>1.3.1</commons-fileupload>
+		<springframework.data>1.11.6.RELEASE</springframework.data>
+		<commons-beanutils>1.9.3</commons-beanutils>
+		<commons-collections>3.2.2</commons-collections>
+		<commons-codec>1.10</commons-codec>
+		<commons-io>2.6</commons-io>
+		<commons-lang3>3.5</commons-lang3>
+		<shiro-all>1.3.2</shiro-all>
+		<aspectjrt.version>1.8.6</aspectjrt.version>
+		<aspectjweaver.version>1.8.5</aspectjweaver.version>
+		<!-- quartz -->
+		<quartz.version>2.3.0</quartz.version>
+
+		<swagger2.version>2.5.0</swagger2.version>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<!-- 添加jstl依赖 -->
+
+			<dependency>
+				<groupId>jstl</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl}</version>
+			</dependency>
+
+			<!-- spring start -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-oxm</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<!-- spring end -->
+			<!--hibernate start -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-ehcache</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate.common</groupId>
+				<artifactId>hibernate-commons-annotations</artifactId>
+				<version>${hibernate.common}</version>
+			</dependency>
+			<!-- hibernate end -->
+			<!-- validation start -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>5.2.1.Final</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.1.0.Final</version>
+			</dependency>
+			<!-- validation end -->
+			<!-- jackson start -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<!-- jackson end -->
+			<!-- logback start -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<!-- logback end -->
+			<!-- spring-data-jpa start -->
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${springframework.data}</version>
+			</dependency>
+			<!-- spring-data-jpa end -->
+			<!-- lombok start -->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- lombook end -->
+			<!-- druid start -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${druid}</version>
+			</dependency>
+			<!-- druid end -->
+			<!-- mysql start -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql}</version>
+			</dependency>
+			<!-- mysql end -->
+			<!-- fileupload -->
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${commons-fileupload}</version>
+			</dependency>
+			<!-- 添加junit4依赖 -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<!-- 指定范围，在测试时才会加载 -->
+				<scope>test</scope>
+			</dependency>
+			<!-- tools start -->
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>${commons-collections}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>${commons-codec}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3}</version>
+			</dependency>
+			<!-- tools end -->
+			<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-all -->
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-all</artifactId>
+				<version>${shiro-all}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectjrt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectjweaver.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aspects</artifactId>
+				<version>${springframework.version}</version>
+			</dependency>
+			<!-- quartz -->
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>${quartz.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz-jobs</artifactId>
+				<version>${quartz.version}</version>
+			</dependency>
+			<!-- swagger开始 -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${swagger2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-staticdocs</artifactId>
+				<version>${swagger2.version}</version>
+			</dependency>
+			<!-- swagger结束 -->
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<!-- 资源文件拷贝插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- java编译插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<description>公共项目</description>
+</project>

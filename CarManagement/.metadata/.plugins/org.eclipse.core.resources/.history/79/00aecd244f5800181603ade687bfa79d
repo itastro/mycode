@@ -1,0 +1,49 @@
+package com.bailian.car.domain.carmaintain;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+/**
+ * 
+ * @ClassName: CarMaintain
+ * @Description:车辆维修实体类
+ * @author itastro
+ * @date 2018年5月15日
+ *
+ */
+@Entity
+@Table(name = "t_carmaintain")
+public class CarMaintain {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "C_ID", unique = true, nullable = false, length = 11)
+	private int id;
+
+	@Column(columnDefinition = "varchar(20) default ''", nullable = false)
+	private String sendPeople; // 送修人
+	@Column(columnDefinition = "varchar(20) default ''", nullable = false)
+	private String vSn; // 车辆编号
+	@Column(columnDefinition = "varchar(50) default ''")
+	private String vCarSn; // 车牌号
+	@Column(columnDefinition = "varchar(50) default ''")
+	private String reason; // 维修原因
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String send_park; // 停放地点
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date send_time; // 送修时间
+	@Column(columnDefinition = "varchar(255) default ''")
+	private String send_remark; // 备注
+	@Column(columnDefinition = "varchar(20) default ''")
+	private String operator; // 维修人 谁去维修
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date forecastTime; // 预计完成时间
+
+}

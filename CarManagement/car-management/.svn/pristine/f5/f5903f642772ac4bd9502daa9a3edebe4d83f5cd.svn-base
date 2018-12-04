@@ -1,0 +1,236 @@
+package com.bailian.car.controller.carmaintain;
+
+import java.util.List;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.bailian.car.annotation.SystemLog;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.domain.carmaintain.CarMaintain;
+import com.bailian.car.domain.carmaintain.Employee;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.emnu.OperationType;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.CarmaintainApply;
+import com.bailian.car.param.CarmaintainAssign;
+import com.bailian.car.param.CarmaintainComplete;
+import com.bailian.car.param.MaintainQueryParam;
+import com.bailian.car.param.ScreenResult;
+import com.bailian.car.service.CarMaintain.CarMaintainService;
+import com.bailian.car.utils.BeanValidator;
+import com.bailian.car.utils.JsonMapper;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+@RequestMapping("/carmaintain")
+@Api(value = "api接口", description = "车辆维修相关操作")
+public class CarmaintainController {
+	@Autowired
+	private CarMaintainService carMaintainService;
+
+	// 申请
+	@RequestMapping("/apply.action")
+	@ResponseBody
+	@ApiOperation(value = "车辆维修申请")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "send_park", value = "停放地点", dataType = "string"),
+			@ApiImplicitParam(name = "item", value = "维修项目", dataType = "string"),
+			@ApiImplicitParam(name = "applyRemark", value = "备注", dataType = "string"),
+			@ApiImplicitParam(name = "applyTEL", value = "申请人电话", dataType = "string")
+
+	})
+	@SystemLog(type = OperationType.APPLY, medoule = "维修管理", methods = "维修申请")
+	public JsonData applyMaintain(@ApiParam(value = "维修申请模型") @RequestBody CarmaintainApply carmaintainApply) {
+		log.info("carmaintainApply:{}", JsonMapper.obj2String(carmaintainApply));
+		BeanValidator.check(carmaintainApply);
+
+		try {
+			return carMaintainService.apply(carmaintainApply);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具工程师角色/维修申请权限");
+		}
+
+	}
+
+	// 分配任务
+	@RequestMapping("/assign.action")
+	@ResponseBody
+	@ApiOperation(value = "分配任务")
+	@SystemLog(type = OperationType.OTHERT, medoule = "维修管理", methods = "维修任务分配")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "forecastTime", value = "预计完成时间", dataType = "string"),
+			@ApiImplicitParam(name = "workContent", value = "工作内容", dataType = "string"),
+			@ApiImplicitParam(name = "operator", value = "操作人", dataType = "string"),
+			@ApiImplicitParam(name = "operatorTEL", value = "操作人电话", dataType = "string")
+
+	})
+	public JsonData assign(@RequestBody CarmaintainAssign carmaintainAssign) {
+		log.info("CarmaintainAssign:{}", JsonMapper.obj2String(carmaintainAssign));
+		BeanValidator.check(carmaintainAssign);
+		try {
+			return carMaintainService.assign(carmaintainAssign);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修管理员角色/维修任务分配权限");
+		}
+
+	}
+
+	// 完成
+	@RequestMapping("/complete.action")
+	@ResponseBody
+	@ApiOperation(value = "维修完成")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "fin_park", value = "停放地点", dataType = "string"),
+			@ApiImplicitParam(name = "remark", value = "备注", dataType = "string")
+
+	})
+	@SystemLog(type = OperationType.OTHERT, medoule = "维修管理", methods = "维修完成操作")
+	public JsonData complete(@RequestBody CarmaintainComplete carmaintainComplete) {
+		log.info("carmaintainComplete:{}", JsonMapper.obj2String(carmaintainComplete));
+		BeanValidator.check(carmaintainComplete);
+		try {
+			return carMaintainService.complete(carmaintainComplete);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修管理员角色/完成任务确认权限");
+		}
+
+	}
+
+	// 维修时进行置顶操作
+	@RequestMapping("/top.action")
+	@SystemLog(medoule = "维修管理", type = OperationType.UPDATE, methods = "维修置顶")
+	@ResponseBody
+	@ApiOperation(value = "维修置顶")
+	public JsonData top(@ApiParam(value = "维修id") Integer id) {
+		try {
+			return carMaintainService.top(id);
+		} catch (UnauthorizedException e) {
+			throw new PermissionException("当前用户不具备维修管理员角色/置顶权限");
+		}
+	}
+
+	// 维修列表查询
+	@RequestMapping("/query.action")
+	@ResponseBody
+	@ApiOperation(value = "维修列表查询")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "page", value = "当前页", dataType = "int", defaultValue = "1"),
+			@ApiImplicitParam(name = "size", value = "每页显示数量", dataType = "int", defaultValue = "10"),
+			@ApiImplicitParam(name = "sort", value = "排序参数", dataType = "string"),
+			@ApiImplicitParam(name = "sortOder", value = "排序命令", dataType = "string"),
+			@ApiImplicitParam(name = "vSn", value = "车辆编号", dataType = "string"),
+			@ApiImplicitParam(name = "status", value = "车辆状态", dataType = "string")
+
+	})
+	public PageBean<CarMaintain> query(PageQuery pageQuery, MaintainQueryParam maintainQueryParam) {
+
+		return carMaintainService.pageQuery(pageQuery, maintainQueryParam);
+
+	}
+	// 维修大屏显示
+
+	// 每次加载20 条数据进行循环加载
+
+	// 按照维修状态进行分组
+
+	// 按照时间降序
+
+	// 可以设置已完成车辆显示时间
+
+	// 可以设置页面刷新时间
+	@RequestMapping("/screen.action")
+	@ResponseBody
+	@ApiOperation(value = "维修大屏")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "page", value = "当前页", dataType = "int", defaultValue = "1"),
+			@ApiImplicitParam(name = "size", value = "每页显示数量", dataType = "int", defaultValue = "10"),
+			@ApiImplicitParam(name = "sort", value = "排序参数", dataType = "string"),
+			@ApiImplicitParam(name = "sortOder", value = "排序命令", dataType = "string")
+
+	})
+	public ScreenResult getScreen(PageQuery pQuery) {
+		log.info("pQuery:{}", JsonMapper.obj2String(pQuery));
+		ScreenResult screenResult = carMaintainService.findScreen(pQuery);
+		return screenResult;
+
+	}
+
+	// 查询维修工
+	@RequestMapping("/employee.action")
+	@ResponseBody
+	@ApiOperation(value = "查询维修工")
+	public List<Employee> getEmployee() {
+		return carMaintainService.getAllEmployee();
+	}
+
+	// 添加维修工
+	@RequestMapping("/addEmployee.action")
+	@ResponseBody
+	@SystemLog(medoule = "系统管理", type = OperationType.ADD, methods = "维修员的添加")
+	@ApiOperation(value = "添加维修工")
+	public JsonData addEmployee(@ApiParam(value = "维修功模型") Employee employee) {
+		BeanValidator.check(employee);
+		return carMaintainService.addEmployee(employee);
+	}
+
+	// 删除维修工
+	@RequestMapping("/delEmployee.action")
+	@ResponseBody
+	@SystemLog(medoule = "系统管理", type = OperationType.ADD, methods = "维修员的删除")
+	@ApiOperation(value = "删除维修工")
+	@ApiImplicitParam(name = "ids", value = "维修工id数组")
+	public JsonData delEmployee(String[] ids) {
+		return carMaintainService.delEmployee(ids);
+
+	}
+
+	// 维修操作员修改
+	@RequestMapping("/updateEmployee.action")
+	@ResponseBody
+	@SystemLog(medoule = "系统管理", type = OperationType.UPDATE, methods = "维修员的修改")
+	@ApiOperation(value = "修改维修操作员")
+	public JsonData updateEmployee(@ApiParam(value = "维修功模型") @RequestBody Employee employee) {
+		BeanValidator.check(employee);
+		return carMaintainService.updateEmployee(employee);
+	}
+
+	// 查询所有的维修技师
+	@RequestMapping("/findEmployee.action")
+	@ResponseBody
+	@ApiOperation(value = "获取操作员")
+	public List<User> findEmployee() {
+		return carMaintainService.findEmployee();
+
+	}
+
+	// Supplement
+	@RequestMapping("/supplement.action")
+	@ResponseBody
+	public JsonData supplement(CarMaintain carMaintain) {
+		return carMaintainService.supplement(carMaintain);
+	}
+
+	// Supplement
+	@RequestMapping("/delete.action")
+	@ResponseBody
+	public JsonData delete(Integer id) {
+		return carMaintainService.delete(id);
+	}
+	
+	// Supplement
+		@RequestMapping("/editApply.action")
+		@ResponseBody
+		public JsonData edit(Integer id,CarmaintainApply carmaintainApply) {
+			return carMaintainService.edit(id,carmaintainApply);
+		}
+}

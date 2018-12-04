@@ -1,0 +1,20 @@
+body {
+    font-size: 20px;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a span {
+    font-size: 1.5rem;
+}
+
+.sidebar-wrapper .sidebar-menu ul li a span.label,
+.sidebar-wrapper .sidebar-menu ul li a span.badge {
+    margin-top: 4px;
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-dropdown>a::after {
+    top: 0px;
+}
+
+.sidebar_nav_img {
+    height: 52px;
+}

@@ -1,0 +1,42 @@
+package com.bailian.car.param;
+
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+/**
+ * 
+    * @ClassName: MaintainQueryParam
+    * @Description: 维修查询参数
+    * @author itastro
+    * @date 2018年6月21日
+    *
+ */
+public class MaintainQueryParam implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private String vSn; // 车辆编号
+
+	private String status; // 状态
+
+	private String applyTime;  //申请日期
+
+	private String applyPeople;  //申请人
+	
+	private String applyStartTime;
+	
+	private String applyEndTime;
+	
+	private String workContent;
+	
+	private String operator;
+}

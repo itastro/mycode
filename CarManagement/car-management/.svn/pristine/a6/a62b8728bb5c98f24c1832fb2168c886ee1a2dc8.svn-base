@@ -1,0 +1,9 @@
+package com.bailian.car.dao.iccard;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.bailian.car.domain.iccard.IccardUseHistory;
+
+public interface IccardUseHistoryRepository extends JpaRepository<IccardUseHistory, Integer>{
+
+}

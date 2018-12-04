@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>车辆出入管理</title>
+    <link rel="shortcut icon" href="../img/tit_ico.png" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../css/sentry.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap-3.3.7.min.css">
+    <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+    <style>
+        /*声明 WebFont*/
+        
+        @font-face {
+            font-family: 'langqingti';
+            src: url('../assets/langqianti.otf');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'UnidreamLED';
+            src: url('../assets/UnidreamLED.ttf');
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+</head>
+
+<body class="shopbody" style="height: 100%;" id="full_mainlist">
+    <div class="shopwhole">
+        <img class="logo" src="../img/logo.png" alt="">
+        <h3>
+            <img src="../img/screen/left.png" alt=""> 车辆进出列表
+            <img src="../img/screen/right.png" alt="">
+        </h3>
+        <button id='btn'>全屏显示</button>
+        <!--<button id='inAndOutBtn'>进出记录</button>-->
+        <div class="workshopList">
+            <ul class="title">
+                <li>
+                    <span class="list1">车辆编号</span>
+                    <span class="list2">驾驶员</span>
+                    <span class="list3">车牌号</span>
+                    <!-- <span class="list4">牌照有效期</span> -->
+                    <span class="list5">进出时间</span>
+                    <span class="list6">是否允许通行</span>
+                </li>
+            </ul>
+            <div id="scrollbg">
+                <div id="scrollbgul">
+                    <ul>
+                        <li></li>
+                    </ul>
+                </div>
+                <div id="scrollDiv">
+                    <ul>
+                    </ul>
+                    <div class="ifInfo">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    var viewFullScreen = document.getElementById("btn");
+    if (viewFullScreen) {
+        viewFullScreen.addEventListener("click", function() {
+            var docElm = document.documentElement;
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.msRequestFullscreen) {
+                docElm = document.body; //overwrite the element (for IE) 
+                docElm.msRequestFullscreen();
+            } else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            }
+        }, false);
+    }
+
+    function newInAndOut() {
+        $.ajax({
+            "url": "/car-management/inAndOut/newInAndOut.action",
+            "type": "get",
+            "success": function(res) {
+                if (res == undefined || res.length == 0 || res == null) {
+                    $("#scrollDiv ul").html("<p class='nullcar'>当前没有车辆出入！</p>");
+                    return;
+                }
+                var screenHtml = "";
+                var classname = "";
+                screenHtml = '<li style="margin-top:0px;">'
+                    +'<span class="list1">' + res.carSn + '</span>'
+                    +'<span class="list2 ' + classname + '">' + res.driverName + '</span>'
+                    +'<span class="list3">' + res.licenseNo + '</span>'
+                    +'<span class="list5">' + res.updateTime + '</span>'
+                    +'<span class="list6">' + res.error + '</span></li>';
+                $("#scrollDiv ul").html(screenHtml);
+                $("#scrollDiv .ifInfo").html(res.message);
+            },
+            "error": function(res) {
+                // console.log(res);
+            }
+        })
+    }
+    newInAndOut();
+    setInterval(function() {
+        newInAndOut();
+    }, 3000)
+    $("#inAndOutBtn").unbind('click').bind('click', function() {
+        window.location.hash = "inAndOut"
+        $(".sentry").removeClass("sentry");
+    })
+</script>
+
+</html>

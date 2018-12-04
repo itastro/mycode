@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/jpa 
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd ">
+		
+	<!-- JPA实体管理工厂的配置 -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- 数据库连接池 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 扫描实体类 -->
+		<property name="packagesToScan" value="com.bailian.car.domain" /><!--待扫描的实体类包，不再需要persistence.xml了 -->
+		<property name="persistenceProvider">
+			<bean class="org.hibernate.jpa.HibernatePersistenceProvider" />
+		</property>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true" />
+				<property name="database" value="MYSQL" />
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+		<property name="jpaDialect">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+		</property>
+		<property name="jpaPropertyMap">
+			<map>
+				<entry key="hibernate.query.substitutions" value="true 1, false 0" />
+				<entry key="hibernate.default_batch_fetch_size" value="16" />
+				<entry key="hibernate.max_fetch_depth" value="2" />
+				<entry key="hibernate.generate_statistics" value="true" />
+				<entry key="hibernate.bytecode.use_reflection_optimizer"
+					value="true" />
+				<entry key="hibernate.cache.use_second_level_cache" value="false" />
+				<entry key="hibernate.cache.use_query_cache" value="false" />
+			</map>
+		</property>
+	</bean>
+	<!-- 重要配置：启用扫描并自动创建代理的功能 -->
+	<jpa:repositories base-package="com.bailian.car.dao" />
+	<!-- transaction-manager-ref="transactionManager" -->
+	<!-- entity-manager-factory-ref="entityManagerFactory" -->
+
+</beans>

@@ -1,0 +1,449 @@
+2018-01-23 09:03:41.460 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-23 09:03:41.529 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Tue Jan 23 09:03:41 CST 2018]; root of context hierarchy
+2018-01-23 09:03:41.565 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-23 09:03:41.958 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-23 09:03:42.260 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-23 09:03:42.280 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-23 09:03:42.580 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-23 09:03:44.331 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#28b23a01' of type [org.springframework.beans.factory.config.PropertiesFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:44.441 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor#0' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:44.473 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#28b23a01' of type [java.util.Properties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:44.514 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#26e267a3' of type [org.springframework.data.repository.core.support.PropertiesBasedNamedQueries] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:44.534 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#31e6c594' of type [org.springframework.data.repository.query.ExtensionAwareEvaluationContextProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:45.154 [localhost-startStop-1] INFO  com.alibaba.druid.pool.DruidDataSource -
+				{dataSource-1} inited
+2018-01-23 09:03:45.154 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'dataSource' of type [com.alibaba.druid.pool.DruidDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:45.336 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.hibernate.jpa.HibernatePersistenceProvider#6b543506' of type [org.hibernate.jpa.HibernatePersistenceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:45.395 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter#14f432a1' of type [org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:45.422 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.springframework.orm.jpa.vendor.HibernateJpaDialect#2e3dd971' of type [org.springframework.orm.jpa.vendor.HibernateJpaDialect] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:45.489 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-01-23 09:03:45.641 [localhost-startStop-1] INFO  org.hibernate.Version -
+				HHH000412: Hibernate Core {5.2.10.Final}
+2018-01-23 09:03:45.643 [localhost-startStop-1] INFO  org.hibernate.cfg.Environment -
+				HHH000206: hibernate.properties not found
+2018-01-23 09:03:45.697 [localhost-startStop-1] INFO  org.hibernate.annotations.common.Version -
+				HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-01-23 09:03:45.900 [localhost-startStop-1] INFO  org.hibernate.dialect.Dialect -
+				HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2018-01-23 09:03:46.681 [localhost-startStop-1] INFO  org.hibernate.validator.internal.util.Version -
+				HV000001: Hibernate Validator 5.2.1.Final
+2018-01-23 09:03:49.018 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-01-23 09:03:49.021 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'entityManagerFactory' of type [org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.024 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'entityManagerFactory' of type [com.sun.proxy.$Proxy49] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.080 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#5ec7e289' of type [com.sun.proxy.$Proxy51] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.218 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'jpaMappingContext' of type [org.springframework.data.jpa.repository.config.JpaMetamodelMappingContextFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.222 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'jpaMappingContext' of type [org.springframework.data.jpa.mapping.JpaMetamodelMappingContext] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.338 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.341 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.342 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.364 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.493 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.596 [localhost-startStop-1] INFO  org.hibernate.hql.internal.QueryTranslatorFactoryInitiator -
+				HHH000397: Using ASTQueryTranslatorFactory
+2018-01-23 09:03:49.800 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.806 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.899 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:49.913 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'userRepository' of type [org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.921 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'userRepository' of type [com.sun.proxy.$Proxy56] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.981 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#152b882a' of type [org.springframework.beans.factory.config.PropertiesFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:49.983 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#152b882a' of type [java.util.Properties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:50.006 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#2e8263f9' of type [org.springframework.data.repository.core.support.PropertiesBasedNamedQueries] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:50.012 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#56d0c32a' of type [org.springframework.data.repository.query.ExtensionAwareEvaluationContextProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:50.019 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#7caf0412' of type [com.sun.proxy.$Proxy51] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:50.099 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:50.114 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:50.123 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:50.198 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:50.203 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'roleRepository' of type [org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:50.207 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'roleRepository' of type [com.sun.proxy.$Proxy58] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:50.299 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'userServiceImpl' of type [com.bailian.car.service.impl.UserServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.009 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#72ca0aff' of type [org.springframework.beans.factory.config.PropertiesFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.018 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#72ca0aff' of type [java.util.Properties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.031 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#707d0c51' of type [org.springframework.data.repository.core.support.PropertiesBasedNamedQueries] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.032 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#26b94fe4' of type [org.springframework.data.repository.query.ExtensionAwareEvaluationContextProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.034 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#1b488507' of type [com.sun.proxy.$Proxy51] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.090 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.092 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.100 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.252 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.258 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'permissionRepository' of type [org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.262 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'permissionRepository' of type [com.sun.proxy.$Proxy60] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.287 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#57697fd8' of type [org.springframework.beans.factory.config.PropertiesFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.289 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#57697fd8' of type [java.util.Properties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.323 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#504da296' of type [org.springframework.data.repository.core.support.PropertiesBasedNamedQueries] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.333 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#4ec3dfa3' of type [org.springframework.data.repository.query.ExtensionAwareEvaluationContextProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.339 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean '(inner bean)#6cc4d0c2' of type [com.sun.proxy.$Proxy51] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.362 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.370 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.380 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.406 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.443 [localhost-startStop-1] INFO  org.hibernate.engine.internal.StatisticalLoggingSessionEventListener -
+				Session Metrics {
+    0 nanoseconds spent acquiring 0 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    0 nanoseconds spent preparing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2018-01-23 09:03:51.450 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'menuRepository' of type [org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.454 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'menuRepository' of type [com.sun.proxy.$Proxy61] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.535 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'rolseServiceImpl' of type [com.bailian.car.service.impl.RolseServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.619 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'permissionServiceImpl' of type [com.bailian.car.service.impl.PermissionServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.675 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'carRealm' of type [com.bailian.car.realm.CarRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:51.766 [localhost-startStop-1] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean -
+				Initializing EhCache CacheManager
+2018-01-23 09:03:52.079 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [org.springframework.cache.ehcache.EhCacheManagerFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:52.081 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [net.sf.ehcache.CacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:52.085 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'shiroCacheManager' of type [org.apache.shiro.cache.ehcache.EhCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:52.094 [localhost-startStop-1] INFO  org.apache.shiro.cache.ehcache.EhCacheManager -
+				Using existing EHCache named [car]
+2018-01-23 09:03:52.096 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-23 09:03:52.532 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization completed in 11069 ms
+2018-01-23 09:03:52.705 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization started
+2018-01-23 09:03:52.714 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Tue Jan 23 09:03:52 CST 2018]; parent: Root WebApplicationContext
+2018-01-23 09:03:52.715 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [springmvc/spring-web.xml]
+2018-01-23 09:03:53.052 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-23 09:03:53.258 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/menu/munuList.action]}" onto public org.springframework.web.servlet.ModelAndView com.bailian.car.controller.MenuController.munuList()
+2018-01-23 09:03:53.261 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/menu/showMenu.action]}" onto public java.lang.Object com.bailian.car.controller.MenuController.showMenu()
+2018-01-23 09:03:53.263 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/permission/list.action]}" onto public org.springframework.web.servlet.ModelAndView com.bailian.car.controller.PermissionController.permissionList()
+2018-01-23 09:03:53.264 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/permission/add.action]}" onto public com.bailian.car.common.pojo.JsonData com.bailian.car.controller.PermissionController.createPermission(com.bailian.car.domain.system.Permission)
+2018-01-23 09:03:53.272 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/role/userList.action]}" onto public org.springframework.web.servlet.ModelAndView com.bailian.car.controller.RoleController.userList()
+2018-01-23 09:03:53.274 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/role/addRole.action]}" onto public com.bailian.car.common.pojo.JsonData com.bailian.car.controller.RoleController.addRole(com.bailian.car.domain.system.Role,java.lang.String[],java.lang.String)
+2018-01-23 09:03:53.278 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/test]}" onto public java.lang.String com.bailian.car.controller.TestController.index()
+2018-01-23 09:03:53.290 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/user/UserInfo.action]}" onto public java.lang.String com.bailian.car.controller.UserController.userInfo()
+2018-01-23 09:03:53.290 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/user/userList.action]}" onto public org.springframework.web.servlet.ModelAndView com.bailian.car.controller.UserController.userList()
+2018-01-23 09:03:53.290 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/user/addUser.action]}" onto public com.bailian.car.common.pojo.JsonData com.bailian.car.controller.UserController.addUser(com.bailian.car.domain.system.User,java.lang.String[])
+2018-01-23 09:03:53.290 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/user/login.action]}" onto public com.fasterxml.jackson.databind.util.JSONPObject com.bailian.car.controller.UserController.login(java.lang.String,java.lang.String,java.lang.String,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2018-01-23 09:03:53.292 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/user/code.action]}" onto public void com.bailian.car.controller.UserController.genarateCode(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.io.IOException
+2018-01-23 09:03:53.293 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/user/loginOut.action]}" onto public com.bailian.car.common.pojo.JsonData com.bailian.car.controller.UserController.loginOut()
+2018-01-23 09:03:53.294 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/user/changeUserPassWord.action]}" onto public com.bailian.car.common.pojo.JsonData com.bailian.car.controller.UserController.changeUserPassWord(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2018-01-23 09:03:53.828 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Tue Jan 23 09:03:52 CST 2018]; parent: Root WebApplicationContext
+2018-01-23 09:03:53.916 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Tue Jan 23 09:03:52 CST 2018]; parent: Root WebApplicationContext
+2018-01-23 09:03:54.126 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2018-01-23 09:03:54.155 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2018-01-23 09:03:54.166 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2018-01-23 09:03:54.458 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization completed in 1751 ms

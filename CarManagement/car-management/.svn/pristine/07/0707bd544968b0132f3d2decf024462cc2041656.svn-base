@@ -1,0 +1,25 @@
+package com.bailian.car.utils;
+
+import java.util.UUID;
+
+/**
+ * 生成UUID工具类
+ * 
+ * @创建人 bailian
+ * @创建时间 2018年1月12日上午11:35:35
+ * @修改人 wang
+ * @修改时间 2018年1月12日上午11:35:35
+ * @since JDK 1.8
+ */
+public class UUIDUtils {
+	public static String getUUID() {
+
+		return UUID.randomUUID().toString().replace("-", "");
+
+	}
+	
+	public static void main(String[] args) {
+		
+		System.out.println((1==1&&1==2));
+	}
+}

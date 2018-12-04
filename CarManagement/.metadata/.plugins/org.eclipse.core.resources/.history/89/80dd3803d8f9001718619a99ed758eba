@@ -1,0 +1,290 @@
+2018-01-15 16:57:03.965 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-15 16:57:04.016 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Mon Jan 15 16:57:04 CST 2018]; root of context hierarchy
+2018-01-15 16:57:04.044 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-15 16:57:04.537 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-15 16:57:04.642 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-15 16:57:04.680 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-15 16:57:05.127 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 16:59:36.425 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-15 16:59:36.484 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Mon Jan 15 16:59:36 CST 2018]; root of context hierarchy
+2018-01-15 16:59:36.537 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-15 16:59:36.857 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-15 16:59:36.969 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-15 16:59:36.987 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-15 16:59:37.286 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:03:25.187 [main] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-15 17:03:25.427 [main] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Mon Jan 15 17:03:25 CST 2018]; root of context hierarchy
+2018-01-15 17:03:25.536 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-15 17:03:26.028 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-15 17:03:26.288 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-15 17:03:26.308 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-15 17:03:26.611 [main] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:03:27.640 [main] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean -
+				Initializing EhCache CacheManager
+2018-01-15 17:12:32.445 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-15 17:12:32.483 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Mon Jan 15 17:12:32 CST 2018]; root of context hierarchy
+2018-01-15 17:12:32.512 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-15 17:12:32.820 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-15 17:12:32.950 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-15 17:12:32.971 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-15 17:12:33.237 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:12:33.832 [localhost-startStop-1] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean -
+				Initializing EhCache CacheManager
+2018-01-15 17:12:34.187 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [org.springframework.cache.ehcache.EhCacheManagerFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:12:34.232 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor#0' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:12:34.240 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [net.sf.ehcache.CacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:12:34.251 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'shiroCacheManager' of type [org.apache.shiro.cache.ehcache.EhCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:12:34.253 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:12:34.663 [localhost-startStop-1] INFO  com.alibaba.druid.pool.DruidDataSource -
+				{dataSource-1} inited
+2018-01-15 17:12:35.389 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:12:35.791 [localhost-startStop-1] INFO  org.hibernate.Version -
+				HHH000412: Hibernate Core {5.2.10.Final}
+2018-01-15 17:12:35.793 [localhost-startStop-1] INFO  org.hibernate.cfg.Environment -
+				HHH000206: hibernate.properties not found
+2018-01-15 17:12:35.953 [localhost-startStop-1] INFO  org.hibernate.annotations.common.Version -
+				HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-01-15 17:12:36.706 [localhost-startStop-1] INFO  org.hibernate.dialect.Dialect -
+				HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-01-15 17:12:37.375 [localhost-startStop-1] INFO  org.hibernate.validator.internal.util.Version -
+				HV000001: Hibernate Validator 5.2.1.Final
+2018-01-15 17:12:37.721 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:12:37.751 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Closing JPA EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:12:37.755 [localhost-startStop-1] INFO  com.alibaba.druid.pool.DruidDataSource -
+				{dataSource-1} closed
+2018-01-15 17:12:37.759 [localhost-startStop-1] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean -
+				Shutting down EhCache CacheManager
+2018-01-15 17:20:35.134 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-15 17:20:35.254 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Mon Jan 15 17:20:35 CST 2018]; root of context hierarchy
+2018-01-15 17:20:35.352 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-15 17:20:35.747 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-15 17:20:35.968 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-15 17:20:35.986 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-15 17:20:36.320 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:20:37.295 [localhost-startStop-1] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean -
+				Initializing EhCache CacheManager
+2018-01-15 17:20:37.586 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [org.springframework.cache.ehcache.EhCacheManagerFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:20:37.709 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor#0' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:20:37.752 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [net.sf.ehcache.CacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:20:37.764 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'shiroCacheManager' of type [org.apache.shiro.cache.ehcache.EhCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:20:37.773 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:20:38.300 [localhost-startStop-1] INFO  com.alibaba.druid.pool.DruidDataSource -
+				{dataSource-1} inited
+2018-01-15 17:20:38.873 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:20:39.171 [localhost-startStop-1] INFO  org.hibernate.Version -
+				HHH000412: Hibernate Core {5.2.10.Final}
+2018-01-15 17:20:39.175 [localhost-startStop-1] INFO  org.hibernate.cfg.Environment -
+				HHH000206: hibernate.properties not found
+2018-01-15 17:20:39.279 [localhost-startStop-1] INFO  org.hibernate.annotations.common.Version -
+				HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-01-15 17:20:40.291 [localhost-startStop-1] INFO  org.hibernate.dialect.Dialect -
+				HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-01-15 17:20:40.644 [localhost-startStop-1] INFO  org.hibernate.validator.internal.util.Version -
+				HV000001: Hibernate Validator 5.2.1.Final
+2018-01-15 17:20:40.810 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:20:41.148 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization completed in 6009 ms
+2018-01-15 17:20:41.257 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization started
+2018-01-15 17:20:41.263 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:20:41 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:20:41.263 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [springmvc/spring-web.xml]
+2018-01-15 17:20:41.511 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:20:41.892 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/test]}" onto public java.lang.String com.bailian.car.controller.TestController.index()
+2018-01-15 17:20:42.383 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:20:41 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:20:42.512 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:20:41 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:20:42.815 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2018-01-15 17:20:42.821 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2018-01-15 17:20:42.827 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2018-01-15 17:20:43.046 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization completed in 1788 ms
+2018-01-15 17:22:35.410 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-15 17:22:35.489 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Mon Jan 15 17:22:35 CST 2018]; root of context hierarchy
+2018-01-15 17:22:35.545 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-15 17:22:35.943 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-15 17:22:36.084 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-15 17:22:36.181 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-15 17:22:36.709 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:22:38.099 [localhost-startStop-1] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean -
+				Initializing EhCache CacheManager
+2018-01-15 17:22:38.759 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [org.springframework.cache.ehcache.EhCacheManagerFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:22:38.979 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor#0' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:22:38.991 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [net.sf.ehcache.CacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:22:39.021 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'shiroCacheManager' of type [org.apache.shiro.cache.ehcache.EhCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:22:39.024 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:22:39.607 [localhost-startStop-1] INFO  com.alibaba.druid.pool.DruidDataSource -
+				{dataSource-1} inited
+2018-01-15 17:22:39.919 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:22:40.093 [localhost-startStop-1] INFO  org.hibernate.Version -
+				HHH000412: Hibernate Core {5.2.10.Final}
+2018-01-15 17:22:40.095 [localhost-startStop-1] INFO  org.hibernate.cfg.Environment -
+				HHH000206: hibernate.properties not found
+2018-01-15 17:22:40.145 [localhost-startStop-1] INFO  org.hibernate.annotations.common.Version -
+				HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-01-15 17:22:40.618 [localhost-startStop-1] INFO  org.hibernate.dialect.Dialect -
+				HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-01-15 17:22:41.018 [localhost-startStop-1] INFO  org.hibernate.validator.internal.util.Version -
+				HV000001: Hibernate Validator 5.2.1.Final
+2018-01-15 17:22:41.370 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:22:42.119 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization completed in 6707 ms
+2018-01-15 17:22:42.235 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization started
+2018-01-15 17:22:42.249 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:22:42 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:22:42.250 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [springmvc/spring-web.xml]
+2018-01-15 17:22:42.621 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:22:42.826 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/test]}" onto public java.lang.String com.bailian.car.controller.TestController.index()
+2018-01-15 17:22:43.351 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:22:42 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:22:43.525 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:22:42 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:22:43.925 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2018-01-15 17:22:43.981 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2018-01-15 17:22:43.988 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2018-01-15 17:22:44.181 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization completed in 1946 ms
+2018-01-15 17:34:08.791 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization started
+2018-01-15 17:34:08.944 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing Root WebApplicationContext: startup date [Mon Jan 15 17:34:08 CST 2018]; root of context hierarchy
+2018-01-15 17:34:09.138 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext.xml]
+2018-01-15 17:34:09.829 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-data.xml]
+2018-01-15 17:34:10.109 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-shiro.xml]
+2018-01-15 17:34:10.156 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [spring/applicationContext-cache.xml]
+2018-01-15 17:34:10.739 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:34:12.050 [localhost-startStop-1] INFO  org.springframework.cache.ehcache.EhCacheManagerFactoryBean -
+				Initializing EhCache CacheManager
+2018-01-15 17:34:12.344 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [org.springframework.cache.ehcache.EhCacheManagerFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:34:12.386 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor#0' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:34:12.394 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'ehCacheManager' of type [net.sf.ehcache.CacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:34:12.421 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'shiroCacheManager' of type [org.apache.shiro.cache.ehcache.EhCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:34:12.426 [localhost-startStop-1] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker -
+				Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-01-15 17:34:12.848 [localhost-startStop-1] INFO  com.alibaba.druid.pool.DruidDataSource -
+				{dataSource-1} inited
+2018-01-15 17:34:13.445 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:34:13.749 [localhost-startStop-1] INFO  org.hibernate.Version -
+				HHH000412: Hibernate Core {5.2.10.Final}
+2018-01-15 17:34:13.751 [localhost-startStop-1] INFO  org.hibernate.cfg.Environment -
+				HHH000206: hibernate.properties not found
+2018-01-15 17:34:13.855 [localhost-startStop-1] INFO  org.hibernate.annotations.common.Version -
+				HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-01-15 17:34:14.589 [localhost-startStop-1] INFO  org.hibernate.dialect.Dialect -
+				HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-01-15 17:34:15.079 [localhost-startStop-1] INFO  org.hibernate.validator.internal.util.Version -
+				HV000001: Hibernate Validator 5.2.1.Final
+2018-01-15 17:34:15.251 [localhost-startStop-1] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean -
+				Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-01-15 17:34:15.895 [localhost-startStop-1] INFO  org.springframework.web.context.ContextLoader -
+				Root WebApplicationContext: initialization completed in 7101 ms
+2018-01-15 17:34:16.113 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization started
+2018-01-15 17:34:16.120 [localhost-startStop-1] INFO  org.springframework.web.context.support.XmlWebApplicationContext -
+				Refreshing WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:34:16 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:34:16.122 [localhost-startStop-1] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader -
+				Loading XML bean definitions from class path resource [springmvc/spring-web.xml]
+2018-01-15 17:34:16.513 [localhost-startStop-1] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor -
+				JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2018-01-15 17:34:16.914 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -
+				Mapped "{[/test]}" onto public java.lang.String com.bailian.car.controller.TestController.index()
+2018-01-15 17:34:17.711 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:34:16 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:34:17.799 [localhost-startStop-1] INFO  org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter -
+				Looking for @ControllerAdvice: WebApplicationContext for namespace 'SpringMVC-servlet': startup date [Mon Jan 15 17:34:16 CST 2018]; parent: Root WebApplicationContext
+2018-01-15 17:34:18.249 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2018-01-15 17:34:18.267 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2018-01-15 17:34:18.274 [localhost-startStop-1] INFO  org.springframework.web.servlet.handler.SimpleUrlHandlerMapping -
+				Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2018-01-15 17:34:18.471 [localhost-startStop-1] INFO  org.springframework.web.servlet.DispatcherServlet -
+				FrameworkServlet 'SpringMVC': initialization completed in 2358 ms

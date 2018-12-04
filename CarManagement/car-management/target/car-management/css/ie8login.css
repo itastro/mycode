@@ -1,0 +1,70 @@
+body {
+    height: 100%;
+    /*background: pink;*/
+}
+
+.header img {
+    width: 200px;
+    height: 60px;
+}
+
+.header {
+    min-height: 80px;
+    font-size: 37px;
+}
+
+.content {
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    height: 80%;
+}
+
+.login_box {
+    width: 330px;
+    min-height: 380px;
+    /*height:*/
+}
+
+.box_title {
+    font-size: 25px;
+}
+
+.glyphicon.glyphicon-user,
+.glyphicon.glyphicon-lock {
+    font-size: 19px;
+}
+
+.user_group,
+.pass_group {
+    width: 230px;
+    min-height: 35px;
+    /*border: 1px solid red;*/
+}
+
+.vercode_input {
+    width: 80px;
+}
+
+.vercode {
+    min-width: 90px;
+    min-height: 29px;
+}
+
+.login_btn {
+    width: 235px;
+}
+
+.user_input,
+.pass_input {
+    width: 96%;
+    font-size: 18px;
+}
+
+.logininfo_group {
+    font-size: 13px;
+}
+
+.footer {
+    font-size: 14px;
+}

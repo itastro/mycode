@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommitComments>	<CommitComment>添加了   当天上线车辆</CommitComment>
+	<CommitComment>加入了时间  修改了sql</CommitComment>
+	<CommitComment>初始导入。</CommitComment>
+	<CommitComment>实体类</CommitComment>
+	<CommitComment>第一次导入</CommitComment>
+	<CommitComment>1.增加了quartz的引用</CommitComment>
+	<CommitComment>1.增加了定时任务
+2.修改了维修大屏的查询。
+3.增加了维修的置顶功能。
+3.增加了维修的排队状态。
+4.增加了维修的开始维修功能。
+6.增加了JobFactory CarMaintainJob类。
+7.增加了applicationContext-quartz.xml.
+7.修改了applicationContext.xml
+8.增加了定时修改维修状态的方法。
+9.pom文件增加了定时quartz的引用。</CommitComment>
+	<CommitComment>更新后的提交</CommitComment>
+	<CommitComment>first 提交</CommitComment>
+	<CommitComment>添加了用户登录 修改密码 用户退出  权限认证</CommitComment>
+</CommitComments>

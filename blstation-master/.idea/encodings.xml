@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blstation-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blstation-dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blstation-entity" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blstation-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blstation-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blstation-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/generator" charset="UTF-8" />
+  </component>
+</project>

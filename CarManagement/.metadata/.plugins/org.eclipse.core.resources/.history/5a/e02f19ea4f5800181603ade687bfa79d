@@ -1,0 +1,22 @@
+package com.bailian.car.domain.carmaintain;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * 
+    * @ClassName: Employee
+    * @Description: 维修员工
+    * @author itastro
+    * @date 2018年5月15日
+    *
+ */
+@Entity
+@Table(name = "t_employee")
+public class Employee {
+	
+	private int  id;
+	
+	private String name;
+
+}

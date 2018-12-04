@@ -1,0 +1,6 @@
+1531063027956	Rename type 'CheckBeanUtil'
+1531469785973	Delete element
+1531496017184	Delete element
+1531555581406	Rename type 'excelCar'
+1531557854093	Extract method 'createExcelCar'
+1531558109019	Extract method 'autoCreateProject'

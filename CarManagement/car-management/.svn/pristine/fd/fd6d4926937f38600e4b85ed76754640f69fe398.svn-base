@@ -1,0 +1,70 @@
+package com.bailian.car.controller.cargps;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.domain.cargps.CarGps;
+import com.bailian.car.dto.GpsCarDto;
+import com.bailian.car.param.CarGpsSearch;
+import com.bailian.car.service.cargps.CarGpsService;
+
+@Controller
+@RequestMapping("/gpscar")
+public class CarGpsController {
+	
+	@Autowired
+	private CarGpsService carGpsService;
+	
+	
+	@RequestMapping("/check.action")
+	@ResponseBody
+	public JsonData check(String vSn, String gpsSn) {
+		
+		if (StringUtils.isBlank(vSn)&&StringUtils.isBlank(gpsSn)) {
+			return JsonData.build(false, "请输入gps编号或者车辆编号", null);
+		}
+		return carGpsService.check(vSn, gpsSn);
+		
+	}
+	
+	@RequestMapping("/bindCarGps.action")
+	@ResponseBody
+	public JsonData bindCarGps(String vSn, String gpsSn) {
+		
+		if (StringUtils.isBlank(vSn)&&StringUtils.isBlank(gpsSn)) {
+			return JsonData.build(false, "请输入gps编号或者车辆编号", null);
+		}
+		return carGpsService.carGpsBind(vSn, gpsSn);
+		
+	}
+	
+	@RequestMapping("/pageQuery.action")
+	@ResponseBody
+	public PageBean<CarGps> bindCarGps(PageQuery pageQuery, CarGpsSearch carGpsSearch) {
+		
+		return carGpsService.pageQuery(pageQuery, carGpsSearch);
+		
+	}
+	
+	@RequestMapping("/gpsOnline.action")
+	@ResponseBody
+	public PageBean<GpsCarDto> gpsOnline(PageQuery pageQuery){
+		
+	return carGpsService.gpsOnline(pageQuery);
+	}
+	
+	@RequestMapping("/currentDayGps.action")
+	@ResponseBody
+	public PageBean<GpsCarDto> currentDayGps(PageQuery pageQuery){
+		
+	
+		return carGpsService.currentDayGps(pageQuery);
+	}
+
+}

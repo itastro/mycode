@@ -1,0 +1,27 @@
+package com.bailian.car.controller.data;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.bailian.car.domain.basedata.CarBase;
+import com.bailian.car.service.data.CarService;
+
+@Controller
+@RequestMapping("/car")
+public class CarController {
+
+	@Autowired
+	private CarService carService;
+
+	@RequestMapping(value = "/addCar.action")
+	public String addCar(CarBase carBase) {
+		carService.add(carBase);
+		return "carlist";
+	}
+
+	@RequestMapping(value = "/carPageQuery")
+	public Object carPageQuery(int page, int rows) {
+		return null;
+
+	}
+}

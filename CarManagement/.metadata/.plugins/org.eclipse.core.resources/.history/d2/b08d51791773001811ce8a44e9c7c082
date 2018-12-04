@@ -1,0 +1,228 @@
+package com.bailian.car.service.cars.insurance.impl;
+
+import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.cars.car.CarInsuranceRepository;
+import com.bailian.car.dao.cars.car.CarRepository;
+import com.bailian.car.dao.cars.car.HistoryInsuranceRepository;
+import com.bailian.car.domain.cars.car.Car;
+import com.bailian.car.domain.cars.car.CarInsurance;
+import com.bailian.car.domain.cars.car.HistoryInsurance;
+import com.bailian.car.domain.cars.car.QCar;
+import com.bailian.car.domain.cars.car.QCarInsurance;
+import com.bailian.car.dto.InsuranceDto;
+import com.bailian.car.exception.PermissionException;
+import com.bailian.car.param.AddInsuranceParam;
+import com.bailian.car.service.cars.insurance.InsuranceService;
+import com.bailian.car.utils.DateUtils;
+import com.bailian.car.utils.JsonMapper;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Transactional
+@Service
+public class InsuranceServiceImpl implements InsuranceService {
+
+	@Autowired
+	private CarInsuranceRepository carInsuranceRepository;
+
+	@Autowired
+	private CarRepository carRepository;
+
+	@Autowired
+	private HistoryInsuranceRepository historyInsuranceRepository;
+
+	// 实体管理
+	@Autowired
+	private EntityManager entityManager;
+
+	// 查询工厂
+	private JPAQueryFactory queryFactory;
+
+	// 初始化查询工厂
+	@PostConstruct
+	public void init() {
+		queryFactory = new JPAQueryFactory(entityManager);
+	}
+
+	@Override
+	public PageBean<InsuranceDto> pageQuery1(PageQuery pageQuery) {
+
+		PageBean<InsuranceDto> bean = new PageBean<>();
+		// 车辆信息
+		QCar qcar = QCar.car;
+		// 保险信息
+		QCarInsurance qCarInsurance = QCarInsurance.carInsurance;
+		//
+		// Predicate predicate =
+		// qCarInsurance.vSn.like("").or(qCarInsurance.insNo.like(""));
+
+		Predicate predicate = qCarInsurance.vSn.like("2018ICECTC001").or(qCarInsurance);
+
+		// 查询
+		QueryResults<InsuranceDto> results = queryFactory
+				.select(Projections.bean(InsuranceDto.class, qCarInsurance.id, qcar.vSn, qcar.vin, qcar.engineNumber,
+						qcar.brandModelone, qcar.vCarType, qcar.seats, qcar.price, qcar.engineCapacity, qcar.istatus,
+						qcar.vehicleQuality, qcar.projectEngineer, qCarInsurance.insNo, qCarInsurance.brandModeltwo,
+						qCarInsurance.startTime, qCarInsurance.endTime, qCarInsurance.numtime, qCarInsurance.applyTime,
+						qCarInsurance.applyPerson, qCarInsurance.remark, qCarInsurance.makeTime, qCarInsurance.lave,
+						qcar.project, qcar.carName, qCarInsurance.vehicleInspection))
+				.from(qCarInsurance, qcar).where(qcar.vSn.eq(qCarInsurance.vSn), predicate)
+				.orderBy(qCarInsurance.applyTime.desc()).offset(pageQuery.getPage()).limit(pageQuery.getSize())
+				.fetchResults();
+		bean.setTotal(results.getTotal());
+		bean.setRows(results.getResults());
+		return bean;
+	}
+
+	@Override
+	public JsonData applyInsurance(String[] vSns, Integer numtime) {
+		Date date = new Date();
+		// String nickname = TokenManagerUtils.getNickname();
+
+		if (vSns == null) {
+			return JsonData.fail("请选择车辆");
+		}
+		if (vSns.length <= 0) {
+			return JsonData.fail("请选择车辆");
+		}
+
+		if (numtime == null) {
+			return JsonData.fail("请填写保险期限");
+		}
+		if (vSns.length == 0) {
+			return JsonData.fail("请选择车辆");
+		}
+		for (String vSn : vSns) {
+			// 判断这个车辆是否已经录入
+			Car car = carRepository.findByvSn(vSn);
+
+			if (car == null) {
+				return JsonData.fail("车辆编号为" + vSn + "的车不存在,请联系管理员");
+			}
+
+			if (car.getProjectEngineer() == null) {
+				return JsonData.fail("车辆编号为" + vSn + "的车未进行车辆录入");
+			}
+
+			if (("已申请").equals(car.getIstatus())) {
+				return JsonData.fail("此车已经进行了申请/续保操作");
+			}
+			CarInsurance carInsurance1 = carInsuranceRepository.findByvSn(vSn);
+			if (carInsurance1 == null) {
+				CarInsurance carInsurance = CarInsurance.builder().vSn(vSn).numtime(numtime).applyTime(date)
+						.applyPerson("admin").build();
+				carInsuranceRepository.save(carInsurance);
+			} else {
+				carInsurance1.setApplyTime(date);
+				carInsurance1.setApplyPerson("admin");
+				carInsurance1.setMakeTime(null);
+				carInsurance1.setInsNo(null);
+				carInsurance1.setStartTime(null);
+				carInsurance1.setEndTime(null);
+			}
+
+			car.setIstatus("已申请");
+		}
+		return JsonData.success("保险申请成功,请去保列表导出需要信息");
+
+	}
+
+	@Override
+	public PageBean<CarInsurance> pageQuery(PageQuery pageQuery) {
+
+		log.info("pageQuery:{}", JsonMapper.obj2String(pageQuery));
+
+		PageBean<CarInsurance> result = new PageBean<>();
+		Sort sort = new Sort(Direction.DESC, "applyTime");
+		Pageable pageable = new PageRequest(pageQuery.getPage(), pageQuery.getSize(), sort);
+
+		Page<CarInsurance> pageData = carInsuranceRepository.findAll(pageable);
+
+		result.setTotal(pageData.getTotalElements());
+
+		result.setRows(pageData.getContent());
+		return result;
+	}
+
+	@Override
+	public JsonData addInsurance(AddInsuranceParam addInsuranceParam) {
+		log.info("insuranceParam,{}", JsonMapper.obj2String(addInsuranceParam));
+		String vSn = addInsuranceParam.getvSn();
+		Car car = carRepository.findByvSn(addInsuranceParam.getvSn());
+		if (car == null) {
+			return JsonData.fail("此车辆不存在");
+		}
+		CarInsurance insurance = carInsuranceRepository.findByvSn(vSn);
+
+		if (insurance == null) {
+			return JsonData.fail("无此保险申请");
+		}
+		// 保存保险信息到保险列表
+		BeanUtils.copyProperties(addInsuranceParam, insurance);
+		// 保存保险信息到车辆
+		BeanUtils.copyProperties(addInsuranceParam, car);
+		insurance.setMakeTime(new Date());
+		car.setIstatus("未申请");
+		carRepository.save(car);
+		carInsuranceRepository.save(insurance);
+		HistoryInsurance hInsurance = creatInsHistory(insurance);
+
+		historyInsuranceRepository.save(hInsurance);
+		return JsonData.success("录入保险成功");
+
+	}
+
+	// 创建保险历史纪录
+	private HistoryInsurance creatInsHistory(CarInsurance insurance) {
+		HistoryInsurance hInsurance = HistoryInsurance.builder().vSn(insurance.getvSn())
+				.brandModeltwo(insurance.getBrandModeltwo()).insNo(insurance.getInsNo())
+				.startTime(insurance.getStartTime()).endTime(insurance.getEndTime()).numtime(insurance.getNumtime())
+				.applyTime(insurance.getApplyTime()).applyPerson(insurance.getApplyPerson())
+				.remark(insurance.getRemark()).makeTime(insurance.getMakeTime())
+				.vehicleInspection(insurance.getVehicleInspection()).build();
+		return hInsurance;
+	}
+
+	@Override
+	public List<HistoryInsurance> findByvSn(String vSn) {
+		List<HistoryInsurance> list = historyInsuranceRepository.findByvSn(vSn);
+		return list;
+	}
+
+	@Override
+	public JsonData updateInsurance(AddInsuranceParam insuranceParam) {
+
+		log.info("insuranceParam,{}", JsonMapper.obj2String(insuranceParam));
+		try {
+			carInsuranceRepository.update(insuranceParam.getvSn(), insuranceParam.getInsNo(),
+					insuranceParam.getStartTime(), insuranceParam.getEndTime(), insuranceParam.getRemark(),
+					insuranceParam.getBrandModeltwo());
+			carRepository.update(insuranceParam.getvSn(), insuranceParam.getInsNo(), insuranceParam.getStartTime(),
+					insuranceParam.getEndTime());
+			return JsonData.success("修改成功");
+		} catch (Exception e) {
+			throw new PermissionException("修改失败" + e.getCause());
+		}
+
+	}
+
+}

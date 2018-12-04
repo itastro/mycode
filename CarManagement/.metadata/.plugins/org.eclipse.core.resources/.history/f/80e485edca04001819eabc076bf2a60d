@@ -1,0 +1,102 @@
+package com.bailian.car.service.impl;
+
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.dao.MenuRepository;
+import com.bailian.car.dao.PermissionRepository;
+import com.bailian.car.dao.RoleRepository;
+import com.bailian.car.domain.system.Menu;
+import com.bailian.car.domain.system.Permission;
+import com.bailian.car.domain.system.Role;
+import com.bailian.car.domain.system.User;
+import com.bailian.car.service.RoleService;
+
+@Service
+@Transactional
+public class RolseServiceImpl implements RoleService {
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private PermissionRepository permissionRepository;
+	@Autowired
+	private MenuRepository menuRepository;
+
+	@Override
+	public List<Role> findByUser(User user) {
+		// TODO Auto-generated method stub
+		// 基于用户查询角色
+		// admin用户具有所有的角色
+		if (user.getUsername().equals("admin")) {
+			return roleRepository.findAll();
+		} else {
+			return roleRepository.findByUser(user.getId());
+		}
+
+	}
+
+	@Override
+	public void add(Role role, String[] permissionIds, String menuIds) {
+		// TODO Auto-generated method stub
+		try {
+			// 关联权限
+			if (permissionIds != null) {
+				for (String permissionId : permissionIds) {
+					Permission permission = permissionRepository.findOne(Integer.parseInt(permissionId));
+					role.getPermissions().add(permission);
+				}
+
+			}
+			// 关联菜菜单
+			if (StringUtils.isNoneBlank(menuIds)) {
+				String[] ids = menuIds.split(",");
+				for (String id : ids) {
+					Menu menu = menuRepository.findOne(Integer.parseInt(id));
+					role.getMenus().add(menu);
+				}
+			}
+
+			// 保存角色信息
+			roleRepository.save(role);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+
+		}
+	}
+
+	@Override
+	public JsonData findALL() {
+		// 查询所有的角色
+		List<Role> findAll = roleRepository.findAll();
+
+		return JsonData.success(findAll);
+	}
+
+	@Override
+	public void delete(String[] roleIds) {
+		// TODO Auto-generated method stub
+
+		for (String rid : roleIds) {
+			int id = Integer.parseInt(rid);
+			Role role = roleRepository.findOne(id);
+			Set<User> users = role.getUsers();
+
+			for (User user : users) {
+				if (user.getId() == id) {
+					user.getRoles().remove(role);
+				}
+
+			}
+
+			role.setUsers(null);
+			roleRepository.delete(role);
+		}
+
+	}
+}

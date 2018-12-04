@@ -1,0 +1,208 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 204,
+    "complete": 14,
+    "completepercentage": 10,
+    "queuepercentage": 20,
+    "currentpercentage": 70,
+    "current": 11,
+    "queue": 411,
+    "data": [{
+            "vSn": "9883-999",
+            "operator": "车辆 0",
+            "forecastTime": "01-10 00:00",
+            "status": "维修中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别和克",
+            "fin_park": "维修间",
+            "carvSn": "2015-809"
+        },
+        {
+            "vSn": "9883-999",
+            "operator": "车辆 1",
+            "status": "维修中",
+            "forecastTime": "01-10 00:00",
+            "islegal": "不合法",
+            "workContent": "更换副驾皮带轮，车辆是新车",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "陕A570UX"
+        },
+        {
+            "vSn": "2083-999",
+            "operator": "车辆 2",
+            "forecastTime": "01-10 00:00",
+            "status": "排队中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "陕A870gg"
+        },
+        {
+            "vSn": "2018ICECTC008",
+            "operator": "车辆 3",
+            "status": "维修中",
+            "forecastTime": "01-10 00:00",
+            "islegal": "不合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "陕A270UX"
+        },
+        {
+            "vSn": "2018CTDND001",
+            "operator": "车辆 4",
+            "status": "已完成",
+            "forecastTime": "01-10 00:00",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "陕A170UX"
+        },
+        {
+            "vSn": "2018ICECTC031",
+            "operator": "车辆 5",
+            "forecastTime": "01-10 00:00",
+            "status": "排队中",
+            "islegal": "不合法",
+            "workContent": "雨刮器不动作，换灯,检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "陕A470UX"
+        },
+        {
+            "vSn": "2018ICECTC011",
+            "operator": "车辆 6",
+            "forecastTime": "01-10 00:00",
+            "status": "已完成",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，换灯,检修，换灯,检修，换灯,检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-819"
+        },
+        {
+            "vSn": "2019SJSNS002",
+            "operator": "车辆 7",
+            "forecastTime": "01-10 00:00",
+            "status": "已完成",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-811"
+        },
+        {
+            "vSn": 8,
+            "operator": "车辆 8",
+            "forecastTime": "01-10 00:00",
+            "status": "维修中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-855"
+        },
+        {
+            "vSn": "2019-228",
+            "operator": "车辆 9",
+            "forecastTime": "01-10 00:00",
+            "status": "已完成",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-889"
+        },
+        {
+            "vSn": "2018-222",
+            "operator": "车辆 10",
+            "forecastTime": "01-10 00:00",
+            "status": "维修中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-109"
+        },
+        {
+            "vSn": "2018-224",
+            "operator": "车辆 8",
+            "forecastTime": "01-10 00:00",
+            "status": "已完成",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2016-119"
+        },
+        {
+            "vSn": "2018-465",
+            "operator": "车辆 8",
+            "forecastTime": "01-10 00:00",
+            "status": "排队中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-459"
+        },
+        {
+            "vSn": "2018-669",
+            "operator": "车辆 8",
+            "forecastTime": "01-10 00:00",
+            "status": "维修中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-888"
+        },
+        {
+            "vSn": "2091-222",
+            "operator": "车辆 8",
+            "forecastTime": "01-10 00:00",
+            "status": "排队中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-555"
+        }, {
+            "vSn": "2018-465",
+            "operator": "车辆 8",
+            "forecastTime": "01-10 00:00",
+            "status": "排队中",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-459"
+        },
+        {
+            "vSn": "2018-669",
+            "operator": "车辆 8",
+            "status": "排队中",
+            "forecastTime": "01-10 00:00",
+            "islegal": "合法",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-888"
+        },
+        {
+            "vSn": "2091-222",
+            "operator": "车辆 8",
+            "status": "维修中",
+            "forecastTime": "01-10 00:00",
+            "workContent": "雨刮器不动作，检修",
+            "applyPeople": "别克",
+            "fin_park": "维修间",
+            "carvSn": "2015-555"
+        }
+    ]
+}

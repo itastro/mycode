@@ -1,0 +1,790 @@
+package cn.shengrui.common.util;
+
+import cn.shengrui.common.beans.Ftp;
+import cn.shengrui.common.beans.JsonResult;
+import cn.shengrui.common.constant.FileTypeConstant;
+import cn.shengrui.common.enums.ResultEnum;
+import cn.shengrui.common.exception.ParamException;
+import cn.shengrui.common.propertites.FtpPertites;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Ftp服务工具类
+ *
+ * @ClassName FtpUtil
+ * @Description TODO
+ * @Date 2018/9/20 11:25
+ * @Author itastro
+ * @Version 1.0
+ **/
+@Component
+public class FTPUtil {
+
+    @Autowired
+    private FtpPertites ftpPertites;
+
+    /**
+     * 日志对象
+     **/
+    private static final Logger LOGGER = LoggerFactory.getLogger(FTPUtil.class);
+
+    /**
+     * FTP地址
+     **/
+    //private static final String FTP_ADDRESS = "192.168.0.107";
+    private static final String FTP_ADDRESS = "222.91.98.78";
+
+    /**
+     * FTP端口
+     **/
+    private static final int FTP_PORT = 21;
+
+    /**
+     * FTP用户名
+     **/
+
+    private static final String FTP_USERNAME = "Administrator";
+    //private static final String FTP_USERNAME = "ftpuser";
+    //private static final String FTP_USERNAME = "itastro";
+    /**
+     * FTP密码
+     **/
+    private static final String FTP_PASSWORD = "Blct2018";
+    //private static final String FTP_PASSWORD = "blct2018";
+    // private static final String FTP_PASSWORD = "0205";
+
+    /**
+     * FTP基础目录
+     **/
+    public static final String BASE_PATH = "";
+
+    /**
+     * FTP图片目录
+     **/
+    private static final String IMAGE_PATH = "/image";
+    /**
+     * FTP图片目录
+     **/
+    public static final String TCU_PATH = "/tcufile";
+    //private static final String TCU_PATH = "/tcufile";
+
+    /**
+     * FTP文件目录
+     **/
+    private static final String FILES_PATH = "/files";
+
+    private static final String SHENGRUISCRIPT_PATH = "/shengruiScript";
+
+    private static final String PROVIDERSCRIPT_PATH = "/providerScript";
+
+    /**
+     * 本地字符编码
+     **/
+    private static String localCharset = "GBK";
+
+    /**
+     * FTP协议里面，规定文件名编码为iso-8859-1
+     **/
+    private static String serverCharset = "ISO-8859-1";
+
+    /**
+     * UTF-8字符编码
+     **/
+    private static final String CHARSET_UTF8 = "UTF-8";
+
+    /**
+     * OPTS UTF8字符串常量
+     **/
+    private static final String OPTS_UTF8 = "OPTS UTF8";
+
+    /**
+     * 设置缓冲区大小4M
+     **/
+    private static final int BUFFER_SIZE = 1024 * 1024 * 4;
+
+    /**
+     * FTPClient对象
+     **/
+    private static FTPClient ftpClient = null;
+
+    /**
+     * 本地文件上传到FTP服务器
+     *
+     * @param ftpPath  FTP服务器文件相对路径，例如：test/123
+     * @param savePath 本地文件路径，例如：D:/test/123/test.txt
+     * @param fileName 上传到FTP服务的文件名，例如：666.txt
+     * @return boolean 成功返回true，否则返回false
+     */
+    public static boolean uploadLocalFile(String ftpPath, String savePath, String fileName) throws Exception {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        boolean flag = false;
+        if (ftpClient != null) {
+            File file = new File(savePath);
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(file);
+
+                ftpClient.setBufferSize(BUFFER_SIZE);
+                // 设置编码：开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）
+                if (FTPReply.isPositiveCompletion(ftpClient.sendCommand(OPTS_UTF8, "ON"))) {
+                    localCharset = CHARSET_UTF8;
+                }
+                ftpClient.setControlEncoding(localCharset);
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                String path = changeEncoding(BASE_PATH + ftpPath);
+                // 目录不存在，则递归创建
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    FTPUtil.createDirectorys(path);
+                }
+                // 设置被动模式，开通一个端口来传输数据
+                ftpClient.enterLocalPassiveMode();
+                // 上传文件
+                flag = ftpClient.storeFile(new String(fileName.getBytes(localCharset), serverCharset), fis);
+            } catch (Exception e) {
+                LOGGER.error("本地文件上传FTP失败", e);
+            } finally {
+                IOUtils.closeQuietly(fis);
+                closeConnect();
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * web文件上传到FTP服务器
+     *
+     * @param file 本地文件路径，例如：D:/test/123/test.txt
+     */
+    public JsonResult webUploadLocalFile(MultipartFile file, Integer type) {
+        if (file.isEmpty()) {
+            throw new ParamException(ResultEnum.UNKONW_ERROR);
+        }
+        String fileName = file.getOriginalFilename();
+        fileName = fileName.replaceAll(" ", "");
+        String url = "";
+        String ftpPath = this.path(type);
+        // 登录
+        login(ftpPertites.getAddress(), ftpPertites.getPort(), ftpPertites.getFtpUsername(), ftpPertites.getFtpPassword());
+
+
+        Ftp ftpbean = new Ftp();
+        boolean flag = false;
+        if (ftpClient != null) {
+
+            FileInputStream fis = null;
+
+            try {
+                fis = (FileInputStream) file.getInputStream();
+                ftpClient.setBufferSize(ftpPertites.getBufferSize());
+                // 设置编码：开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）
+                if (FTPReply.isPositiveCompletion(ftpClient.sendCommand(ftpPertites.getOptsUtf8(), "ON"))) {
+                    localCharset = ftpPertites.getLocalCharset();
+                }
+                ftpClient.setControlEncoding(localCharset);
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                String path = changeEncoding(ftpPertites.getBasePath() + ftpPath);
+                // 目录不存在，则递归创建
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    FTPUtil.createDirectorys(path);
+                }
+                // 设置被动模式，开通一个端口来传输数据
+                ftpClient.enterLocalPassiveMode();
+                // 上传文件
+                flag = ftpClient.storeFile(new String(fileName.getBytes(ftpPertites.getLocalCharset()), ftpPertites.getServerCharset()), fis);
+
+                if (!flag) {
+                    return JsonResult.build(0, "文件上传失败", url);
+                }
+            } catch (Exception e) {
+                LOGGER.error("本地文件上传FTP失败", e);
+                return JsonResult.build(0, "文件上传失败", url);
+            } finally {
+                IOUtils.closeQuietly(fis);
+                closeConnect();
+            }
+        }
+        getFtpBean(fileName, ftpPath, ftpbean);
+
+        try {
+            fileName = URLEncoder.encode(fileName, "GBK");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        url = "ftp" + ":" + "//" + ftpPertites.getAddress() + ftpPertites.getBasePath() + ftpPath + "/" + fileName;
+
+
+        return JsonResult.build(1, "文件上传成功", url);
+    }
+
+    private static void getFtpBean(String fileName, String ftpPath, Ftp ftpbean) {
+        ftpbean.setName(fileName);
+
+        ftpbean.setPort(FTP_PORT);
+
+        ftpbean.setUrl(FTP_ADDRESS);
+
+        ftpbean.setPath(BASE_PATH + ftpPath);
+    }
+
+
+    public static boolean isNull(MultipartFile file) {
+        if (file.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public String path(Integer type) {
+
+        if (type == FileTypeConstant.tcufile) {
+            return ftpPertites.getTcuPath();
+        }
+
+        if (type == FileTypeConstant.shengruiScript) {
+            return ftpPertites.getShengruiScriptPath();
+        }
+
+        if (type == FileTypeConstant.customerScript) {
+            return ftpPertites.getProviderScriptPath();
+        }
+        if (type == FileTypeConstant.bfcfile) {
+            return ftpPertites.getBfcPath();
+        }
+
+        return FILES_PATH;
+    }
+
+    /**
+     * 远程文件上传到FTP服务器
+     *
+     * @param ftpPath    FTP服务器文件相对路径，例如：test/123
+     * @param remotePath 远程文件路径，例如：http://www.baidu.com/xxx/xxx.jpg
+     * @param fileName   上传到FTP服务的文件名，例如：test.jpg
+     * @return boolean 成功返回true，否则返回false
+     */
+    public boolean uploadRemoteFile(String ftpPath, String remotePath, String fileName) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        boolean flag = false;
+        if (ftpClient != null) {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            CloseableHttpResponse response = null;
+            try {
+                // 远程获取文件输入流
+                HttpGet httpget = new HttpGet(remotePath);
+                response = httpClient.execute(httpget);
+                HttpEntity entity = response.getEntity();
+                InputStream input = entity.getContent();
+                ftpClient.setBufferSize(BUFFER_SIZE);
+                // 设置编码：开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）
+                if (FTPReply.isPositiveCompletion(ftpClient.sendCommand(OPTS_UTF8, "ON"))) {
+                    localCharset = CHARSET_UTF8;
+                }
+                ftpClient.setControlEncoding(localCharset);
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                String path = changeEncoding(BASE_PATH + ftpPath);
+                // 目录不存在，则递归创建
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    FTPUtil.createDirectorys(path);
+                }
+                // 设置被动模式，开通一个端口来传输数据
+                ftpClient.enterLocalPassiveMode();
+                // 上传文件
+                flag = ftpClient.storeFile(new String(fileName.getBytes(localCharset), serverCharset), input);
+            } catch (Exception e) {
+                LOGGER.error("远程文件上传FTP失败", e);
+            } finally {
+                closeConnect();
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    LOGGER.error("关闭流失败", e);
+                }
+                if (response != null) {
+                    try {
+                        response.close();
+                    } catch (IOException e) {
+                        LOGGER.error("关闭流失败", e);
+                    }
+                }
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 下载指定文件到本地
+     *
+     * @param ftpPath  FTP服务器文件相对路径，例如：test/123
+     * @param fileName 要下载的文件名，例如：test.txt
+     * @param savePath 保存文件到本地的路径，例如：D:/test
+     * @return 成功返回true，否则返回false
+     */
+    public static boolean downloadFile(String ftpPath, String fileName, String savePath) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        boolean flag = false;
+        if (ftpClient != null) {
+            try {
+                String path = changeEncoding(BASE_PATH + ftpPath);
+                // 判断是否存在该目录
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录不存在");
+                    return flag;
+                }
+                ftpClient.enterLocalPassiveMode();  // 设置被动模式，开通一个端口来传输数据
+                String[] fs = ftpClient.listNames();
+                // 判断该目录下是否有文件
+                if (fs == null || fs.length == 0) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录下没有文件");
+                    return flag;
+                }
+                for (String ff : fs) {
+                    String ftpName = new String(ff.getBytes(serverCharset), localCharset);
+                    if (ftpName.equals(fileName)) {
+                        File file = new File(savePath + '/' + ftpName);
+                        try (OutputStream os = new FileOutputStream(file)) {
+                            flag = ftpClient.retrieveFile(ff, os);
+                        } catch (Exception e) {
+                            LOGGER.error(e.getMessage(), e);
+                        }
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                LOGGER.error("下载文件失败", e);
+            } finally {
+                closeConnect();
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 下载该目录下所有文件到本地
+     *
+     * @param ftpPath  FTP服务器上的相对路径，例如：test/123
+     * @param savePath 保存文件到本地的路径，例如：D:/test
+     * @return 成功返回true，否则返回false
+     */
+    public boolean downloadFiles(String ftpPath, String savePath) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        boolean flag = false;
+        if (ftpClient != null) {
+            try {
+                String path = changeEncoding(BASE_PATH + ftpPath);
+                // 判断是否存在该目录
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录不存在");
+                    return flag;
+                }
+                ftpClient.enterLocalPassiveMode();  // 设置被动模式，开通一个端口来传输数据
+                String[] fs = ftpClient.listNames();
+                // 判断该目录下是否有文件
+                if (fs == null || fs.length == 0) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录下没有文件");
+                    return flag;
+                }
+                for (String ff : fs) {
+                    String ftpName = new String(ff.getBytes(serverCharset), localCharset);
+                    File file = new File(savePath + '/' + ftpName);
+                    try (OutputStream os = new FileOutputStream(file)) {
+                        ftpClient.retrieveFile(ff, os);
+                    } catch (Exception e) {
+                        LOGGER.error(e.getMessage(), e);
+                    }
+                }
+                flag = true;
+            } catch (IOException e) {
+                LOGGER.error("下载文件失败", e);
+            } finally {
+                closeConnect();
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 获取该目录下所有文件,以字节数组返回
+     *
+     * @param ftpPath FTP服务器上文件所在相对路径，例如：test/123
+     * @return Map<String, Object> 其中key为文件名，value为字节数组对象
+     */
+    public Map<String, byte[]> getFileBytes(String ftpPath) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        Map<String, byte[]> map = new HashMap<>();
+        if (ftpClient != null) {
+            try {
+                String path = changeEncoding(BASE_PATH + ftpPath);
+                // 判断是否存在该目录
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录不存在");
+                    return map;
+                }
+                ftpClient.enterLocalPassiveMode();  // 设置被动模式，开通一个端口来传输数据
+                String[] fs = ftpClient.listNames();
+                // 判断该目录下是否有文件
+                if (fs == null || fs.length == 0) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录下没有文件");
+                    return map;
+                }
+                for (String ff : fs) {
+                    try (InputStream is = ftpClient.retrieveFileStream(ff)) {
+                        String ftpName = new String(ff.getBytes(serverCharset), localCharset);
+                        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                        byte[] buffer = new byte[BUFFER_SIZE];
+                        int readLength = 0;
+                        while ((readLength = is.read(buffer, 0, BUFFER_SIZE)) > 0) {
+                            byteStream.write(buffer, 0, readLength);
+                        }
+                        map.put(ftpName, byteStream.toByteArray());
+                        ftpClient.completePendingCommand(); // 处理多个文件
+                    } catch (Exception e) {
+                        LOGGER.error(e.getMessage(), e);
+                    }
+                }
+            } catch (IOException e) {
+                LOGGER.error("获取文件失败", e);
+            } finally {
+                closeConnect();
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 根据名称获取文件，以字节数组返回
+     *
+     * @param ftpPath  FTP服务器文件相对路径，例如：test/123
+     * @param fileName 文件名，例如：test.xls
+     * @return byte[] 字节数组对象
+     */
+    public byte[] getFileBytesByName(String ftpPath, String fileName) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        if (ftpClient != null) {
+            try {
+                String path = changeEncoding(BASE_PATH + ftpPath);
+                // 判断是否存在该目录
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录不存在");
+                    return byteStream.toByteArray();
+                }
+                ftpClient.enterLocalPassiveMode();  // 设置被动模式，开通一个端口来传输数据
+                String[] fs = ftpClient.listNames();
+                // 判断该目录下是否有文件
+                if (fs == null || fs.length == 0) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录下没有文件");
+                    return byteStream.toByteArray();
+                }
+                for (String ff : fs) {
+                    String ftpName = new String(ff.getBytes(serverCharset), localCharset);
+                    if (ftpName.equals(fileName)) {
+                        try (InputStream is = ftpClient.retrieveFileStream(ff);) {
+                            byte[] buffer = new byte[BUFFER_SIZE];
+                            int len = -1;
+                            while ((len = is.read(buffer, 0, BUFFER_SIZE)) != -1) {
+                                byteStream.write(buffer, 0, len);
+                            }
+                        } catch (Exception e) {
+                            LOGGER.error(e.getMessage(), e);
+                        }
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                LOGGER.error("获取文件失败", e);
+            } finally {
+                closeConnect();
+            }
+        }
+        return byteStream.toByteArray();
+    }
+
+    /**
+     * 获取该目录下所有文件,以输入流返回
+     *
+     * @param ftpPath FTP服务器上文件相对路径，例如：test/123
+     * @return Map<String, InputStream> 其中key为文件名，value为输入流对象
+     */
+    public Map<String, InputStream> getFileInputStream(String ftpPath) throws Exception {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        Map<String, InputStream> map = new HashMap<>();
+        if (ftpClient != null) {
+           /* try {*/
+            String path = changeEncoding(BASE_PATH + ftpPath);
+            // 判断是否存在该目录
+            if (!ftpClient.changeWorkingDirectory(path)) {
+                LOGGER.error(BASE_PATH + ftpPath + "该目录不存在");
+                return map;
+            }
+            ftpClient.enterLocalPassiveMode();  // 设置被动模式，开通一个端口来传输数据
+            String[] fs = ftpClient.listNames();
+            // 判断该目录下是否有文件
+            if (fs == null || fs.length == 0) {
+                LOGGER.error(BASE_PATH + ftpPath + "该目录下没有文件");
+                return map;
+            }
+            for (String ff : fs) {
+                String ftpName = new String(ff.getBytes(serverCharset), localCharset);
+                InputStream is = ftpClient.retrieveFileStream(ff);
+                map.put(ftpName, is);
+                // ftpClient.completePendingCommand(); // 处理多个文件
+            }
+           /* } catch (IOException e) {
+                LOGGER.error("获取文件失败", e);
+            } finally {*/
+            //  closeConnect();
+           /* }*/
+        }
+        return map;
+    }
+
+    /**
+     * 根据名称获取文件，以输入流返回
+     *
+     * @param ftpPath  FTP服务器上文件相对路径，例如：test/123
+     * @param fileName 文件名，例如：test.txt
+     * @return InputStream 输入流对象
+     */
+    public InputStream getInputStreamByName(String ftpPath, String fileName) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        InputStream input = null;
+        if (ftpClient != null) {
+            try {
+                String path = changeEncoding(BASE_PATH + ftpPath);
+                // 判断是否存在该目录
+                if (!ftpClient.changeWorkingDirectory(path)) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录不存在");
+                    return input;
+                }
+                ftpClient.enterLocalPassiveMode();  // 设置被动模式，开通一个端口来传输数据
+                String[] fs = ftpClient.listNames();
+                // 判断该目录下是否有文件
+                if (fs == null || fs.length == 0) {
+                    LOGGER.error(BASE_PATH + ftpPath + "该目录下没有文件");
+                    return input;
+                }
+                for (String ff : fs) {
+                    String ftpName = new String(ff.getBytes(serverCharset), localCharset);
+                    if (ftpName.equals(fileName)) {
+                        input = ftpClient.retrieveFileStream(ff);
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                LOGGER.error("获取文件失败", e);
+            } finally {
+                closeConnect();
+            }
+        }
+        return input;
+    }
+
+    /**
+     * 删除指定文件
+     *
+     * @param filePath 文件相对路径，例如：test/123/test.txt
+     * @return 成功返回true，否则返回false
+     */
+    public static boolean deleteFile(String filePath) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        boolean flag = false;
+        if (ftpClient != null) {
+            try {
+                String path = changeEncoding(BASE_PATH + filePath);
+                flag = ftpClient.deleteFile(filePath);
+            } catch (IOException e) {
+                LOGGER.error("删除文件失败", e);
+            } finally {
+                closeConnect();
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 删除目录下所有文件
+     *
+     * @param dirPath 文件相对路径，例如：test/123
+     * @return 成功返回true，否则返回false
+     */
+    public boolean deleteFiles(String dirPath) {
+        // 登录
+        login(FTP_ADDRESS, FTP_PORT, FTP_USERNAME, FTP_PASSWORD);
+        boolean flag = false;
+        if (ftpClient != null) {
+            try {
+                ftpClient.enterLocalPassiveMode();  // 设置被动模式，开通一个端口来传输数据
+                String path = changeEncoding(BASE_PATH + dirPath);
+                String[] fs = ftpClient.listNames(path);
+                // 判断该目录下是否有文件
+                if (fs == null || fs.length == 0) {
+                    LOGGER.error(BASE_PATH + dirPath + "该目录下没有文件");
+                    return flag;
+                }
+                for (String ftpFile : fs) {
+                    ftpClient.deleteFile(ftpFile);
+                }
+                flag = true;
+            } catch (IOException e) {
+                LOGGER.error("删除文件失败", e);
+            } finally {
+                closeConnect();
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 连接FTP服务器
+     *
+     * @param address  地址，如：127.0.0.1
+     * @param port     端口，如：21
+     * @param username 用户名，如：root
+     * @param password 密码，如：root
+     */
+    public static void login(String address, int port, String username, String password) {
+        ftpClient = new FTPClient();
+        try {
+            ftpClient.connect(address, port);
+            ftpClient.login(username, password);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                closeConnect();
+                LOGGER.error("FTP服务器连接失败");
+            }
+        } catch (Exception e) {
+            LOGGER.error("FTP登录失败", e);
+        }
+    }
+
+    /**
+     * 关闭FTP连接
+     */
+    public static void closeConnect() {
+        if (ftpClient != null && ftpClient.isConnected()) {
+            try {
+                ftpClient.logout();
+                ftpClient.disconnect();
+            } catch (IOException e) {
+                LOGGER.error("关闭FTP连接失败", e);
+            }
+        }
+    }
+
+    /**
+     * FTP服务器路径编码转换
+     *
+     * @param ftpPath FTP服务器路径
+     * @return String
+     */
+    private static String changeEncoding(String ftpPath) {
+        String directory = null;
+        try {
+            if (FTPReply.isPositiveCompletion(ftpClient.sendCommand(OPTS_UTF8, "ON"))) {
+                localCharset = CHARSET_UTF8;
+            }
+            directory = new String(ftpPath.getBytes(localCharset), serverCharset);
+        } catch (Exception e) {
+            LOGGER.error("路径编码转换失败", e);
+        }
+        return directory;
+    }
+
+    /**
+     * 在服务器上递归创建目录
+     *
+     * @param dirPath 上传目录路径
+     * @return
+     */
+    public static void createDirectorys(String dirPath) {
+        try {
+            if (!dirPath.endsWith("/")) {
+                dirPath += "/";
+            }
+            String directory = dirPath.substring(0, dirPath.lastIndexOf("/") + 1);
+            ftpClient.makeDirectory("/");
+            int start = 0;
+            int end = 0;
+            if (directory.startsWith("/")) {
+                start = 1;
+            } else {
+                start = 0;
+            }
+            end = directory.indexOf("/", start);
+            while (true) {
+                String subDirectory = new String(dirPath.substring(start, end));
+                if (!ftpClient.changeWorkingDirectory(subDirectory)) {
+                    if (ftpClient.makeDirectory(subDirectory)) {
+                        ftpClient.changeWorkingDirectory(subDirectory);
+                    } else {
+                        LOGGER.info("创建目录失败");
+                        return;
+                    }
+                }
+                start = end + 1;
+                end = directory.indexOf("/", start);
+                //检查所有目录是否创建完毕
+                if (end <= start) {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("上传目录创建失败", e);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        FTPUtil ftpUtil = new FTPUtil();
+
+      /*  Boolean flag = FTPUtil.uploadLocalFile("/tcufile", "D:\\新建文件夹\\第16章 权限缓存模块开发（Redis分布式）\\[更多IT教程 www.zxit8.com]  16-2 更新Redis缓存功能实现.mp4", "5.mp4");
+        System.out.println(flag);*/
+
+        /**
+         * 下载指定文件到本地
+         *
+         * @param ftpPath  FTP服务器文件相对路径，例如：test/123
+         * @param fileName 要下载的文件名，例如：test.txt
+         * @param savePath 保存文件到本地的路径，例如：D:/test
+         * @return 成功返回true，否则返回false
+         */
+       /* boolean flag = ftpUtil.downloadFile("/shengrui/tcufile", "API参考文档.zip", "D:/");*/
+
+        Map<String, byte[]> map = ftpUtil.getFileBytes("/shengrui/");
+
+
+        for (Map.Entry<String, byte[]> entry :
+                map.entrySet()) {
+
+            System.out.println(entry.getKey() + "<==========>" + entry.getValue());
+        }
+    }
+}

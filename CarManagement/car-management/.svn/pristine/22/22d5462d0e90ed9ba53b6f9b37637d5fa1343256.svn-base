@@ -1,0 +1,210 @@
+package com.bailian.car.service.cargps.impl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.LongType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.stereotype.Service;
+
+import com.bailian.car.beans.PageBean;
+import com.bailian.car.beans.PageQuery;
+import com.bailian.car.common.JsonData;
+import com.bailian.car.dao.cargps.CarGpsRepository;
+import com.bailian.car.dao.cars.car.CarPositionRepository;
+import com.bailian.car.dao.cars.car.CarRepository;
+import com.bailian.car.domain.cargps.CarGps;
+import com.bailian.car.domain.cars.car.Car;
+import com.bailian.car.domain.cars.car.CarPosition;
+import com.bailian.car.dto.GpsCarDto;
+import com.bailian.car.param.CarGpsSearch;
+import com.bailian.car.param.CarQueryOrder;
+import com.bailian.car.service.cargps.CarGpsService;
+@Service
+@Transactional
+public class CarGpsServiceImpl implements CarGpsService{
+	
+	@Autowired
+	private CarGpsRepository carGpsRepository;
+	
+	@Autowired
+	private CarRepository carRepository;
+	
+	@Autowired
+	private CarPositionRepository carPositionRepository;
+
+	
+	@Autowired
+	private LocalContainerEntityManagerFactoryBean entityManagerFactory;
+	
+	
+	@Override
+	public JsonData check(String vSn, String gpsSn) {
+		
+	CarGps carGps=	carGpsRepository.findByVSn(vSn);
+	carGps=	carGpsRepository.findByGpsSn(gpsSn);
+	if (carGps!=null) {
+		return JsonData.build(false, "GPS/车辆绑定过,如需继续绑定将会解除以前的绑定", carGps);
+	}
+		return JsonData.build(true, "请点点击确定按钮进行绑定", carGps);
+	}
+
+	@RequiresRoles(value="CARGPS",logical=Logical.OR)
+	@Override
+	public JsonData carGpsBind(String vSn, String gpsSn) {
+		String gps = gpsSn.replaceAll(" ", "");  //防止字符串有空格
+		String cvSn = vSn.replaceAll(" ", "");
+		
+		Car car2 = carRepository.findByVSn(vSn);
+		if (car2==null) {
+			return JsonData.fail(car2, "此车不存在");
+		}
+		
+	List<CarPosition> cPositions=	carPositionRepository.findByGps(gps);
+		
+		if (CollectionUtils.isEmpty(cPositions)) {
+			return JsonData.fail(null, "GPS编号不存在");
+			
+		}
+		
+		//通过gps编号查询车辆
+		Car car=carRepository.findByGps(gps);
+		//通过Gps查询车辆的绑定关系
+		CarGps carGps = carGpsRepository.findByGpsSn(gps);
+		if (carGps!=null) {
+			carGpsRepository.delete(carGps);
+		}
+	
+		//通过车辆编号查询Gps的绑定关系
+	    CarGps carGps2 = carGpsRepository.findByVSn(cvSn);
+	    if (carGps2!=null) {
+	    	 carGpsRepository.delete(carGps2);
+		}
+	   
+	    //如果Car不为空  设置gps编号为空
+		if (car!=null) {
+		car.setGpsSN("");	
+		}
+		//更新
+		carRepository.updateGpsByVsn(vSn,gps);
+		//保存
+		CarGps gps2 = new CarGps();
+		gps2.setGpsSn(gps);
+		gps2.setvSn(cvSn);
+		carGpsRepository.save(gps2);
+		return JsonData.success(gps2, "关联成功");
+	}
+
+	@Override
+	public PageBean<CarGps> pageQuery(PageQuery pQuery, CarGpsSearch carGpsSearch) {
+		PageBean<CarGps> result = new PageBean<>();
+		Sort sort = new Sort(Direction.DESC, "id");
+
+		Pageable pageable = new PageRequest(pQuery.getPage(), pQuery.getSize(), sort);
+
+		final List<Predicate> list = new ArrayList<>();
+
+		Specification<CarGps> specification = new Specification<CarGps>() {
+
+			@Override
+			public Predicate toPredicate(Root<CarGps> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				if (StringUtils.isNotBlank(carGpsSearch.getGpsSn())) {
+					Predicate predicate = cb.like(root.get("gpsSn").as(String.class),
+							"%" + carGpsSearch.getGpsSn()+ "%");
+					list.add(predicate);
+				}
+				
+				if (StringUtils.isNotBlank(carGpsSearch.getVSn())) {
+					
+					Predicate predicate1 = cb.like(root.get("vSn").as(String.class),
+							"%" + carGpsSearch.getVSn()+ "%");
+					list.add(predicate1);
+					
+				}
+				return cb.and(list.toArray(new Predicate[list.size()]));
+			}
+		};
+		Page<CarGps> pageData = carGpsRepository.findAll(specification, pageable);
+		result.setTotal(pageData.getTotalElements());
+		result.setRows(pageData.getContent());
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public PageBean<GpsCarDto> gpsOnline(PageQuery pQuery) {
+
+		long count = 0;
+		PageBean<GpsCarDto> result = new PageBean<>();
+		List<GpsCarDto> resultList = null;
+		EntityManager em = entityManagerFactory.getNativeEntityManagerFactory().createEntityManager();
+	
+
+		
+		String sql="SELECT tcar.ID AS vId, tcar.vSn AS vSn,tcar.licenseNo AS vPlate,tcar.driverName AS driverName,tcar.carName AS vName,tcar.brandModelone AS vType,tp.coll_time AS lastTime FROM t_carposition tp, t_car tcar WHERE CARPOSITIONID IN (SELECT MAX(CARPOSITIONID) FROM t_carposition GROUP BY CAR_CODE) AND tp.CAR_CODE = tcar.GPSSN";
+		
+			count = em.createNativeQuery(sql).getResultList().size();
+			resultList = pageResult(pQuery, em, sql);
+		
+		if (resultList == null) {
+			result.setTotal((long) 0);
+		} else {
+			result.setTotal(count);
+		}
+		result.setRows(resultList);
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<GpsCarDto> pageResult(PageQuery pQuery, EntityManager em, String sql) {
+		Query nativeQuery = em.createNativeQuery(sql)
+				.setFirstResult(pQuery.getPage() * pQuery.getSize()).setMaxResults(pQuery.getSize());
+		@SuppressWarnings("deprecation")
+		List<Map<String, Object>> List = nativeQuery.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	
+		
+		if(CollectionUtils.isEmpty(List)) {
+			return null;
+		}
+		List<GpsCarDto> result = new ArrayList<>(List.size());
+		for(Map<String,Object> map : List) {
+			GpsCarDto exp = new GpsCarDto();
+			try {
+				BeanUtils.populate(exp, map);
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			result.add(exp);
+		}
+		return result;
+
+	}
+
+}

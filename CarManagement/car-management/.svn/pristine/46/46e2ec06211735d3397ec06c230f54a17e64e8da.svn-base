@@ -1,0 +1,592 @@
+/*系统整体颜色变化*/
+html,
+body {
+  width: 100%;
+  height: 100%
+}
+.form-horizontal {
+  position: relative;
+}
+
+.table_footer {
+  width: 200px;
+  height: 157px;
+  position: absolute;
+  bottom: 10px;
+  right: 30px;
+}
+
+.table_header {
+  position: absolute;
+  top: -20px;
+  right: 30px;
+}
+
+.clear_float::after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
+.sidebar-wrapper {
+  background: #202d45;
+}
+
+#role .form-horizontal {
+  width: 65%;
+  margin: 0 auto;
+  margin-top: 25px;
+  display: none;
+}
+
+.sidebar-footer {
+  background: #3a4f72;
+  box-shadow: 0px -1px 5px #3a4f72;
+  border-top: 1px solid #3a4f72;
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
+  background: #3a4f72;
+}
+
+.sidebar-wrapper .sidebar-header {
+  border-top: 1px solid #3a4f72;
+  border-bottom: 1px solid #3a4f72;
+}
+
+.form-group.modal_btn_group {
+  margin: 0 auto;
+  width: 54%;
+  margin-top: 10px;
+}
+
+.li1 a {
+  color: #1B6DDA !important;
+}
+
+.breadcrumb li.active {
+  color: #1B6DDA;
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li.active a {
+  color: white;
+}
+
+.sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li.active {
+  background: #4b6ba1;
+  ;
+}
+
+.sidebar-brand {
+  background-color: #edf4f6;
+  border-bottom: 4px solid #3a4f72;
+}
+
+.glyphicon-align-justify {
+  color: #01034A;
+}
+
+.bread {
+  width: 100%;
+  background-color: #edf2f6;
+  border-bottom: 4px solid #DBDBDB;
+  position: absolute;
+  top: 0;
+  z-index: 999;
+}
+
+.breadcrumb {
+  padding: 15px;
+  margin: 0px;
+  border-radius: 0px;
+  background: #edf2f6;
+}
+
+.breadcrumb span {
+  padding-left: 40px;
+  margin-left: -12px;
+  color: #01034A;
+  border-left: 1px solid #DBDBDB;
+}
+
+.bread_right {
+  font-size: 12px;
+  line-height: 30px;
+  margin-right: 30px;
+  margin-top: 11px;
+  margin-bottom: 10px;
+}
+
+.bread_right i {
+  cursor: pointer;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0;
+  padding-top: 54.6px
+}
+
+.scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden
+}
+
+.home_link {
+  float: right;
+}
+
+.home {
+  color: #1B6DDA !important;
+  font-weight: bolder;
+}
+
+.loading {
+  width: 80%;
+  position: fixed;
+  left: 55%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  text-align: center;
+  color: #1B6DDA;
+  font-size: 2rem;
+}
+
+.content_header {
+  text-align: center;
+  font-size: 30px;
+  color: #047AF7;
+}
+
+.content_center {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.tab-content>.active {
+  display: block;
+}
+
+.tab-content>.tab-pane {
+  display: none;
+}
+
+.pull-left.pagination-detail {
+  margin-top: 20px;
+}
+
+.pagination {
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.tableTypein {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.form-group input {
+  background: transparent;
+}
+
+#btn_mytetail,
+#btn_mydel,
+.my_btn,
+.optionBth {
+  border: none;
+  color: white;
+  border-radius: 7px;
+  background: #010B52;
+}
+
+.page-content::after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
+.container-fluid:after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
+.search-map {
+  position: absolute;
+  top: 30px;
+  left: 100px;
+  height: 38px;
+}
+
+#suggestId {
+  box-sizing: border-box;
+  width: 300px;
+  background: white;
+  border: 0;
+  border-left: 10px solid transparent;
+  border-right: 27px solid transparent;
+  line-height: 20px;
+  font-size: 16px;
+  height: 100%;
+  color: #333;
+  outline: none;
+  border-radius: 2px 0 0 2px;
+}
+
+.text_blue {
+  color: #1B6DDA !important;
+}
+
+.search-btn {
+  box-sizing: border-box;
+  border: 0;
+  width: 70px;
+  height: 100%;
+  font-size: 23px;
+  cursor: pointer;
+  text-align: center;
+  color: white;
+  display: inline-block;
+  background: #1B6DDA;
+  margin-left: -3px;
+  position: absolute;
+  top: 0px;
+  left: 302px;
+}
+
+/*位置信息框*/
+
+.rightbox {
+  width: 96%;
+  margin: 0 auto;
+  margin-top: 15px;
+}
+
+.point_content {
+  background: #3E3E3E;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+/*上传图片*/
+
+upload_car_img,
+.upload_circuitry_img {
+  width: 75px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+/*权限管理*/
+
+textarea {
+  overflow: auto;
+}
+
+/*数据采集*/
+
+.longDataBox {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+.sidebar-dropdown img,
+.carmapicon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  margin-top: -2px;
+}
+
+.glyphicon-con {
+  width: 22px;
+  height: 20px;
+  color: black;
+  border: 1px solid red;
+}
+
+.config_black {
+  width: 16px;
+  height: 17px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.config-black {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+/*维修进度模块相关样式*/
+
+.searchprogresss {
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.maintainbox {
+  width: 850px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.maintain_progress {
+  margin-bottom: 50px;
+}
+
+.maintain_progress .pro_status {
+  width: 97%;
+  margin: 15px 0px;
+}
+
+.search_progresss_input {
+  margin-right: 20px;
+  height: 24px;
+  width: 322px;
+  border-radius: 5px;
+  font-size: 10px;
+  outline: none;
+  text-indent: 5px;
+}
+
+.pro_status_text {
+  width: 100%;
+}
+
+.pro_status_text span {
+  width: 100px;
+  display: inline-block;
+  text-align: center;
+  margin-left: 140px;
+}
+
+.pro_status_text span:first-child {
+  margin-left: 0px;
+}
+
+/*设置placeholder的颜色*/
+
+#maintainList ::-webkit-input-placeholder {
+  color: #666;
+  font-size: 10px;
+}
+
+::-webkit-input-placeholder {
+  color: #666;
+  font-size: 13px;
+}
+
+:-moz-placeholder {
+  color: #666;
+  font-size: 13px;
+}
+
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #666;
+  font-size: 13px;
+}
+
+:-ms-input-placeholder {
+  color: #666;
+  font-size: 13px;
+}
+
+/*input框自动填充为黄色的解决方法*/
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset;
+}
+
+.pageNav,
+.driverpage {
+  float: right;
+}
+
+.driverpage ul,
+.pageNav ul {
+  list-style: none;
+  overflow: hidden;
+}
+
+.driverpage ul li,
+.pageNav ul li {
+  float: left;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  margin-right: 5px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  background: #ddd;
+}
+
+.pageNav ul li.cur,
+.driverpage ul li.cur {
+  background-color: #1B6DDA;
+}
+
+span.audit_span {
+  min-width: 96px;
+  min-height: 33px;
+  line-height: 33px;
+  float: left;
+  border: 1px solid #bbb;
+  border-top: none;
+  border-right: none;
+  text-align: center;
+}
+
+span.audit_span:last-child {
+  border-right: 1px solid #bbb;
+}
+
+.audit_fot {
+  text-align: right;
+  margin-right: 10px;
+  margin-bottom: 15px;
+}
+
+.audit_fot span:last-child {
+  margin: 10px 0px 0px 20px;
+}
+
+/*start 楼层导航*/
+
+#loutinav,
+#louti2nav {
+  width: 60px;
+  position: fixed;
+  top: 100px;
+  right: 3px;
+  z-index: 10;
+  display: none;
+  border: 1px solid lightgray;
+  box-shadow: 0px -1px 5px lightgrey;
+  border-bottom: none;
+}
+
+#loutinav ul li,
+#louti2nav ul li {
+  width: 60px;
+  height: 32px;
+  line-height: 10px;
+  border-bottom: 1.5px dotted #d8dde0;
+  list-style: none;
+  font-size: 12px;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  background: #edf2f6;
+  color: #3a4f72;
+}
+
+#louti2nav ul li span,
+#loutinav ul li span {
+  width: 60px;
+  height: 32px;
+  padding: 10px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+ol,
+ul {
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
+#louti2nav ul li.last,
+#loutinav ul li.last,
+#louti2nav ul li.last,
+#loutinav ul li.backpage {
+  background: #5e4a4a;
+  color: #fff;
+  border-bottom: 1px solid #ddd;
+  line-height: 32px;
+}
+
+#louti2nav ul li.active span,
+#loutinav ul li.active span {
+  background: #3a4f72;
+  color: #fff;
+  display: block;
+}
+
+#louti2nav ul li:hover span,
+#loutinav ul li:hover span {
+  background: #3a4f72;
+  color: #fff;
+  display: block;
+}
+
+#carAudit .auditlouti,
+#main .louti {
+  width: 94%;
+  /* height: 600px; */
+  margin: 0 auto;
+}
+
+/*end 楼层导航*/
+/*文件上传*/
+
+.a-upload {
+  padding: 3px 12px;
+  font-size: 13px;
+  position: relative;
+  cursor: pointer;
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+  border-radius: 4px;
+  overflow: hidden;
+  top: 9px;
+  left: 5px;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+
+span.showFileName {
+  position: relative;
+  left: 20px;
+  font-size: 11px;
+}
+
+input#uploadBtn {
+  margin-left: 20px;
+}
+
+.a-upload input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  cursor: pointer
+}
+
+.a-upload:hover {
+  color: #FFFFFF;
+  background: #337ab7;
+  border-color: #204d74;
+  text-decoration: none;
+}

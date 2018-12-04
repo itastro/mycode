@@ -1,0 +1,201 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+.shopbody {
+    width: 100%;
+    min-width: 1900px;
+    min-height: 820px;
+    height: 100%;
+    padding-top: 20px;
+    background: url("../../img/workshopScreen/background.png");
+    background-size: 100% 100%;
+    font: 20px Helvetica, sans-serif;
+}
+
+.shopwhole {
+    width: 95%;
+    height: 87%;
+    margin: 0 auto;
+    min-height: 740px;
+    padding-top: 10%;
+    background: url("../../img/workshopScreen/kuang.png") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+}
+
+.workshopList {
+    width: 85%;
+    height: 72%;
+    margin: 0 auto;
+    padding-bottom: 4%;
+}
+
+#btn {
+    padding: 5px 7px;
+    background: #1A1D3E;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 10px;
+    outline: none;
+    position: absolute;
+    right: 267px;
+    top: 278px;
+    width: 212px;
+}
+
+ul.title {
+    width: 100.3%;
+    min-height: 50px;
+    height: 10%;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+ul.title li {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+ul.title li span {
+    width: 14%;
+    height: 100%;
+    float: left;
+    margin-left: 0.9%;
+    text-align: center;
+    background: url("../../img/workshopScreen/weixiu-biaotou.png");
+    background-size: 100% 100%;
+    color: #21c3dc;
+    font-size: 20px;
+    /*字体垂直居中*/
+}
+
+ul.line li span {
+    width: 14%;
+    height: 100%;
+    float: left;
+    margin-left: 0.9%;
+    color: #9bbcdd;
+    font-size: 16px;
+    text-align: center;
+    box-sizing: border-box;
+    /*字体垂直居中*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+ul.line li span:last-child,
+ul.title li span:last-child {
+    float: right;
+    border: none;
+}
+
+ul.title li span.list3,
+ul.line li span.list3 {
+    width: 40%;
+}
+
+ul.line {
+    width: 100%;
+    margin-left: 5px;
+    min-height: 438px;
+    height: 93%;
+    text-align: center;
+    overflow: hidden;
+    display: block !important;
+    /*border: 1px solid yellow;*/
+}
+
+ul.title li span:first-child,
+ul.line li span:first-child {
+    margin-left: 4px;
+}
+
+ul.line li {
+    width: 100%;
+    height: 10.8%;
+    min-height: 42px;
+    list-style: none;
+    background: url("../../img/workshopScreen/weixiu-liebiao.png");
+    background-size: 100% 100%;
+    border-top: 2px solid #021033;
+    border-bottom: 2px solid #021033;
+    -webkit-transition: 1s duration timing-function delay;
+    -moz-transition: 1s duration timing-function delay;
+    transition: 1s duration timing-function delay;
+}
+
+.shopfooter {
+    width: 80%;
+    margin: 0 auto;
+    /*border: 1px solid red;*/
+}
+
+.shopfooter div {
+    display: inline-block;
+}
+
+.shopfooter .footer_left {
+    color: white;
+    margin-top: 37px;
+}
+
+.font-big {
+    font-size: 29px;
+    font-family: 圆体;
+    margin-top: 10px;
+}
+
+.footer_content {
+    margin: 0px 100px;
+    color: #21c3dc;
+    margin-top: 26px;
+}
+
+.footer_right {
+    float: right;
+    color: white;
+    /*border: 1px solid red;*/
+    min-width: 400px;
+    min-height: 300px;
+    margin-left: 100px;
+}
+
+.circleChart_text {
+    /*百分比园内的字体大小*/
+    font-size: 14px !important;
+}
+
+
+/*响应式布局 ，字体大小*/
+
+
+/*@media screen and (min-width: 3100px) and (max-width: 3848px) {
+    .circleChart_text {
+        font-size: 2rem !important;
+    }
+}*/
+
+@media (min-width: 2500px) and (max-width: 4800px) {
+    ul.line li span {
+        font-size: 44px;
+    }
+    .font-big {
+        font-size: 90px !important;
+    }
+    .shopfooter p {
+        font-size: 44px;
+        text-align: center;
+    }
+    .circleChart_text {
+        font-size: 14px !important;
+    }
+}

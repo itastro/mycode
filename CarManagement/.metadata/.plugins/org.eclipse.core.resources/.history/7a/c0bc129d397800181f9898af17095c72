@@ -1,0 +1,309 @@
+var index = "";
+
+function loadsumCarList(args, order, pageInfo) {
+    var url = allurl + "/car-management/car/pageQuery.action";
+    if (args == "orderQuery") {
+        url = allurl + "/car-management/car/orderQuery.action";
+    }
+    if (pageInfo == undefined) {
+        var pageInfo = { pageNumber: 1, pageSize: 10 };
+    }
+    $("#sumcarTable").bootstrapTable('destroy').bootstrapTable({
+        // url: 'https://wangyifannn.github.io/defcar1/json/driverList.json',
+        // url: 'http://localhost/car/defcar/json/driverList.json',
+        url: url,
+        dataType: 'json',
+        striped: true, //是否显示行间隔色
+        toggle: "table",
+        toolbar: "sumcarTable_toolbar",
+        pagination: "true", //是否显示分页（*）
+        sortOrder: "asc", //排序方式
+        sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+        pageNumber: pageInfo.pageNumber, //初始化加载第一页，默认第一页
+        pageSize: pageInfo.pageSize, //每页的记录行数（*）
+        paginationShowPageGo: true,
+        pageList: [10, 25, 50, 70], //可供选择的每页的行数（*）
+        search: false, //是否搜索查询
+        showColumns: true, //是否显示所有的列
+        showRefresh: false, //是否显示刷新按钮
+        sortable: true, //是否启用排序
+        minimumCountColumns: 2, //最少允许的列数
+        clickToSelect: true, //是否启用点击选中行
+        searchOnEnterKey: true, //设置为 true时，按回车触发搜索方法
+        strictSearch: false, //设置为 true启用全匹配搜索， 否则为模糊搜索
+        showToggle: true, //是否显示切换视图（table/card）按钮
+        searchAlign: "right",
+        showFullscreen: true, //是否显示全屏按钮
+        showExport: true,
+        exportDataType: "selected",
+        buttonsAlign: "right", //按钮位置  
+        exportTypes: ['excel'], //导出文件类型  
+        // detailView: true,
+        // detailFormatter: function(index, row) {
+        //     return '<p>' + row.vSn + '</p>';
+        // },
+        exportOptions: {
+            ignoreColumn: [0, 24], //忽略某一列的索引  
+            fileName: '测试车辆-车辆总表', //文件名称设置  
+            worksheetName: 'sheet1', //表格工作区名称  
+            tableName: '测试车辆-车辆总表',
+            excelstyles: ['background-color', 'color', 'font-size', 'font-weight']
+                // onMsoNumberFormat: DoOnMsoNumberFormat
+        },
+        exportDataType: "selected",
+        uniqueId: "vSn", // 每一行的唯一标识  
+        //得到查询的参数
+        queryParams: function(params) {
+            //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            var temp = {
+                size: params.limit, //页面大小
+                page: (params.offset / params.limit) + 1, //页码
+                sort: "vSn", //排序列名  
+                sortOrder: "asc", //排位命令（desc，asc） 
+                vSn: $("#sumCarList .sumcar_top .vSn").val(),
+                project_sn: $("#sumCarList .sumcar_top .project_sn").val(),
+                vin: $("#sumCarList .sumcar_top .vin").val(),
+                engineNumber: $("#sumCarList .sumcar_top .engineNumber").val(),
+                projectEngineer: $("#sumCarList .sumcar_top .projectEngineer").val(),
+                brandModeltwo: $("#filter_model .brandModeltwo").val(),
+                NO: $("#filter_model .NO").val(),
+                bstart: $("#filter_model .bstart").val(), //保险起始日
+                bend: $("#filter_model .bend").val(), //保险终止日
+                pstart: $("#filter_model .pstart").val(), //牌照起始日
+                pend: $("#filter_model .pend").val(), //牌照结束日
+                ustart: $("#filter_model .ustart").val(), //ustart接车起始日
+                uend: $("#filter_model .uend").val(), //接车结束日
+                backstart: $("#filter_model .backstart").val(), //还车起始日
+                backend: $("#filter_model .backend").val(), //还车结束日
+
+                ing: "", //在用
+                all: "", //全部
+                beforup: "", //先前接车
+                haveLi: "", //有牌照无保险
+                HaveIn: "", //有保险无牌照
+                thismonthback: "", //当月归还
+                thismonnew: "", //当月新车
+                beforBack: "", // 之前归还
+                stop: "" //// 停用车辆
+            };
+            // temp.order = order;
+            console.log(order);
+            if (args == "orderQuery") {
+                for (var key in temp) {
+                    if (key == order) {
+                        temp[key] = true;
+                    }
+                }
+            }
+            console.log(temp);
+            return temp;
+        },
+        onLoadSuccess: function(res) {
+            console.log(res);
+        },
+        onLoadError: function() {
+            console.log("数据加载失败！");
+        },
+        //单击行时
+        onClickRow: function(row, $element) {
+            index = $element.data('index');
+        },
+        //点击每列前的checkbox时
+        onCheck: function(row, $element) {
+            index = $element.data('index');
+        },
+        columns: [
+            [{
+                "title": "测试车辆-车辆总表",
+                "halign": "center",
+                "align": "center",
+                "colspan": 24
+            }],
+            [{ field: "checkbox", title: "全选", checkbox: true, align: 'center', valign: "middle" },
+                {
+                    field: 'index',
+                    title: "序号",
+                    valign: "middle",
+                    align: "center",
+                    width: "5%",
+                    formatter: function(value, row, index) {
+                        //return index+1; //序号正序排序从1开始
+                        var pageSize = $('#sumcarTable').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+                        var pageNumber = $('#sumcarTable').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1; //返回每条的序号： 每页条数 * （当前页 - 1 ）+ 序号
+                    }
+                },
+                {
+                    field: "vSn",
+                    title: '<span>车辆编号<i class="glyphicon glyphicon-sort vSn_sort"></i></span>',
+                    align: 'center',
+                    valign: "middle"
+                },
+                {
+                    field: "project",
+                    title: "项目编号",
+                    align: 'center',
+                    valign: "middle",
+                    formatter: function(value, row, index) {
+                        if (value != null) {
+                            return value.project_sn
+                        }
+                    }
+                },
+                {
+                    field: "project",
+                    title: "项目状态",
+                    align: 'center',
+                    valign: "middle",
+                    formatter: function(value, row, index) {
+                        if (value != null) {
+                            return value.project_status
+                        }
+                    }
+                },
+                { field: "customer", title: "客户", align: 'center', valign: "middle" },
+                { field: "projectEngineer", title: "项目工程师", align: 'center', valign: "middle" },
+                { field: "car_status", title: "车辆状态", align: 'center', valign: "middle" },
+                { field: "engineNumber", title: "发动机号", align: 'center', valign: "middle" },
+                { field: "vin", title: "车架号", align: 'center', valign: "middle" },
+                { field: "vehicleQuality", title: "吨位", align: 'center', valign: "middle" },
+                { field: "upcheckTime", title: "接车日期", align: 'center', valign: "middle" },
+                { field: "backchecktime", title: "还车日期", align: 'center', valign: "middle" },
+                { field: "backcheckSubmitTime", title: "还车提交日期", align: 'center', valign: "middle" },
+                { field: "vCarType", title: "车辆类型", align: 'center', valign: "middle" },
+                { field: "checkStaionType", title: "检测站车型", align: 'center', valign: "middle" },
+                { field: "brandModelone", title: "车辆型号", align: 'center', valign: "middle" },
+                { field: "brandModeltwo", title: "厂牌型号（保）", align: 'center', valign: "middle" },
+                { field: "insNo", title: "保单号", align: 'center', valign: "middle" },
+                { field: "startTime", title: "保险起始日", align: 'center', valign: "middle" },
+                { field: "endTime", title: "保险终止日", align: 'center', valign: "middle" },
+                { field: "licenseEndTime", title: "临牌到期日", align: 'center', valign: "middle" },
+                { field: "licenseNo", title: "临牌", align: 'center', valign: "middle" },
+                { field: 'operate', title: '操作', align: 'center', valign: "middle", events: sumcaroperateEvents, formatter: sumcaroperateFormatter }
+            ]
+        ]
+    });
+}
+
+
+function sumcaroperateFormatter(value, row, index) {
+    return [
+        '<a href="#carDetail" data-toggle="tab"><button type="button" id="sumcar_detail" class="my_btn btn btn-default btn-sm">详情</button></a>',
+    ].join('');
+}
+
+window.sumcaroperateEvents = {
+    'click #sumcar_detail': function(e, value, row, index) {
+        $(".sumCarList").removeClass("active");
+        window.sessionStorage.opterator = "detail";
+        var rowarr = [];
+        rowarr.push(row);
+        deletAll(rowarr, "row_detail");
+    }
+};
+$("#project_status").unbind('click').bind('click', function() {
+    $("#add_model").modal();
+    $("#add_model #myModalLabel").html("项目状态更新");
+    creatForm(projectStatus, "#add_model .modal-body form", "porjectstatus_btn");
+    $("#add_model .currentstatus").val($("#add_model select.projectSn option:selected").attr("status"));
+    // 实时监测项目号的值
+    $('#add_model select.projectSn').change(function() {
+        // console.log($("#add_model select.projectSn option:selected").attr("status"));
+        $("#add_model .currentstatus").val($("#add_model select.projectSn option:selected").attr("status"));
+    });
+    $(".porjectstatus_btn").unbind('click').bind('click', function() {
+        var sub_url = allurl + "/car-management/project/updateStatus.action";
+        var sub_data = {
+            "projectSn": $("#add_model .projectSn").val(),
+            status: $("#add_model .status option:selected").attr("value")
+        };
+        $(this).attr({ "data-dismiss": "modal", "aria-label": "Close" });
+        subData(sub_url, sub_data, "get", "projectstatus");
+    });
+});
+$("#sumcar_filter").unbind('click').bind('click', function() {
+    $("#filter_model").modal();
+    $("#filter_model #myModalLabel").html("车辆筛选");
+    $(".sumcar_filter_btn").unbind('click').bind('click', function() {
+        var sub_data = $("#filter_model .modal-body form").serialize();
+        var sub_url = allurl + "/car-management/vehicle/add.json";
+        $(this).attr({ "data-dismiss": "modal", "aria-label": "Close" });
+        subData(sub_url, sub_data, "post", "sub_sumcar_filter");
+    });
+});
+$("#checkpoint_cartype").unbind('click').bind('click', function() { //检测站车型更新
+    var checkpoint_cartype_Arr = $("#sumcarTable").bootstrapTable('getSelections');
+    deletAll(checkpoint_cartype_Arr, "checkpoint_cartype_update");
+});
+
+var cartypeInfo = [
+    { "name": "车辆编号", "type": "text", "inputName": "vSn", "must": "*" },
+    { "name": "检测站车型", "type": "text", "inputName": "type", "must": "*" },
+];
+// 车辆总表查询
+var sumcar_row_filter = [
+    { "name": "项目号", "type": "text", "inputName": "project_sn", "must": "" },
+    { "name": "车辆编号", "type": "text", "inputName": "vSn", "must": "" },
+    { "name": "车架号", "type": "text", "inputName": "vin", "must": "" },
+    { "name": "发动机号", "type": "text", "inputName": "engineNumber", "must": "" },
+    { "name": "项目工程师", "type": "text", "inputName": "projectEngineer", "must": "" }
+];
+var projectStatus = [{
+        "name": "项目号",
+        "type": "select",
+        "inputName": "projectSn",
+        "must": "*",
+        "option": [{ "name": "BN-cal", "val": "BN-cal" }]
+    },
+    { "name": "当前状态", "type": "text", "inputName": "currentstatus", "must": "*" },
+    {
+        "name": "更新后状态",
+        "type": "select",
+        "inputName": "status",
+        "must": "*",
+        "option": [{ "name": "Active", "val": "Active" }, { "name": "Closed", "val": "Closed" }, { "name": "pending", "val": "pending" },
+            { "name": "Cancelled", "val": "Cancelled" }, { "name": "To do", "val": "To do" },
+            { "name": "Lost", "val": "Lost" }, { "name": "ADP", "val": "ADP" },
+            { "name": "C-cal", "val": "C-cal" }, { "name": "BN-cal", "val": "BN-cal" },
+        ]
+    },
+];
+
+
+$(".btn_filter button").unbind('click').bind('click', function() {
+    $(this).addClass('filter_choice_btn').siblings().removeClass('filter_choice_btn');
+});
+
+// 更新项目状态/project/updateStatus.action
+//查询 /car/orderQuery.action
+// 车辆录入列表查询
+creatSelect(sumcar_row_filter, "#sumCarList .sumcar_top .form-inline", "sumcar_filter_btn");
+$(".sumcar_filter_btn").unbind('click').bind('click', function() {
+    loadsumCarList();
+})
+
+$("#sumCarList .sumcar_top input").change(function() {
+    loadsumCarList();
+});
+// 模态框条件查询
+// btn btn-default pull-left btn-primary
+$("#filter_model .pull-left").unbind('click').bind('click', function() {
+    if ($(".btn_filter button").hasClass("filter_choice_btn")) {
+        var val = $(".filter_choice_btn").attr("value");
+        loadsumCarList("orderQuery", $(".filter_choice_btn").attr("value"));
+        console.log(val);
+    } else {
+        loadsumCarList();
+    }
+})
+$("#sumcar_filter_allcar").unbind('click').bind('click', function() { //所有车辆
+    loadsumCarList("orderQuery", "all");
+})
+$("#sumcar_filter_usecar").unbind('click').bind('click', function() { //在用车辆
+    loadsumCarList("orderQuery", "ing");
+});
+// 通过车辆编号升序或者降序
+$(".vSn_sort").unbind('click').bind('click', function() {
+    sumcarqueryParams("orderQuery");
+    loadsumCarList("orderQuery");
+})

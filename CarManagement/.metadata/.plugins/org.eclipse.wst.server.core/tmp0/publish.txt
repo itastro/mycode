@@ -1,0 +1,5 @@
+#Tomcat publish data
+#Sat Sep 08 17:37:38 CST 2018
+org.eclipse.jst.j2ee.server\:car-domain=E\:\\bailian\\tomcat\\webapps\\car-management\\WEB-INF\\lib\\car-domain-0.0.1-SNAPSHOT.jar
+org.eclipse.jst.jee.server\:/binary\:E\:\\bailian\\MavenRepository\\org\\springframework\\spring-web\\4.3.10.RELEASE\\spring-web-4.3.10.RELEASE.jar=E\:\\bailian\\tomcat\\webapps\\car-management\\WEB-INF\\lib\\spring-web-4.3.10.RELEASE.jar
+org.eclipse.jst.jee.server\:car-management=E\:\\bailian\\tomcat\\webapps\\car-management

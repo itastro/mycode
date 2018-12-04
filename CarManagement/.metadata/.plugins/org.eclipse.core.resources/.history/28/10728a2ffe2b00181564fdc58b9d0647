@@ -1,0 +1,83 @@
+package com.bailian.car.service.CarMaintainService.impl;
+
+import java.util.List;
+import javax.transaction.Transactional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.dao.CarMaintain.CarMaintainRepository;
+import com.bailian.car.dao.data.CarRepository;
+import com.bailian.car.domain.car.Car;
+import com.bailian.car.domain.car.CarMaintain;
+import com.bailian.car.service.CarMaintainService.CarMaintainService;
+
+@Service
+@Transactional
+public class CarMaintainServiceImpl implements CarMaintainService {
+	@Autowired
+	private CarMaintainRepository carMaintainRepository;
+	@Autowired
+	private CarRepository carRepository;
+
+	@Override
+	public JsonData create(CarMaintain carMaintain) {
+		if (carMaintain != null) {
+			String sn = carMaintain.getvSn();
+			Car car = carRepository.findByvSn(sn);
+			carMaintainRepository.save(carMaintain);
+			if (car != null) {
+				car.setCarMaintain(carMaintain);
+
+				carRepository.save(car);
+			}
+			return JsonData.success("申请成功");
+		}
+		return JsonData.fail("申请失败");
+	}
+
+	@Override
+	public List<CarMaintain> findAll() {
+		List<CarMaintain> list = carMaintainRepository.findAll();
+		return list;
+	}
+
+	@Override
+	public JsonData edit(CarMaintain carMaintain) {
+		// TODO Auto-generated method stub
+		try {
+			carMaintainRepository.save(carMaintain);
+			return JsonData.success("修改成功");
+		} catch (Exception e) {
+			// throw new CustomException("修改失败");
+			return JsonData.fail("失败");
+		}
+	}
+
+	@Override
+	public CarMaintain findvsn(String vSn) {
+		// TODO Auto-generated method stub
+
+		return carMaintainRepository.findByvSn(vSn);
+	}
+
+	@Override
+	public JsonData updatePlan(Integer id, String status) {
+		CarMaintain carMaintain = null;
+		if (id != null & StringUtils.isEmpty(status)) {
+			carMaintain = carMaintainRepository.findOne(id);
+			if (status.equals("维修申请")) {
+				carMaintain.setStatus("1");
+			} else if (status.equals("正在维修")) {
+				carMaintain.setStatus("2");
+			} else if (status.equals("维修审核")) {
+				carMaintain.setStatus("3");
+			} else if (status.equals("维修完成")) {
+
+			}
+
+		}
+	}
+
+}

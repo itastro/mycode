@@ -1,0 +1,87 @@
+package com.bailian.car.user;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bailian.car.dao.CarMaintain.CarMaintainRepository;
+import com.bailian.car.dao.check.CarCheckNameRepository;
+import com.bailian.car.dao.check.CarCheckParentItemRepository;
+import com.bailian.car.dao.data.CarPositionRepository;
+import com.bailian.car.dao.data.CarRepository;
+import com.bailian.car.dao.system.*;
+import com.bailian.car.domain.car.CarMaintain;
+import com.bailian.car.domain.carcheck.CarCheckName;
+import com.bailian.car.domain.carcheck.CarCheckParentItem;
+import com.bailian.car.service.CarMaintainService.impl.CarMaintainServiceImpl;
+import com.bailian.car.service.system.*;
+
+@Transactional
+@RunWith(value = SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:spring/applicationContext.xml")
+
+public class UserRepositoryTest {
+	private static Logger log = LoggerFactory.getLogger(CarMaintainServiceImpl.class);
+	@Autowired
+	private CarPositionRepository carPositionRepository;
+	@Autowired
+	private CarMaintainRepository carMaintainRepository;
+	@Autowired
+	private CarCheckParentItemRepository carCheckParentItemRepository;
+	@Autowired
+	private CarRepository carRepository;
+	@Autowired
+	private CarCheckNameRepository carCheckNameRepository;
+
+	@Test
+	@Transactional
+	@Rollback(false)
+	public void find1() throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		String startDtae1 = "2018-01-08 01:19:54";
+		String endDate1 = "2018-03-15 16:32:27";
+		String gpsSN = "CATCBL00000000002";
+		Date startDtae = format.parse(startDtae1);
+		Date endDate = format.parse(endDate1);
+
+		List<Object[]> list = carPositionRepository.findGps(startDtae, endDate, gpsSN);
+		System.out.println(list);
+	}
+
+	@Test
+	public void test1() {
+
+		String status = carRepository.findById(6);
+
+		System.err.println(status);
+	}
+
+	@Test
+	public void test2() {
+		List<CarCheckName> list = carCheckNameRepository.findAll();
+		for (CarCheckName carCheckName : list) {
+			log.info(carCheckName.getName());
+		}
+		System.out.println(list);
+	}
+
+	@Test
+	public void test3() {
+		List<CarCheckParentItem> list = carCheckParentItemRepository.findAll();
+		for(CarCheckParentItem CarCheckParentItems:list) {
+		System.out.println(CarCheckParentItems.getCarCheckItems());
+		}
+	}
+}

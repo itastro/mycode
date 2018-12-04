@@ -1,0 +1,68 @@
+package com.bailian.car.service.data.impl;
+
+import java.util.Date;
+import java.util.HashMap;
+
+import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import com.bailian.car.dao.data.CarRepository;
+import com.bailian.car.dao.data.GroupReposity;
+import com.bailian.car.domain.basedata.Car;
+import com.bailian.car.domain.basedata.CarGroup;
+import com.bailian.car.service.data.CarService;
+
+@Service
+@Transactional
+public class CarServiceImpl implements CarService {
+
+	@Autowired
+	private CarRepository carRepository;
+	@Autowired
+	private GroupReposity groupReposity;
+
+	@Override
+	public void add(Car car, String[] gids) {
+		CarGroup group = null;
+		for (String gid : gids) {
+			int id = Integer.parseInt(gid);
+			group = groupReposity.findOne(id);
+		}
+
+		if (car != null) {
+			Date date = new Date();
+			car.setMakeTime(date);
+			car.setcGroup(group);
+			carRepository.save(car);
+		}
+
+	}
+
+	// 分页查询
+	@Override
+	public HashMap<String, Object> pageQuery(Integer page, Integer size, Sort sort) {
+		PageRequest pageable = new PageRequest(page, size, sort);
+		Page<Car> pagedata = carRepository.findAll(pageable);
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("total", pagedata.getTotalElements());
+		result.put("rows", pagedata.getContent());
+		return result;
+	}
+
+	@Override
+	public Car find(String vCarSn) {
+
+		Car car = null;
+		if (vCarSn.equals("") || vCarSn != null) {
+
+			car = carRepository.findByVCarSn(vCarSn);
+
+		}
+		return car = car != null ? car : null;
+
+	}
+
+}

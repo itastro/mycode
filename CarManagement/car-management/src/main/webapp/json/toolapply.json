@@ -1,0 +1,8 @@
+ [
+     { "id": 56, "pname": "ECM发动机电子控制模块", "carCheckRequest": null, "components": { "id": 1, "name": "" }, "carCheckItems": [] },
+     { "id": 57, "pname": "MAP/MAT sensor进气歧管压力温度传感器", "carCheckRequest": null, "components": { "id": 2, "name": "" }, "carCheckItems": [] },
+     { "id": 58, "pname": "Fron Oxygen Sensor前氧传感器", "carCheckRequest": null, "components": { "id": 3, "name": "" }, "carCheckItems": [] },
+     { "id": 59, "pname": "Rear Oxygen Sensor后氧传感器", "carCheckRequest": null, "components": { "id": 4, "name": "" }, "carCheckItems": [] },
+     { "id": 60, "pname": "Fuel Rail Assembly燃油导轨总成", "carCheckRequest": null, "components": { "id": 5, "name": "" }, "carCheckItems": [] },
+     { "id": 61, "pname": "Knock Sensor 爆震传感器", "carCheckRequest": null, "components": { "id": 6, "name": "" }, "carCheckItems": [] }
+ ]

@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bl.station.mapper.InformationMapper" >
+  <resultMap id="BaseResultMap" type="com.bl.station.entity.Information" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="picurl" property="picurl" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
+    <result column="cooperation" property="cooperation" jdbcType="INTEGER" />
+    <result column="patents" property="patents" jdbcType="INTEGER" />
+    <result column="firstpatents" property="firstpatents" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.bl.station.entity.Information" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, address, email, tel, phone, picurl, name, qrcode, cooperation, patents, firstpatents
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.bl.station.entity.InformationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from information
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bl.station.entity.InformationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from information
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bl.station.entity.InformationExample" >
+    delete from information
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bl.station.entity.Information" >
+    insert into information (id, address, email, 
+      tel, phone, picurl, 
+      name, qrcode, cooperation, 
+      patents, firstpatents, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{picurl,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{qrcode,jdbcType=VARCHAR}, #{cooperation,jdbcType=INTEGER}, 
+      #{patents,jdbcType=INTEGER}, #{firstpatents,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bl.station.entity.Information" >
+    insert into information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="picurl != null" >
+        picurl,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="qrcode != null" >
+        qrcode,
+      </if>
+      <if test="cooperation != null" >
+        cooperation,
+      </if>
+      <if test="patents != null" >
+        patents,
+      </if>
+      <if test="firstpatents != null" >
+        firstpatents,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="picurl != null" >
+        #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null" >
+        #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cooperation != null" >
+        #{cooperation,jdbcType=INTEGER},
+      </if>
+      <if test="patents != null" >
+        #{patents,jdbcType=INTEGER},
+      </if>
+      <if test="firstpatents != null" >
+        #{firstpatents,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bl.station.entity.InformationExample" resultType="java.lang.Integer" >
+    select count(*) from information
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update information
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tel != null" >
+        tel = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.picurl != null" >
+        picurl = #{record.picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qrcode != null" >
+        qrcode = #{record.qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cooperation != null" >
+        cooperation = #{record.cooperation,jdbcType=INTEGER},
+      </if>
+      <if test="record.patents != null" >
+        patents = #{record.patents,jdbcType=INTEGER},
+      </if>
+      <if test="record.firstpatents != null" >
+        firstpatents = #{record.firstpatents,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update information
+    set id = #{record.id,jdbcType=INTEGER},
+      address = #{record.address,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      tel = #{record.tel,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      picurl = #{record.picurl,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      qrcode = #{record.qrcode,jdbcType=VARCHAR},
+      cooperation = #{record.cooperation,jdbcType=INTEGER},
+      patents = #{record.patents,jdbcType=INTEGER},
+      firstpatents = #{record.firstpatents,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update information
+    set id = #{record.id,jdbcType=INTEGER},
+      address = #{record.address,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      tel = #{record.tel,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      picurl = #{record.picurl,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      qrcode = #{record.qrcode,jdbcType=VARCHAR},
+      cooperation = #{record.cooperation,jdbcType=INTEGER},
+      patents = #{record.patents,jdbcType=INTEGER},
+      firstpatents = #{record.firstpatents,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bl.station.entity.Information" >
+    update information
+    <set >
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="picurl != null" >
+        picurl = #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null" >
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cooperation != null" >
+        cooperation = #{cooperation,jdbcType=INTEGER},
+      </if>
+      <if test="patents != null" >
+        patents = #{patents,jdbcType=INTEGER},
+      </if>
+      <if test="firstpatents != null" >
+        firstpatents = #{firstpatents,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bl.station.entity.Information" >
+    update information
+    set address = #{address,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      picurl = #{picurl,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      cooperation = #{cooperation,jdbcType=INTEGER},
+      patents = #{patents,jdbcType=INTEGER},
+      firstpatents = #{firstpatents,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bl.station.entity.Information" >
+    update information
+    set address = #{address,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      picurl = #{picurl,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      cooperation = #{cooperation,jdbcType=INTEGER},
+      patents = #{patents,jdbcType=INTEGER},
+      firstpatents = #{firstpatents,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+
+    SELECT  <include refid="Base_Column_List"></include>,<include refid="Blob_Column_List"></include> FROM
+    information
+  </select>
+</mapper>

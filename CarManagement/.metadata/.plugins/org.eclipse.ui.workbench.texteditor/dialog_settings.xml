@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="729" key="DIALOG_X_ORIGIN"/>
+		<item value="390" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="未完成"/>
+			<item value="subMaintainApply_btn"/>
+			<item value="dele"/>
+			<item value="pageQuery"/>
+			<item value="my-demo"/>
+			<item value="log.home_dir"/>
+			<item value="check"/>
+			<item value="druid"/>
+			<item value="准备提交"/>
+			<item value=".modal-body.toolForm"/>
+			<item value="请联系管理员"/>
+			<item value="车牌管理员"/>
+			<item value="超级管理员"/>
+			<item value="车辆录入信息"/>
+			<item value="验车"/>
+		</list>
+		<list key="replacehistory">
+			<item value="car"/>
+			<item value="driverRepository"/>
+			<item value=""/>
+			<item value="&quot;&quot;"/>
+			<item value="29"/>
+			<item value="28"/>
+			<item value="27"/>
+			<item value="25"/>
+			<item value="24"/>
+			<item value="23"/>
+			<item value="22"/>
+			<item value="21"/>
+			<item value="20"/>
+			<item value="19"/>
+			<item value="18"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="300" key="DIALOG_WIDTH"/>
+		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
+		<item value="410" key="DIALOG_HEIGHT"/>
+		<item value="1021" key="DIALOG_X_ORIGIN"/>
+		<item value="449" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

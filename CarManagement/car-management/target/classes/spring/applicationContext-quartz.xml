@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd ">
+	<!-- 开启包扫描 -->
+	<context:component-scan base-package="com.bailian"></context:component-scan>
+	<!-- 注入JOB -->
+	<bean name="carMaintainJob"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.bailian.car.dao.quartz.CarMaintainJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="timeout" value="5" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 注入JOB -->
+	<bean name="CarCheckJob"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.bailian.car.dao.quartz.CarCheckJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="timeout" value="5" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- trigger -->
+	<bean id="simpleTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<!-- 10 seconds -->
+		<property name="jobDetail" ref="carMaintainJob"></property>
+		<property name="startDelay" value="0" />
+		<!-- repeat every 50 seconds -->
+		<property name="repeatInterval" value="21600000" />
+	</bean>
+
+
+	<!-- trigger -->
+	<bean id="simpleTrigger1"
+		class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<!-- 10 seconds -->
+		<property name="jobDetail" ref="CarCheckJob"></property>
+		<property name="startDelay" value="0" />
+		<!-- repeat every 50 seconds -->
+		<property name="repeatInterval" value="60000" />
+	</bean>
+	<!-- scheduled -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobFactory" ref="jobFactory"></property>
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger" />
+				<ref bean="simpleTrigger1" />
+			</list>
+		</property>
+	</bean>
+</beans>

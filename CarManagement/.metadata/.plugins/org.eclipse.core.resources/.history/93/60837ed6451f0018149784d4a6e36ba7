@@ -1,0 +1,66 @@
+package com.bailian.car.service.data.impl;
+
+import java.util.HashMap;
+import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import com.bailian.car.common.exception.CustomException;
+import com.bailian.car.common.pojo.JsonData;
+import com.bailian.car.dao.data.CarDriverRepository;
+import com.bailian.car.domain.basedata.CarDriver;
+import com.bailian.car.service.data.CarDriverService;
+
+@Service
+@Transactional
+public class CarDriverServiceImpl implements CarDriverService {
+	@Autowired
+	private CarDriverRepository carDriverRepository;
+
+	@Override
+	public JsonData add(CarDriver carDriver) {
+		// TODO Auto-generated method stub
+		if (carDriver != null) {
+			carDriver.setStatus(1);
+			carDriverRepository.save(carDriver);
+
+			return JsonData.success("添加成功");
+		}
+		return JsonData.fail("添加失败");
+	}
+
+	@Override
+	public HashMap<String, Object> pageQuery(Integer page, Integer size, Sort sort) {
+		PageRequest pageable = new PageRequest(page, size, sort);
+		Page<CarDriver> pagedata = carDriverRepository.findAll(pageable);
+		HashMap<String, Object> result = new HashMap<>();
+		result.put("total", pagedata.getTotalElements());
+		result.put("rows", pagedata.getContent());
+		return result;
+	}
+
+	@Override
+	public JsonData delete(String cids) {
+		try {
+			// TODO Auto-generated method stub
+			if (cids != null && !cids.equals("")) {
+				String[] ids = cids.split(",");
+				for (String id : ids) {
+					Integer.parseInt(id);
+
+					carDriverRepository.delete(Integer.parseInt(id));
+
+				}
+				return JsonData.success("删除成功");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new CustomException("此用户不存在");
+		}
+		return JsonData.fail("删除失败");
+	}
+
+}

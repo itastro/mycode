@@ -1,0 +1,4 @@
+#用来区分不同环境的配置
+spring:
+  profiles:
+    active: dev

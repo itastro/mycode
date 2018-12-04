@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bl.station.mapper.NewsMapper">
+    <resultMap id="BaseResultMap" type="com.bl.station.entity.News">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="picurl" property="picurl" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="starttime" property="starttime" jdbcType="TIMESTAMP"/>
+        <result column="endtime" property="endtime" jdbcType="TIMESTAMP"/>
+        <result column="summary" property="summary" jdbcType="VARCHAR"/>
+        <result column="author" property="author" jdbcType="VARCHAR"/>
+        <result column="expired" property="expired" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.bl.station.entity.News" extends="BaseResultMap">
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, title, picurl, createtime, starttime, endtime, summary, author, expired
+  </sql>
+    <sql id="Blob_Column_List">
+    content
+  </sql>
+    <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+            parameterType="com.bl.station.entity.NewsExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from news
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bl.station.entity.NewsExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from news
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from news
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from news
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.bl.station.entity.NewsExample">
+        delete from news
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.bl.station.entity.News">
+    insert into news (id, title, picurl, 
+      createtime, starttime, endtime, 
+      summary, author, expired, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{picurl,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{summary,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{expired,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.bl.station.entity.News">
+        insert into news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="picurl != null">
+                picurl,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+            <if test="starttime != null">
+                starttime,
+            </if>
+            <if test="endtime != null">
+                endtime,
+            </if>
+            <if test="summary != null">
+                summary,
+            </if>
+            <if test="author != null">
+                author,
+            </if>
+            <if test="expired != null">
+                expired,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="picurl != null">
+                #{picurl,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="starttime != null">
+                #{starttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endtime != null">
+                #{endtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="summary != null">
+                #{summary,jdbcType=VARCHAR},
+            </if>
+            <if test="author != null">
+                #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="expired != null">
+                #{expired,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.bl.station.entity.NewsExample" resultType="java.lang.Integer">
+        select count(*) from news
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update news
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.title != null">
+                title = #{record.title,jdbcType=VARCHAR},
+            </if>
+            <if test="record.picurl != null">
+                picurl = #{record.picurl,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createtime != null">
+                createtime = #{record.createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.starttime != null">
+                starttime = #{record.starttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.endtime != null">
+                endtime = #{record.endtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.summary != null">
+                summary = #{record.summary,jdbcType=VARCHAR},
+            </if>
+            <if test="record.author != null">
+                author = #{record.author,jdbcType=VARCHAR},
+            </if>
+            <if test="record.expired != null">
+                expired = #{record.expired,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.content != null">
+                content = #{record.content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update news
+        set id = #{record.id,jdbcType=INTEGER},
+        title = #{record.title,jdbcType=VARCHAR},
+        picurl = #{record.picurl,jdbcType=VARCHAR},
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+        starttime = #{record.starttime,jdbcType=TIMESTAMP},
+        endtime = #{record.endtime,jdbcType=TIMESTAMP},
+        summary = #{record.summary,jdbcType=VARCHAR},
+        author = #{record.author,jdbcType=VARCHAR},
+        expired = #{record.expired,jdbcType=TIMESTAMP},
+        content = #{record.content,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update news
+        set id = #{record.id,jdbcType=INTEGER},
+        title = #{record.title,jdbcType=VARCHAR},
+        picurl = #{record.picurl,jdbcType=VARCHAR},
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+        starttime = #{record.starttime,jdbcType=TIMESTAMP},
+        endtime = #{record.endtime,jdbcType=TIMESTAMP},
+        summary = #{record.summary,jdbcType=VARCHAR},
+        author = #{record.author,jdbcType=VARCHAR},
+        expired = #{record.expired,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bl.station.entity.News">
+        update news
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="picurl != null">
+                picurl = #{picurl,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="starttime != null">
+                starttime = #{starttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endtime != null">
+                endtime = #{endtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="summary != null">
+                summary = #{summary,jdbcType=VARCHAR},
+            </if>
+            <if test="author != null">
+                author = #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="expired != null">
+                expired = #{expired,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bl.station.entity.News">
+    update news
+    set title = #{title,jdbcType=VARCHAR},
+      picurl = #{picurl,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      summary = #{summary,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      expired = #{expired,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.bl.station.entity.News">
+    update news
+    set title = #{title,jdbcType=VARCHAR},
+      picurl = #{picurl,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      summary = #{summary,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      expired = #{expired,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="pageQuery" resultMap="ResultMapWithBLOBs" parameterType="map">
+
+        SELECT
+
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+
+        FROM news
+        <where>
+            <if test="search.summary!=null">
+                AND summary LIKE CONCAT('%',#{search.summary},'%')
+            </if>
+            <if test="search.startTime!=null and search.endTime!=null">
+                AND createtime BETWEEN #{search.startTime} AND #{search.endTime}
+            </if>
+        </where>
+
+        ORDER BY createtime DESC
+
+    </select>
+
+    <select id="findAll" resultMap="ResultMapWithBLOBs">
+
+        SELECT
+
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+
+        FROM news
+        WHERE expired &gt; now()
+
+        ORDER BY createtime DESC
+
+    </select>
+</mapper>

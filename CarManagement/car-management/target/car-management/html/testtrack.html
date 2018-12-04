@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>轨迹回放</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+    <link rel="stylesheet" href="../css/mapcontrol.css" />
+
+</head>
+
+<body>
+    <div id="cmapcontainer"></div>
+    <div class="mapcontrol">
+        <div class="controlnav">
+            <p>车辆管理系统 <img class="uparrow" src="../img/map/uparrow.png" alt=""></p>
+        </div>
+        <div class="control_box">
+            <div class="controlbody">
+                <div class="current curr_btn">
+                    <img src="../img/map/control.png" alt="">
+                    <span>实时监控</span>
+                </div>
+                <div class="current guiji_btn">
+                    <img src="../img/map/guiji.png" alt="">
+                    <span>轨迹查询</span>
+                </div>
+                <div class="pointerTabLeft"></div>
+            </div>
+            <div class="controlfoot">
+                <div class="controlbox footbox">
+                    <div class="search_input_box input_box">
+                        <input class="search_input getsearchjson" id="current_input" type="text" name="" placeholder="请输入要查询的车辆编号">
+                    </div>
+                    <div class="controlRight">
+                        <button id="currenttrack_btn">确定搜索</button>
+                    </div>
+                </div>
+                <div class="guijibox footbox">
+                    <div class="date_input_box input_box">
+                        <input placeholder="开始日期" class="form-control layer-date mydata_input" id="startDate" name="startDate">
+                    </div>
+                    <div class="date_input_box input_box">
+                        <input placeholder="结束日期" class="form-control layer-date mydata_input" id="endDate" name="endDate">
+                    </div>
+                    <div class="search_input_box input_box">
+                        <input class="search_input" id="ago_input" type="text" name="" value="" placeholder="请输入车辆编号">
+                    </div>
+                    <div class="controlRight">
+                        <button id="track_playback_btn">轨迹回放</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="button-group">
+        <input type="button" class="button" value="开始" id="start" />
+        <input type="button" class="button" value="暂停" id="pause" />
+        <input type="button" class="button" value="继续" id="resume" />
+        <input type="button" class="button" value="加速前进" id="fast" />
+    </div>
+    <script language="javascript" src="http://webapi.amap.com/maps?v=1.4.7&key=ffc8503b4c8647c3753679c5e95278a5"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/laydate.js"></script>
+    <script src="../js/trackstyle.js"></script>
+    <script>
+        var marker, lineArr = [];
+        var newlineArr = [];
+        var map = new AMap.Map("cmapcontainer", {
+            resizeEnable: true,
+            center: [121.475366, 31.228024],
+            zoom: 9
+        });
+
+        function getTrack() {
+            $.ajax({
+                url: "/car-management/car/carTrack.action",
+                // url: "../json/track.json",
+                "data": {
+                    "startDate": $("#startDate").val(),
+                    "endDate": $("#endDate").val(),
+                    "vSn": $("#ago_input").val()
+                },
+                success: function(res) {
+                    console.log(res);
+                    if (res.ret == false) {
+                        alert(res.msg);
+                        return;
+                    }
+                    marker = new AMap.Marker({
+                        map: map,
+                        position: [res[0].longitude, res[0].latitude],
+                        icon: "../img/gaodeimg/yellowcar20.png",
+                        size: new AMap.Size(24, 44),
+                        offset: new AMap.Pixel(-15, -10),
+                        autoRotation: true, //根据线点自动转换方向
+                        angle: res[0].towards
+                    });
+                    lineArr.length = 0;
+                    newlineArr.length = 0;
+
+                    for (var i = 0; i < res.length; i++) {
+                        lineArr.push(new AMap.LngLat(res[i].longitude, res[i].latitude));
+                        newlineArr.push(new AMap.LngLat(res[i].longitude, res[i].latitude));
+                    }
+                    // 绘制轨迹
+                    var polyline = new AMap.Polyline({
+                        map: map,
+                        path: lineArr,
+                        strokeColor: "#00A", //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 3, //线宽
+                        strokeStyle: "solid", //线样式
+                        lineJoin: "round"
+                    });
+                    var passedPolyline = new AMap.Polyline({
+                        map: map,
+                        path: lineArr,
+                        strokeColor: "blue", //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 3, //线宽
+                        strokeStyle: "solid", //线样式
+                        lineJoin: "round"
+                    });
+                    var passArr = [];
+                    var passArrlength;
+                    marker.on('moving', function(e) {
+
+                        var len = e.passedPath.length;
+                        var location = e.passedPath[len - 1];
+                        var lll = new AMap.LngLat(location.lng, location.lat);
+                        // console.log(e.passedPath);
+                        passArrlength = e.passedPath.length;
+                        passedPolyline.setPath(e.passedPath);
+                    })
+                    map.setFitView();
+                    marker.moveAlong(lineArr, 2000);
+
+                    // 自定义加速前进事件  先调用暂停方法再调用继续方法
+                    AMap.event.addDomListener(document.getElementById('fast'), 'click', function() {
+                        marker.stopMove();
+
+                        newlineArr.splice(0, passArrlength);
+                        console.log(newlineArr);
+
+                        marker.setMap(null);
+                        marker = new AMap.Marker({
+                            map: map,
+                            position: [newlineArr[0].lng, newlineArr[0].lat],
+                            icon: "../img/gaodeimg/yellowcar20.png",
+                            size: new AMap.Size(24, 44),
+                            offset: new AMap.Pixel(-15, -10),
+                            autoRotation: true, //根据线点自动转换方向
+                        });
+                        polyline = new AMap.Polyline({
+                            map: map,
+                            path: newlineArr,
+                            strokeColor: "#00A", //线颜色
+                            strokeOpacity: 1, //线透明度
+                            strokeWeight: 3, //线宽
+                            strokeStyle: "solid", //线样式
+                            lineJoin: "round"
+                        });
+                        passedPolyline = new AMap.Polyline({
+                            map: map,
+                            path: newlineArr,
+                            strokeColor: "blue", //线颜色
+                            strokeOpacity: 1, //线透明度
+                            strokeWeight: 3, //线宽
+                            strokeStyle: "solid", //线样式
+                            lineJoin: "round"
+                        });
+                        marker.on('moving', function(e) {
+                            passedPolyline.setPath(e.passedPath);
+                        })
+                        map.setFitView();
+                        marker.moveAlong(newlineArr, 4000);
+                    }, false);
+
+                    AMap.event.addDomListener(document.getElementById('start'), 'click', function() {
+                        marker.moveAlong(lineArr, 2000);
+                    }, false);
+                    AMap.event.addDomListener(document.getElementById('pause'), 'click', function() {
+                        marker.pauseMove();
+                    }, false);
+                    AMap.event.addDomListener(document.getElementById('resume'), 'click', function() {
+                        marker.resumeMove();
+                    }, false);
+                    setInterval(function() {
+                        if (window.sessionStorage.getItem("ahref") != "#carTrack") {
+                            marker.stopMove();
+                            map.clearMap(); //清除图层覆盖物
+                            console.log(2)
+                        }
+                    }, 5000)
+
+                }
+            })
+        }
+
+        // 实时搜素
+        var markers = [];
+        var infoWindow;
+
+        function searchcar() {
+            console.log($("#current_input").val());
+            if ($("#current_input").val() == null || $("#current_input").val() == "") {
+                alert("车辆编号不能为空");
+            } else {
+                $.ajax({
+                    // url: "http://localhost/car/CarMangae0/json/searchmap.json",
+                    "url": "/car-management/car/carDataByvSn.action?vSn=" + $("#current_input").val(),
+                    "type": "post",
+                    "success": function(res) {
+                        console.log(res);
+                        console.log(res);
+                        markers.length = 0;
+                        map.clearMap(); //清除图层覆盖物
+                        if (res == null || res == undefined) {
+                            alert("车辆数据未搜素到");
+                            return;
+                        } else {
+
+                            var new_marker = new AMap.Marker({
+                                position: [res.longitude, res.latitude],
+                                size: new AMap.Size(24, 44),
+                                offset: new AMap.Pixel(-12, -22),
+                                content: '<img src="../img/gaodeimg/yellowcar20.png">',
+                                zIndex: 101,
+                                map: map,
+                                angle: Math.ceil(Math.random() * 150) + 10,
+                                autoRotation: true
+                            });
+                            new_marker.setMap(map); //在地图上添加点 
+                            new_marker.vSn = res.vSn;
+                            new_marker.licenseNo = res.licenseNo;
+                            new_marker.vCarType = res.vCarType;
+                            new_marker.carName = res.carName;
+                            new_marker.gpsSN = res.gpsSN;
+                            new_marker.iccard = res.iccard;
+                            new_marker.speed = res.speed;
+
+                            new_marker.on('click', function(e) {
+                                infoWindow.setContent("<button class='close_info' onClick = 'javascript:infoWindow.close()'>×</button><div class='main'><p> 车辆编号： <span style='color:blue'>" + e.target.vSn + "</span></p>" +
+                                    "<p>  gps编号: <span style='color:blue'>" + e.target.gpsSN + "  </span></p>" +
+                                    "<p>  车牌号：<span style='color:blue'>" + e.target.licenseNo + "  </span></p>" +
+                                    "<p style='color:#aaa;font-size:11px;text-decoration: underline;'>更多信息请查看右侧面板</p></div>");
+                                infoWindow.open(map, e.lnglat);
+                                //  mapInfo(e.target.vSn,e.target.licenseNo,e.target.iccard, e.target.gpsSN, e.target.vCarType,  e.target.speed);
+                            });
+                            map.setCenter(new_marker.getPosition());
+                            map.setZoom(13);
+                            infoWindow = new AMap.InfoWindow({
+                                isCustom: true, //使用自定义窗体
+                                draggable: false, //是否可拖动  
+                                offset: new AMap.Pixel(0, -31),
+                                content: ""
+                            });
+
+                        }
+                    },
+                    "error": function(data) {
+                        console.log(data);
+                        alert("发生错误");
+                    }
+                })
+            }
+        }
+        $("#currenttrack_btn").click(function() {
+            map.clearMap(); //清除图层覆盖物
+            searchcar();
+        });
+        $("#track_playback_btn").click(function() {
+            map.clearMap(); //清除图层覆盖物
+            lineArr.length = 0;
+            getTrack();
+
+        });
+    </script>
+</body>
+
+</html>

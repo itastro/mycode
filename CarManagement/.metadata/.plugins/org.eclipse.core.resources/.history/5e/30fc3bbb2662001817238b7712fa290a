@@ -1,0 +1,29 @@
+package com.bailian.car.domain.cardriver;
+
+import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class InAndOut {
+
+	private Integer id; // id
+
+	private String vSn; // 车辆编号
+
+	private String driverName; // 驾驶员名称
+
+	private Date endTime; // 牌照有效期
+
+	private Date time; // 进出时间
+
+	private String isAllowPass; // 是否允许通过
+
+}

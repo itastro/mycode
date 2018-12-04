@@ -1,0 +1,17 @@
+package com.bailian.car.domain.carmaintain;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+/**
+ * 
+    * @ClassName: Employee
+    * @Description: TODO(这里用一句话描述这个类的作用)
+    * @author itastro
+    * @date 2018年5月15日
+    *
+ */
+@Entity
+@Table(name = "t_employee")
+public class Employee {
+
+}

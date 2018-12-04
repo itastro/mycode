@@ -1,0 +1,39 @@
+package com.bailian.car;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.servlet.ServletConfig;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.web.context.ServletConfigAware;
+public class InitFIFOListener implements InitializingBean ,ServletConfigAware{
+		
+
+	public BlockingQueue<String> queue = new  LinkedBlockingQueue<String>();
+	
+	
+	
+	
+	@Override
+	public void setServletConfig(ServletConfig servletConfig) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public BlockingQueue<String> getQueue() {
+		return queue;
+	}
+ 
+	public void setQueue(BlockingQueue<String> queue) {
+		this.queue = queue;
+	}
+
+
+}

@@ -1,0 +1,2 @@
+2018-01-23 09:03:44.710 [localhost-startStop-1] ERROR com.alibaba.druid.pool.DruidAbstractDataSource -
+				maxIdle is deprecated
